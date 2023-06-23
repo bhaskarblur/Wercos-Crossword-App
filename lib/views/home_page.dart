@@ -132,7 +132,9 @@ class _HomePageState extends State<HomePage> {
                   height: 14,
                 ),
                 CustomSwitchButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _showMyDialog();
+                  },
                   isOn: true,
                   labels: ["Pública", "Privada"],
                 ),
@@ -140,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                   height: 16,
                 ),
                 CustomSwitchButton(
-                  onPressed: () {},
+                  onPressed: () {_showMyDialog();},
                   isOn: true,
                   labels: ["Fija", "Dinámica"],
                 ),
@@ -185,14 +187,25 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 15),
                   decoration: BoxDecoration(
-                      color: AllColors.litePurple,
+
                       borderRadius: BorderRadius.circular(50),
                       boxShadow: [
-                        BoxShadow(
-                            color: AllColors.darkPurple,
-                            spreadRadius: 1,
-                            blurRadius: 1,
-                            offset: Offset(0, -5))
+                        BoxShadow(color: AllColors.black.withOpacity(0.6),
+                          offset: Offset(0,-1),
+                          blurRadius: 0,
+                          spreadRadius: -1,
+
+
+                        ),
+
+                        BoxShadow(color: AllColors.litePurple,
+                          offset: Offset(1,1),
+                          blurRadius: 10,
+                          spreadRadius: 0,
+
+
+                        ),
+
                       ]),
                   height: 50,
                   width: double.maxFinite,
@@ -207,14 +220,24 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 15),
                   decoration: BoxDecoration(
-                      color: AllColors.litePurple,
+
                       borderRadius: BorderRadius.circular(50),
                       boxShadow: [
-                        BoxShadow(
-                            color: AllColors.darkPurple,
-                            spreadRadius: 1,
-                            blurRadius: 1,
-                            offset: Offset(0, -5))
+                        BoxShadow(color: AllColors.black.withOpacity(0.6),
+                          offset: Offset(0,-1),
+                          blurRadius: 0,
+                          spreadRadius: -1,
+
+
+                        ),
+
+                        BoxShadow(color: AllColors.litePurple,
+                          offset: Offset(1,1),
+                          blurRadius: 10,
+                          spreadRadius: 0,
+
+
+                        ),
                       ]),
                   height: 50,
                   width: double.maxFinite,
@@ -312,30 +335,153 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 10,
                 ),
-                CupertinoButton(
-                  onPressed: () {},
-                  padding: EdgeInsets.zero,
-                  minSize: 0,
-                  child: Container(
-                    width: double.maxFinite,
-                    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 14),
-                    decoration: BoxDecoration(
-                      color: AllColors.liteGreen,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Center(
-                        child: Label(
-                      text: "GENERAR",
-                      fontSize: FontSize.p2,
-                      fontWeight: FontWeight.w500,
-                    )),
-                  ),
-                ),
+                GreenShadowButton(onPressed: () {  }, title: "GENERAR",),
               ],
             ),
           ),
         ),
 
+      ),
+    );
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 300,
+              margin: EdgeInsets.symmetric(horizontal: 24),
+
+
+
+
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: AllColors.alertBg
+
+              ),
+
+              child: Stack(
+                children: [
+                  Positioned(
+                    top:10,
+                    right: 10,
+
+                    child: CupertinoButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      padding: EdgeInsets.zero,
+                      minSize: 0,
+                      child: Icon(
+                        CupertinoIcons.multiply_circle,
+                        color: AllColors.white,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 50),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric( horizontal: 20,vertical: 10),
+                          child: Label(align: TextAlign.center,text: "El máximo de palabras para el plan freemium es de 6", fontSize: FontSize.p2,),
+                        ),
+                        Spacer(),
+
+                        GreenShadowButton(onPressed: (){}, title: "Hazte Premium")
+
+
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class GreenShadowButton extends StatelessWidget {
+  const GreenShadowButton({
+    super.key, required this.onPressed, required this.title,
+  });
+
+  final VoidCallback onPressed;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton(
+      onPressed: onPressed,
+      padding: EdgeInsets.zero,
+      minSize: 0,
+      child: Container(
+        width: double.maxFinite,
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 14),
+        decoration: BoxDecoration(
+
+          borderRadius: BorderRadius.circular(50),
+            boxShadow: [
+              BoxShadow(color: AllColors.darkLiteGreen,
+                offset: Offset(0,0),
+                blurRadius:0,
+                spreadRadius: 0,
+
+
+              ),
+
+              BoxShadow(color: AllColors.white.withOpacity(.4),
+                offset: Offset(-3,6),
+                blurRadius: 1,
+                spreadRadius: -13,
+
+
+              ),
+              BoxShadow(color: AllColors.white.withOpacity(.7),
+                offset: Offset(2,-6),
+                blurRadius: 1,
+                spreadRadius: -10,
+
+
+              ),
+              BoxShadow(color: AllColors.shineGreen,
+                offset: Offset(0,0),
+                blurRadius: 1,
+                spreadRadius: 0,
+
+
+              ),
+              BoxShadow(color: AllColors.darkLiteGreen,
+                offset: Offset(-1,7),
+                blurRadius: 10,
+                spreadRadius: -10,
+
+
+              ),
+
+
+
+
+            ]
+        ),
+        child: Center(
+            child: Label(
+          text: title,
+          fontSize: FontSize.p2,
+          fontWeight: FontWeight.w500,
+        )),
       ),
     );
   }

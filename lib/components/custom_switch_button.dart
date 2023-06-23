@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart' as inset_box_shadow;
 
 
 import '../utils/all_colors.dart';
@@ -32,27 +33,29 @@ class CustomSwitchButton extends StatelessWidget {
               width: double.maxFinite,
               height: 50,
               decoration: BoxDecoration(
-                  color: AllColors.darkPurple,
+                  boxShadow: [
+                BoxShadow(color: AllColors.black.withOpacity(0.8),
+                        offset: Offset(0,0),
+                        blurRadius: 1,
+                        spreadRadius: 0,
+
+
+                    ),
+
+                  BoxShadow(color: AllColors.darkPurple,
+                        offset: Offset(1,1),
+                        blurRadius: 10,
+                        spreadRadius: 0,
+
+
+                    ),
+                  ],
+
                   borderRadius: BorderRadius.circular(50),
                   border: Border.all(color: AllColors.superLitePurple)),
               child: Row(
                 children: [
-                  Expanded(
-                    child: Container(
-                      width: double.maxFinite,
-                      height: double.maxFinite,
-                      decoration: BoxDecoration(
-                        color: AllColors.superLitePurple,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Center(
-                          child: Label(
-                            text: labels.first,
-                            fontSize: FontSize.p2,
-                            fontWeight: FontWeight.w500,
-                          )),
-                    ),
-                  ),
+                  EnabledSwitch(labels: labels),
                   Expanded(
                     child: Container(
                       width: double.maxFinite,
@@ -97,6 +100,69 @@ class CustomSwitchButton extends StatelessWidget {
               size: 36,
             ))
       ],
+    );
+  }
+}
+
+class EnabledSwitch extends StatelessWidget {
+  const EnabledSwitch({
+    super.key,
+    required this.labels,
+  });
+
+  final List<String> labels;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        width: double.maxFinite,
+        height: double.maxFinite,
+        decoration: BoxDecoration(
+
+          borderRadius: BorderRadius.circular(50),
+boxShadow: [
+  BoxShadow(color: AllColors.superLitePurple,
+    offset: Offset(0,0),
+    blurRadius:0,
+    spreadRadius: 0,
+
+
+  ),
+  BoxShadow(color: AllColors.white.withOpacity(.4),
+    offset: Offset(-3,6),
+    blurRadius: 8,
+    spreadRadius: -13,
+
+
+  ),
+  BoxShadow(color: AllColors.white.withOpacity(.7),
+    offset: Offset(2,-6),
+    blurRadius: 5,
+    spreadRadius: -10,
+
+
+  ),
+  BoxShadow(color: AllColors.darkLitePurple,
+    offset: Offset(-1,-1),
+    blurRadius: 10,
+    spreadRadius: -3,
+
+
+  ),
+
+
+
+
+]
+        ),
+        child: Center(
+            child: Label(
+              text: labels.first,
+              fontSize: FontSize.p2,
+              fontWeight: FontWeight.w500,
+            )),
+      ),
     );
   }
 }

@@ -52,8 +52,8 @@ class _DashboardState extends State<Dashboard> {
 
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(top: 20.0),
-          child: SizedBox(height: 70,
-            width: 70,
+          child: SizedBox(height: 60,
+            width: 60,
             child: FloatingActionButton(
               backgroundColor: AllColors.liteGreen,
 

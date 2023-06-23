@@ -16,6 +16,7 @@ class LanguageSelectionPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           toolbarHeight: 100,
           centerTitle: true,
           backgroundColor: Colors.transparent,
@@ -44,7 +45,9 @@ class LanguageSelectionPage extends StatelessWidget {
               ),
               Expanded(
                 child: CupertinoButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   minSize: 0,
                   padding: EdgeInsets.zero,
                   child: Column(
