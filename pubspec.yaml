@@ -38,6 +38,7 @@ dependencies:
   google_fonts:
   animated_bottom_navigation_bar:
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -16,12 +16,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-List<IconData> _iconList = [
-  CupertinoIcons.square_grid_2x2_fill,
-  CupertinoIcons.star_fill,
-  CupertinoIcons.person_3_fill,
-  Icons.settings
-];
+
 
 
 
@@ -33,7 +28,7 @@ class _HomePageState extends State<HomePage> {
       decoration: const BoxDecoration(gradient: AllColors.bg),
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 80,
+          toolbarHeight: 70,
           centerTitle: true,
           backgroundColor: Colors.transparent,
           title: Row(
