@@ -38,6 +38,7 @@ dependencies:
   google_fonts:
   animated_bottom_navigation_bar:
   flutter_inset_box_shadow:
+  step_progress_indicator:
 
 
 dev_dependencies:

@@ -3,6 +3,7 @@ import 'package:mobile_app_word_search/views/dashboard.dart';
 import 'package:mobile_app_word_search/views/home_page.dart';
 import 'package:mobile_app_word_search/views/language_selection_page.dart';
 import 'package:mobile_app_word_search/views/option_page.dart';
+import 'package:mobile_app_word_search/views/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:  Dashboard( ),
+      home:  SplashScreen( ),
     );
   }
 }
