@@ -5,6 +5,7 @@ import 'package:mobile_app_word_search/components/custom_switch_button.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/buttons.dart';
+import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
 import 'package:mobile_app_word_search/views/language_selection_page.dart';
 
@@ -17,100 +18,14 @@ class CreateWordPage extends StatefulWidget {
   State<CreateWordPage> createState() => _CreateWordPageState();
 }
 
-
-
-
-
 class _CreateWordPageState extends State<CreateWordPage> {
   @override
-
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(gradient: AllColors.bg),
       child: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 70,
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          title: Row(
-            children: [
-              Expanded(
-                child: CupertinoButton(
-                  minSize: 0,
-                  padding: EdgeInsets.zero,
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LanguageSelectionPage()));
-                  },
-                  child: Column(
-                    children: [
-                      CustomImageButton(
-                        image: "assets/images/spanish_flag.png",
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Label(
-                          text: "Idioma/Languaje",
-                          fontSize: FontSize.p4,
-                          color: AllColors.superLitePurple)
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: CupertinoButton(
-                  onPressed: () {},
-                  minSize: 0,
-                  padding: EdgeInsets.zero,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 50,
-                        child: Icon(
-                          CupertinoIcons.arrowshape_turn_up_left_fill,
-                          color: Colors.white,
-                          size: 34,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Label(
-                          text: "Regresar",
-                          fontSize: FontSize.p4,
-                          color: AllColors.superLitePurple)
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: CupertinoButton(
-                  onPressed: () {},
-                  minSize: 0,
-                  padding: EdgeInsets.zero,
-                  child: Column(
-                    children: [
-                      CustomImageButton(
-                        image: "assets/images/hash.png",
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Label(
-                        text: "Nível",
-                        fontSize: FontSize.p4,
-                        color: AllColors.superLitePurple,
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(70), child: CustomAppBar()),
         backgroundColor: Colors.transparent,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 26),
@@ -136,17 +51,18 @@ class _CreateWordPageState extends State<CreateWordPage> {
                   onPressed: () {
                     _showMyDialog();
                   },
-                  isOn: true,
                   labels: ["Pública", "Privada"],
+                  infoButton: true,
                 ),
                 SizedBox(
                   height: 16,
                 ),
                 CustomSwitchButton(
-                  onPressed: () {_showMyDialog();},
-                  isOn: true,
-                  labels: ["Fija", "Dinámica"],
-                ),
+                    onPressed: () {
+                      _showMyDialog();
+                    },
+                    labels: ["Fija", "Dinámica"],
+                    infoButton: true),
                 SizedBox(
                   height: 20,
                 ),
@@ -188,25 +104,20 @@ class _CreateWordPageState extends State<CreateWordPage> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 15),
                   decoration: BoxDecoration(
-
                       borderRadius: BorderRadius.circular(50),
                       boxShadow: [
-                        BoxShadow(color: AllColors.black.withOpacity(0.6),
-                          offset: Offset(0,-1),
+                        BoxShadow(
+                          color: AllColors.black.withOpacity(0.6),
+                          offset: Offset(0, -1),
                           blurRadius: 0,
                           spreadRadius: -1,
-
-
                         ),
-
-                        BoxShadow(color: AllColors.litePurple,
-                          offset: Offset(1,1),
+                        BoxShadow(
+                          color: AllColors.litePurple,
+                          offset: Offset(1, 1),
                           blurRadius: 10,
                           spreadRadius: 0,
-
-
                         ),
-
                       ]),
                   height: 50,
                   width: double.maxFinite,
@@ -221,23 +132,19 @@ class _CreateWordPageState extends State<CreateWordPage> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 15),
                   decoration: BoxDecoration(
-
                       borderRadius: BorderRadius.circular(50),
                       boxShadow: [
-                        BoxShadow(color: AllColors.black.withOpacity(0.6),
-                          offset: Offset(0,-1),
+                        BoxShadow(
+                          color: AllColors.black.withOpacity(0.6),
+                          offset: Offset(0, -1),
                           blurRadius: 0,
                           spreadRadius: -1,
-
-
                         ),
-
-                        BoxShadow(color: AllColors.litePurple,
-                          offset: Offset(1,1),
+                        BoxShadow(
+                          color: AllColors.litePurple,
+                          offset: Offset(1, 1),
                           blurRadius: 10,
                           spreadRadius: 0,
-
-
                         ),
                       ]),
                   height: 50,
@@ -334,14 +241,20 @@ class _CreateWordPageState extends State<CreateWordPage> {
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 90,
                 ),
-                GreenShadowButton(onPressed: () {  }, title: "GENERAR",),
               ],
             ),
           ),
         ),
-
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 25, left: 10, right: 10),
+          child: GreenShadowButton(
+            onPressed: () {},
+            title: "GENERAR",
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
@@ -358,22 +271,14 @@ class _CreateWordPageState extends State<CreateWordPage> {
             Container(
               height: 300,
               margin: EdgeInsets.symmetric(horizontal: 24),
-
-
-
-
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                gradient: AllColors.alertBg
-
-              ),
-
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: AllColors.alertBg),
               child: Stack(
                 children: [
                   Positioned(
-                    top:10,
+                    top: 10,
                     right: 10,
-
                     child: CupertinoButton(
                       onPressed: () {
                         Navigator.pop(context);
@@ -388,24 +293,28 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 50),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 50),
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric( horizontal: 20,vertical: 10),
-                          child: Label(align: TextAlign.center,text: "El máximo de palabras para el plan freemium es de 6", fontSize: FontSize.p2,),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Label(
+                            align: TextAlign.center,
+                            text:
+                                "El máximo de palabras para el plan freemium es de 6",
+                            fontSize: FontSize.p2,
+                          ),
                         ),
                         Spacer(),
-
-                        GreenShadowButton(onPressed: (){}, title: "Hazte Premium")
-
-
+                        GreenShadowButton(
+                            onPressed: () {}, title: "Hazte Premium")
                       ],
                     ),
                   ),
                 ],
               ),
-
             ),
           ],
         );
@@ -413,5 +322,3 @@ class _CreateWordPageState extends State<CreateWordPage> {
     );
   }
 }
-
-

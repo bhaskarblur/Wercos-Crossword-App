@@ -19,6 +19,7 @@ class GreenShadowButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       minSize: 0,
       child: Container(
+        height: 55,
         width: double.maxFinite,
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 14),
         decoration: BoxDecoration(

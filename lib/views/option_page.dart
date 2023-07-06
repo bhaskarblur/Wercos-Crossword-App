@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 
 import '../components/cutom_image_button.dart';
 import '../components/labels.dart';
@@ -17,84 +18,8 @@ class OptionPage extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
 
-          appBar: AppBar(
-            toolbarHeight: 100,
-            centerTitle: true,
-            backgroundColor: Colors.transparent,
-            title: Row(
-              children: [
-                Expanded(
-                  child: CupertinoButton(
-                    minSize: 0,
-                    padding: EdgeInsets.zero,
-                    onPressed: () {},
-                    child: Column(
-                      children: [
-                        CustomImageButton(
-                          image: "assets/images/spanish_flag.png",
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Label(
-                            text: "Idioma/Languaje",
-                            fontSize: FontSize.p4,
-                            color: AllColors.superLitePurple)
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: CupertinoButton(
-                    onPressed: () {},
-                    minSize: 0,
-                    padding: EdgeInsets.zero,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          child: Icon(
-                            CupertinoIcons.arrowshape_turn_up_left_fill,
-                            color: Colors.white,
-                            size: 34,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Label(
-                            text: "Regresar",
-                            fontSize: FontSize.p4,
-                            color: AllColors.superLitePurple)
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: CupertinoButton(
-                    onPressed: () {},
-                    minSize: 0,
-                    padding: EdgeInsets.zero,
-                    child: Column(
-                      children: [
-                        CustomImageButton(
-                          image: "assets/images/hash.png",
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Label(
-                          text: "Nível",
-                          fontSize: FontSize.p4,
-                          color: AllColors.superLitePurple,
-                        )
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
+          appBar: PreferredSize(preferredSize: Size.fromHeight(70),
+              child: CustomAppBar()),
 
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),

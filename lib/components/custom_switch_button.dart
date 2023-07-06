@@ -11,14 +11,16 @@ class CustomSwitchButton extends StatelessWidget {
   final VoidCallback onPressed;
   const CustomSwitchButton({
   super.key,
-  required this.isOn,
+
   required this.onPressed,
-  required this.labels,
+  required this.labels, required this.infoButton,
   });
 
-  final bool isOn;
+
 
   final List<String> labels;
+
+  final bool infoButton;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +92,7 @@ class CustomSwitchButton extends StatelessWidget {
         SizedBox(
           width: 6,
         ),
-        CupertinoButton(
+       infoButton? CupertinoButton(
             onPressed: () {},
             minSize: 0,
             padding: EdgeInsets.zero,
@@ -98,7 +100,7 @@ class CustomSwitchButton extends StatelessWidget {
               Icons.info_outline,
               color: AllColors.white,
               size: 36,
-            ))
+            )):Container()
       ],
     );
   }

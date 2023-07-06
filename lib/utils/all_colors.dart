@@ -10,6 +10,7 @@ class AllColors {
       colors: [Color(0xFF3E3294), Color(0xFF1E155C)]);
 static const Color black= Color(0xff000000);
   static const Color white= Color(0xffffffff);
+  static const Color purple= Color(0xff3E3294);
   static const Color superLitePurple= Color(0xff8067E5);
   static const Color darkLitePurple= Color(0xff5741b8);
   static const Color litePurple= Color(0xff332981);

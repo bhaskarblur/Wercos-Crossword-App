@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
+import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 
 import '../components/cutom_image_button.dart';
 import '../components/labels.dart';
@@ -18,34 +19,8 @@ class CreatePage extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
 
-          appBar: AppBar(
-            toolbarHeight: 70,
-            centerTitle: true,
-            backgroundColor: Colors.transparent,
-            actions: [ CupertinoButton(
-              onPressed: () {},
-              minSize: 0,
-              padding: EdgeInsets.zero,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 24),
-                child: Column(
-                  children: [
-                    CustomImageButton(
-                      image: "assets/images/hash.png",
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Label(
-                      text: "Nível",
-                      fontSize: FontSize.p4,
-                      color: AllColors.superLitePurple,
-                    )
-                  ],
-                ),
-              ),
-            )],
-          ),
+          appBar: PreferredSize(preferredSize: Size.fromHeight(70),
+              child: CustomAppBar()),
           body: Center(
             child: Column(
 
