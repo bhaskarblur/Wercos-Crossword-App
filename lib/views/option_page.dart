@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app_word_search/components/labels.dart';
+import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
-
-import '../components/cutom_image_button.dart';
-import '../components/labels.dart';
-import '../utils/all_colors.dart';
-import '../utils/font_size.dart';
+import 'package:mobile_app_word_search/utils/font_size.dart';
 
 class OptionPage extends StatelessWidget {
   const OptionPage({Key? key}) : super(key: key);
@@ -14,67 +12,91 @@ class OptionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: const BoxDecoration(gradient: AllColors.bg),
-
         child: Scaffold(
           backgroundColor: Colors.transparent,
-
-          appBar: PreferredSize(preferredSize: Size.fromHeight(70),
-              child: CustomAppBar()),
-
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+          appBar: PreferredSize(
+              preferredSize: Size.fromHeight(70), child: CustomAppBar()),
+          body: Center(
             child: Column(
               children: [
-                Label(text: "SELECCIONAR NIVEL", fontWeight: FontWeight.bold, fontSize: FontSize.p2,),
+                SizedBox(height: 20,),
+                Label(
+                  text: 'OPTIONS',
+                  fontSize: FontSize.p2,
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(height: 14,),
+                CupertinoButton(
+                  onPressed: () {  },
+                  padding: EdgeInsets.zero,
+                  minSize: 0,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+
+                    width: double.maxFinite,
+                    height: 55,
+                    decoration: BoxDecoration(
+                        color: AllColors.liteDarkPurple,
+                        borderRadius: BorderRadius.circular(50)),
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Label(
+                          text: 'APP LANGUAGE/IDIOMA',
+                          fontSize: FontSize.p2,
+                        ),
+                        SizedBox(width: 10,),
+
+                        Image.asset('assets/images/us_flag.png', height: 45,width: 45,),
+                        SizedBox(width: 5,),
+                        Image.asset('assets/images/spanish_flag.png', height: 45,width: 45,)
+                      ],
+                    )),
+                ),
 
                 SizedBox(height: 20,),
-                LevelCard(level: '6 PALABRAS  (FÁCIL)', isPremium: false,),
-                LevelCard(level: '9 PALABRAS (MEDIO)', isPremium: false,),
-                LevelCard(level: '12 PALABRAS (AVANZADO)', isPremium: true,),
-                LevelCard(level: '15 PALABRAS  (DÍFICIL)', isPremium: true,),
-                LevelCard(level: '18  PALABRAS  (EXPERTO)', isPremium: true,),
 
-
+                OptionItem(optionName: 'LEVEL', onPressed: () {  },),
+                OptionItem(optionName: 'MY GAMES', onPressed: () {  },),
+                OptionItem(optionName: 'PLAY', onPressed: () {  },),
+                OptionItem(optionName: 'MY ACCOUNT', onPressed: () {  },),
               ],
             ),
           ),
-
         ));
   }
 }
 
-class LevelCard extends StatelessWidget {
-  const LevelCard({
-    super.key, required this.level, required this.isPremium,
+class OptionItem extends StatelessWidget {
+  const OptionItem({
+    super.key, required this.optionName, required this.onPressed,
   });
 
-  final String level;
-  final bool isPremium;
+  final String optionName;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 14),
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 15),
-      height: 50,
-      width: double.maxFinite,
-      decoration: BoxDecoration(
-          color: AllColors.liteDarkPurple,
-          borderRadius: BorderRadius.circular(50)
+    return CupertinoButton(
+      onPressed: onPressed,
+      padding: EdgeInsets.zero,
+      minSize: 0,
+      child: Container(
+        margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
+
+        width: double.maxFinite,
+        height: 55,
+        decoration: BoxDecoration(
+            color: AllColors.liteDarkPurple,
+            borderRadius: BorderRadius.circular(50)),
+        child: Center(
+          child: Label(
+            text: optionName,
+            fontSize: FontSize.p2,
+          ),
+        ),
       ),
-
-
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-        children: [
-          Icon(isPremium?CupertinoIcons.lock_fill:null, color: AllColors.liteGreen,),
-
-          Label(text: level, fontSize: FontSize.p2,),
-          SizedBox(),
-        ],
-      ),
-
     );
   }
 }

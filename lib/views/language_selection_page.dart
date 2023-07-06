@@ -23,6 +23,7 @@ class LanguageSelectionPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Column(
             children: [
+              SizedBox(height: 20,),
               Label(text: "SELECCIONAR IDIOMA", fontSize: FontSize.p2, fontWeight: FontWeight.bold,),
             SizedBox(
             height: 16,

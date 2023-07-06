@@ -7,8 +7,10 @@ import 'package:mobile_app_word_search/views/dashboard.dart';
 import 'package:mobile_app_word_search/views/language_selection_page.dart';
 import 'package:mobile_app_word_search/views/leaderboard_page.dart';
 import 'package:mobile_app_word_search/views/level_completion_page.dart';
+import 'package:mobile_app_word_search/views/level_page.dart';
 import 'package:mobile_app_word_search/views/my_games_page.dart';
 import 'package:mobile_app_word_search/views/option_page.dart';
+
 import 'package:mobile_app_word_search/views/play_page.dart';
 import 'package:mobile_app_word_search/views/splash_screen.dart';
 import 'package:mobile_app_word_search/views/word_related_page.dart';
@@ -44,7 +46,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:  CreateWordPage(),
+      home:  OptionPage(),
     );
   }
 }

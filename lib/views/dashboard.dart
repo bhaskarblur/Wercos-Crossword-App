@@ -7,7 +7,8 @@ import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/views/create_word_page.dart';
 
 import 'package:mobile_app_word_search/views/language_selection_page.dart';
-import 'package:mobile_app_word_search/views/option_page.dart';
+import 'package:mobile_app_word_search/views/level_page.dart';
+
 
 
 
@@ -26,7 +27,7 @@ class _DashboardState extends State<Dashboard> {
     CreateWordPage(),
     LanguageSelectionPage(),
     CreateWordPage(),
-    OptionPage(),
+    LevelPage(),
 
 
   ];
