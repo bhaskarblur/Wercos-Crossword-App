@@ -19,7 +19,12 @@ static const Color black= Color(0xff000000);
   static const Color liteGreen= Color(0xff86DCB4);
   static const Color darkLiteGreen= Color(0xff69bf96);
   static const Color shineGreen= Color(0xff319a67);
-  
+  static const Color superLightGreen= Color(0xffA6FFD5);
+  static const Color grey= Color(0xffD9D9D9);
+  static const Color darkOrange= Color(0xffff9900);
+  static const Color darkLiteOrange= Color(0xffdea430);
+  static const Color liteRed= Color(0xffFF7991);
+
   
   static const LinearGradient alertBg= LinearGradient(
 

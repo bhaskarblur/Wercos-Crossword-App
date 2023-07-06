@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/components/model/bottom_navigation_item.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/views/home_page.dart';
+import 'package:mobile_app_word_search/views/create_word_page.dart';
+
 import 'package:mobile_app_word_search/views/language_selection_page.dart';
 import 'package:mobile_app_word_search/views/option_page.dart';
 
@@ -22,9 +23,9 @@ class _DashboardState extends State<Dashboard> {
   int _currentIndex=0;
 
   final List<Widget> pages=[
-    HomePage(),
+    CreateWordPage(),
     LanguageSelectionPage(),
-    HomePage(),
+    CreateWordPage(),
     OptionPage(),
 
 

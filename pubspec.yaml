@@ -39,6 +39,7 @@ dependencies:
   animated_bottom_navigation_bar:
   flutter_inset_box_shadow:
   step_progress_indicator:
+  flutter_rating_bar:
 
 
 dev_dependencies:
