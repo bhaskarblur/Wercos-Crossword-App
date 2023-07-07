@@ -62,7 +62,7 @@ class MyGamesPage extends StatelessWidget {
             child: ShadowButton(  fillColors: [
               AllColors.semiLiteGreen,
               AllColors.shineGreen
-            ],onPressed: () {  }, title: 'CREATE CHALLENGE',),
+            ],onPressed: () {  }, title: 'CREATE WORD SEARCH',),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         ));
