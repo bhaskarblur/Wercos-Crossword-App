@@ -90,15 +90,24 @@ class LevelCompletionPage extends StatelessWidget {
                 SizedBox(
                   height: 60,
                 ),
-                GreenShadowButton(onPressed: (){}, title: 'Back'),
+                ShadowButton(  fillColors: [
+                  AllColors.semiLiteGreen,
+                  AllColors.shineGreen
+                ],onPressed: (){}, title: 'Back'),
                 SizedBox(
                   height: 16,
                 ),
-                OrangeShadowButton(onPressed: (){}, title: 'See leaderboard'),
+              ShadowButton(  fillColors: [
+                AllColors.liteOrange,
+                AllColors.orange
+              ],onPressed: (){}, title: 'See leaderboard'),
                 SizedBox(
                   height: 16,
                 ),
-                isCompleted? SizedBox():GreenShadowButton(onPressed: (){}, title: 'Starr new game'),
+                isCompleted? SizedBox():ShadowButton(  fillColors: [
+                  AllColors.semiLiteGreen,
+                  AllColors.shineGreen
+                ],onPressed: (){}, title: 'Starr new game'),
               ],
             ),
           ),

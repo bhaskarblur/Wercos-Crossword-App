@@ -19,20 +19,21 @@ class LevelPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
 
           appBar: PreferredSize(preferredSize: Size.fromHeight(70),
-              child: CustomAppBar()),
+              child: CustomAppBar(isBack: true, isLang: true,)),
 
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
             child: Column(
               children: [
-                Label(text: "SELECCIONAR NIVEL", fontWeight: FontWeight.bold, fontSize: FontSize.p2,),
+                SizedBox(height: 20,),
+                Label(text: "SELECT LEVEL", fontWeight: FontWeight.bold, fontSize: FontSize.p2,),
 
                 SizedBox(height: 20,),
-                LevelCard(level: '6 PALABRAS  (FÁCIL)', isPremium: false,),
-                LevelCard(level: '9 PALABRAS (MEDIO)', isPremium: false,),
-                LevelCard(level: '12 PALABRAS (AVANZADO)', isPremium: true,),
-                LevelCard(level: '15 PALABRAS  (DÍFICIL)', isPremium: true,),
-                LevelCard(level: '18  PALABRAS  (EXPERTO)', isPremium: true,),
+                LevelCard(level: '6 WORDS (EASY)', isPremium: false,),
+                LevelCard(level: '9 WORDS (MEDIUM)', isPremium: false,),
+                LevelCard(level: '12 WORDS (ADVANCED)', isPremium: true,),
+                LevelCard(level: '15 WORDS  (HARD)', isPremium: true,),
+                LevelCard(level: '18  WORDS   (EXPERT)', isPremium: true,),
 
 
               ],

@@ -26,7 +26,7 @@ class SubscriptionPage extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: PreferredSize(
-              preferredSize: Size.fromHeight(70), child: CustomAppBar()),
+              preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: true, isLang: true,)),
           body: Column(
             children: [
               Padding(
@@ -59,7 +59,10 @@ class SubscriptionPage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: GreenShadowButton(
+                child: ShadowButton(  fillColors: [
+                  AllColors.semiLiteGreen,
+                  AllColors.shineGreen
+                ],
                     onPressed: () {}, title: 'MONTHLY \$99 / month'),
               ),
               SizedBox(
@@ -67,7 +70,10 @@ class SubscriptionPage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: GreenShadowButton(
+                child: ShadowButton(  fillColors: [
+                  AllColors.semiLiteGreen,
+                  AllColors.shineGreen
+                ],
                     onPressed: () {}, title: 'ANNUAL \$89 / month (Save 10%)'),
               ),
             ],

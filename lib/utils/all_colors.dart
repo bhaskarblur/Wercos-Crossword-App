@@ -18,16 +18,16 @@ static const Color black= Color(0xff000000);
   static const Color darkPurple= Color(0xff2B2369);
   static const Color superDarkPurple=Color(0xff1E155C);
   static const Color liteGreen= Color(0xff86DCB4);
-  static const Color darkLiteGreen= Color(0xff69bf96);
+  static const Color semiLiteGreen= Color(0xff69bf96);
   static const Color shineGreen= Color(0xff319a67);
   static const Color superLightGreen= Color(0xffA6FFD5);
   static const Color grey= Color(0xffD9D9D9);
-  static const Color darkOrange= Color(0xffff9900);
-  static const Color darkLiteOrange= Color(0xffdea430);
+  static const Color orange= Color(0xffe7791c);
+  static const Color liteOrange= Color(0xffdea430);
   static const Color liteRed= Color(0xffFF7991);
 
   
-  static const LinearGradient alertBg= LinearGradient(
+  static const LinearGradient alertGradient= LinearGradient(
 
 
       begin: Alignment(-1.0, 1.0),

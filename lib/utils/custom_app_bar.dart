@@ -4,12 +4,23 @@ import 'package:mobile_app_word_search/components/cutom_image_button.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
+import 'package:mobile_app_word_search/views/dashboard.dart';
 import 'package:mobile_app_word_search/views/language_selection_page.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
-  super.key,
+  super.key, this.languageOnPressed, this.backOnPressed, this.levelOnPressed, required this.isLang, required this.isBack, this.isLevel,
   });
+
+  final VoidCallback ? languageOnPressed;
+  final VoidCallback ? backOnPressed;
+  final VoidCallback ? levelOnPressed;
+
+  final bool  isLang;
+  final bool  isBack;
+  final bool ? isLevel;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +31,7 @@ class CustomAppBar extends StatelessWidget {
       automaticallyImplyLeading: false,
       title: Row(
         children: [
-          Expanded(
+          isLang?Expanded(
             child: CupertinoButton(
               minSize: 0,
               padding: EdgeInsets.zero,
@@ -45,10 +56,12 @@ class CustomAppBar extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-          Expanded(
+          ):Expanded(child: SizedBox()),
+          isBack?Expanded(
             child: CupertinoButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Dashboard()));
+              },
               minSize: 0,
               padding: EdgeInsets.zero,
               child: Column(
@@ -71,7 +84,7 @@ class CustomAppBar extends StatelessWidget {
                 ],
               ),
             ),
-          ),
+          ):Expanded(child: SizedBox()),
           Expanded(
             child: CupertinoButton(
               onPressed: () {},

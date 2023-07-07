@@ -1,6 +1,7 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app_word_search/components/custom_dialogs.dart';
 import 'package:mobile_app_word_search/components/custom_switch_button.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
@@ -25,7 +26,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
       decoration: const BoxDecoration(gradient: AllColors.bg),
       child: Scaffold(
         appBar: PreferredSize(
-            preferredSize: Size.fromHeight(70), child: CustomAppBar()),
+            preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: true, isLang: true,)),
         backgroundColor: Colors.transparent,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 26),
@@ -33,14 +34,17 @@ class _CreateWordPageState extends State<CreateWordPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                SizedBox(height: 20,),
                 Center(
                     child: Label(
-                  text: "CREAR SOPA",
+                  text: "CREATE WORD SEARCH",
                   fontSize: FontSize.p2,
                   fontWeight: FontWeight.w500,
                 )),
+                SizedBox(height: 5,),
                 Label(
-                  text: "Mode de publicación",
+                  text: "Publication mode",
                   fontSize: FontSize.p4,
                   fontWeight: FontWeight.w500,
                 ),
@@ -49,9 +53,9 @@ class _CreateWordPageState extends State<CreateWordPage> {
                 ),
                 CustomSwitchButton(
                   onPressed: () {
-                    _showMyDialog();
+               CustomDialog().showPurchaseDialog(context: context);
                   },
-                  labels: ["Pública", "Privada"],
+                  labels: ["Public", "Private"],
                   infoButton: true,
                 ),
                 SizedBox(
@@ -59,9 +63,9 @@ class _CreateWordPageState extends State<CreateWordPage> {
                 ),
                 CustomSwitchButton(
                     onPressed: () {
-                      _showMyDialog();
+                      CustomDialog().showPurchaseDialog(context: context);
                     },
-                    labels: ["Fija", "Dinámica"],
+                    labels: ["Fixed", "Dynamic"],
                     infoButton: true),
                 SizedBox(
                   height: 20,
@@ -85,7 +89,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                           width: 30,
                         ),
                         Label(
-                          text: "Idioma/ Language",
+                          text: "Language/Idiioma",
                           fontSize: FontSize.p4,
                           align: TextAlign.center,
                         ),
@@ -122,7 +126,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                   height: 50,
                   width: double.maxFinite,
                   child: Label(
-                    text: "Ingresar nombre de la sopa",
+                    text: "Enter name of the Word search",
                     fontSize: FontSize.p2,
                   ),
                 ),
@@ -150,7 +154,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                   height: 50,
                   width: double.maxFinite,
                   child: Label(
-                    text: "Ingresar palabra",
+                    text: "Enter word",
                     fontSize: FontSize.p2,
                   ),
                 ),
@@ -171,7 +175,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Label(
-                          text: "Agregar",
+                          text: "Add",
                           fontSize: FontSize.p4,
                           align: TextAlign.center,
                         ),
@@ -198,7 +202,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Label(
-                        text: "Palabra",
+                        text: "Beach",
                         fontSize: FontSize.p2,
                       ),
                       CupertinoButton(
@@ -226,7 +230,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Label(
-                        text: "Palabra",
+                        text: "Sun",
                         fontSize: FontSize.p2,
                       ),
                       CupertinoButton(
@@ -249,7 +253,10 @@ class _CreateWordPageState extends State<CreateWordPage> {
         ),
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 25, left: 10, right: 10),
-          child: GreenShadowButton(
+          child: ShadowButton(  fillColors: [
+            AllColors.semiLiteGreen,
+            AllColors.shineGreen
+          ],
             onPressed: () {},
             title: "GENERAR",
           ),
@@ -259,66 +266,5 @@ class _CreateWordPageState extends State<CreateWordPage> {
     );
   }
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: 300,
-              margin: EdgeInsets.symmetric(horizontal: 24),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  gradient: AllColors.alertBg),
-              child: Stack(
-                children: [
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: CupertinoButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      padding: EdgeInsets.zero,
-                      minSize: 0,
-                      child: Icon(
-                        CupertinoIcons.multiply_circle,
-                        color: AllColors.white,
-                        size: 30,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 50),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          child: Label(
-                            align: TextAlign.center,
-                            text:
-                                "El máximo de palabras para el plan freemium es de 6",
-                            fontSize: FontSize.p2,
-                          ),
-                        ),
-                        Spacer(),
-                        GreenShadowButton(
-                            onPressed: () {}, title: "Hazte Premium")
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+
 }

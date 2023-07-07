@@ -5,6 +5,7 @@ import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
+import 'package:mobile_app_word_search/views/subscription_page.dart';
 
 class MyAccountPage extends StatelessWidget {
   const MyAccountPage({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class MyAccountPage extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: PreferredSize(
-              preferredSize: Size.fromHeight(70), child: CustomAppBar()),
+              preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: true, isLang: true,)),
           body: Column(
             children: [
               Padding(
@@ -91,7 +92,13 @@ class MyAccountPage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: GreenShadowButton(onPressed: () {}, title: 'UPGRADE'),
+                child: ShadowButton(  fillColors: [
+                  AllColors.semiLiteGreen,
+                  AllColors.shineGreen
+                ],onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> SubscriptionPage()));
+
+                }, title: 'UPGRADE'),
               )
             ],
           ),

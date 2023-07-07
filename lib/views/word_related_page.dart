@@ -11,11 +11,11 @@ class WordRelatedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(gradient: AllColors.alertBg),
+      decoration: const BoxDecoration(gradient: AllColors.alertGradient),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: PreferredSize(
-            preferredSize: Size.fromHeight(70), child: CustomAppBar()),
+            preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: true, isLang: true,)),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -37,7 +37,8 @@ class WordRelatedPage extends StatelessWidget {
                 ),
                 SizedBox(height: 120,),
 
-                OrangeShadowButton(onPressed: (){}, title: 'CONTINUE')
+           ShadowButton(onPressed: (){}, title: 'CONTINUE', fillColors: [AllColors.liteOrange,
+             AllColors.orange],)
               ],
             ),
           ),

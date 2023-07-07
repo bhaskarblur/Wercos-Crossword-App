@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:mobile_app_word_search/components/custom_dialogs.dart';
 import 'package:mobile_app_word_search/components/custom_switch_button.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
+import 'package:mobile_app_word_search/views/leaderboard_page.dart';
 
 class MyGamesPage extends StatelessWidget {
   const MyGamesPage({Key? key}) : super(key: key);
@@ -18,7 +20,7 @@ class MyGamesPage extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: PreferredSize(
-              preferredSize: Size.fromHeight(70), child: CustomAppBar()),
+              preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: false, isLang: true,)),
           body: SingleChildScrollView(
             child: Center(
               child: Padding(
@@ -37,7 +39,9 @@ class MyGamesPage extends StatelessWidget {
                       height: 20,
                     ),
                     CustomSwitchButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        CustomDialog().showPurchaseDialog(context: context);
+                      },
                       labels: ['WORD SEARCHES', 'CHALLENGES'],
                       infoButton: false,
                     ),
@@ -55,7 +59,10 @@ class MyGamesPage extends StatelessWidget {
           ),
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 20, left: 24,right: 24),
-            child: GreenShadowButton(onPressed: () {  }, title: 'CREATE CHALLENGE',),
+            child: ShadowButton(  fillColors: [
+              AllColors.semiLiteGreen,
+              AllColors.shineGreen
+            ],onPressed: () {  }, title: 'CREATE CHALLENGE',),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         ));
@@ -149,7 +156,10 @@ class CreatedGamesItem extends StatelessWidget {
           ),
           SizedBox(height: 10,),
           CupertinoButton(
-            onPressed: () {  },
+            onPressed: () {
+
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> LeaderBoardPage()));
+            },
             minSize: 0,
             padding: EdgeInsets.zero,
             child: Container(

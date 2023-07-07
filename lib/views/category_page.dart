@@ -26,7 +26,7 @@ class _CategoryPageState extends State<CategoryPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: PreferredSize(
-            preferredSize: Size.fromHeight(70), child: CustomAppBar()),
+            preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: true, isLang: true,)),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
@@ -43,13 +43,16 @@ class _CategoryPageState extends State<CategoryPage> {
                 SizedBox(
                   height: 20,
                 ),
-                GreenShadowButton(
+                ShadowButton(
                     onPressed: () {
                       setState(() {
                         isCategoryVisible = !isCategoryVisible;
                       });
                     },
-                    title: 'CATEGORY 1'),
+                    title: 'CATEGORY 1', fillColors: [
+                      AllColors.semiLiteGreen,
+                  AllColors.shineGreen
+                ],),
                 isCategoryVisible
                     ? SizedBox()
                     : TopicButton(onPressed: () {
@@ -60,7 +63,11 @@ class _CategoryPageState extends State<CategoryPage> {
                   height: 20,
                 ),
 
-                GreenShadowButton(
+                ShadowButton(
+                    fillColors: [
+                      AllColors.semiLiteGreen,
+                      AllColors.shineGreen
+                    ],
                     onPressed: () {
 
                     },
@@ -68,7 +75,10 @@ class _CategoryPageState extends State<CategoryPage> {
                 SizedBox(
                   height: 20,
                 ),
-                GreenShadowButton(
+                ShadowButton(  fillColors: [
+                  AllColors.semiLiteGreen,
+                  AllColors.shineGreen
+                ],
                     onPressed: () {
 
                     },
@@ -76,7 +86,10 @@ class _CategoryPageState extends State<CategoryPage> {
                 SizedBox(
                   height: 20,
                 ),
-                GreenShadowButton(
+                ShadowButton(  fillColors: [
+                  AllColors.semiLiteGreen,
+                  AllColors.shineGreen
+                ],
                     onPressed: () {
 
                     },
@@ -84,7 +97,10 @@ class _CategoryPageState extends State<CategoryPage> {
                 SizedBox(
                   height: 20,
                 ),
-                GreenShadowButton(
+                ShadowButton(  fillColors: [
+                  AllColors.semiLiteGreen,
+                  AllColors.shineGreen
+                ],
                     onPressed: () {
 
                     },

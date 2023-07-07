@@ -4,6 +4,11 @@ import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
+import 'package:mobile_app_word_search/views/language_selection_page.dart';
+import 'package:mobile_app_word_search/views/level_page.dart';
+import 'package:mobile_app_word_search/views/my_account_page.dart';
+import 'package:mobile_app_word_search/views/my_games_page.dart';
+import 'package:mobile_app_word_search/views/play_page.dart';
 
 class OptionPage extends StatelessWidget {
   const OptionPage({Key? key}) : super(key: key);
@@ -15,7 +20,7 @@ class OptionPage extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: PreferredSize(
-              preferredSize: Size.fromHeight(70), child: CustomAppBar()),
+              preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: false, isLang: true,)),
           body: Center(
             child: Column(
               children: [
@@ -27,7 +32,9 @@ class OptionPage extends StatelessWidget {
                 ),
                 SizedBox(height: 14,),
                 CupertinoButton(
-                  onPressed: () {  },
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> LanguageSelectionPage()));
+                  },
                   padding: EdgeInsets.zero,
                   minSize: 0,
                   child: Container(
@@ -57,10 +64,18 @@ class OptionPage extends StatelessWidget {
 
                 SizedBox(height: 20,),
 
-                OptionItem(optionName: 'LEVEL', onPressed: () {  },),
-                OptionItem(optionName: 'MY GAMES', onPressed: () {  },),
-                OptionItem(optionName: 'PLAY', onPressed: () {  },),
-                OptionItem(optionName: 'MY ACCOUNT', onPressed: () {  },),
+                OptionItem(optionName: 'LEVEL', onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> LevelPage()));
+                },),
+                OptionItem(optionName: 'MY GAMES', onPressed: () {
+
+                },),
+                OptionItem(optionName: 'PLAY', onPressed: () {
+
+                },),
+                OptionItem(optionName: 'MY ACCOUNT', onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MyAccountPage()));
+                },),
               ],
             ),
           ),

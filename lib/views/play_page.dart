@@ -18,7 +18,7 @@ class PlayPage extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: PreferredSize(
-              preferredSize: Size.fromHeight(70), child: CustomAppBar()),
+              preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: false, isLang: true,)),
           body: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5.0),
@@ -113,8 +113,9 @@ class PlayPage extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  OrangeShadowButton(
-                      onPressed: () {}, title: 'PLAY WITH THE ENTERED CODE')
+               ShadowButton(
+                      onPressed: () {}, title: 'PLAY WITH THE ENTERED CODE', fillColors: [AllColors.liteOrange,
+                 AllColors.orange],)
                 ],
               ),
             ),

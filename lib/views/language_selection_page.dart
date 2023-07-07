@@ -17,7 +17,7 @@ class LanguageSelectionPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: PreferredSize(preferredSize: Size.fromHeight(70),
-            child: CustomAppBar()),
+            child: CustomAppBar(isBack: true, isLang: false,)),
         
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),

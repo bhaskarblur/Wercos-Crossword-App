@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app_word_search/components/custom_dialogs.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
+import 'package:mobile_app_word_search/views/create_word_page.dart';
 
 import '../components/cutom_image_button.dart';
 import '../components/labels.dart';
@@ -20,7 +22,7 @@ class CreatePage extends StatelessWidget {
           backgroundColor: Colors.transparent,
 
           appBar: PreferredSize(preferredSize: Size.fromHeight(70),
-              child: CustomAppBar()),
+              child: CustomAppBar(isBack: false, isLang: true,)),
           body: Center(
             child: Column(
 
@@ -29,7 +31,10 @@ class CreatePage extends StatelessWidget {
                 Label(text: 'CREATE', fontSize: FontSize.p2, fontWeight: FontWeight.bold,),
                 SizedBox(height: 20,),
                 CupertinoButton(
-                  onPressed: () {  },
+                  onPressed: () {
+
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateWordPage()));
+                  },
                   padding: EdgeInsets.zero,
                   minSize: 0,
                   child: Container(
@@ -50,7 +55,9 @@ class CreatePage extends StatelessWidget {
                 ),
                 SizedBox(height: 10,),
                 CupertinoButton(
-                  onPressed: () {  },
+                  onPressed: () {
+                    CustomDialog().showPurchaseDialog(context: context);
+                  },
                   padding: EdgeInsets.zero,
                   minSize: 0,
                   child: Container(

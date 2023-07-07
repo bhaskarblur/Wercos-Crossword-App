@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart' as inset_box_shadow;
-
+import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart'
+    as inset_box_shadow;
+import 'package:mobile_app_word_search/components/custom_dialogs.dart';
+import 'package:mobile_app_word_search/components/suggestion/model/suggestion.dart';
 
 import '../utils/all_colors.dart';
 import '../utils/font_size.dart';
@@ -10,13 +12,11 @@ import 'labels.dart';
 class CustomSwitchButton extends StatelessWidget {
   final VoidCallback onPressed;
   const CustomSwitchButton({
-  super.key,
-
-  required this.onPressed,
-  required this.labels, required this.infoButton,
+    super.key,
+    required this.onPressed,
+    required this.labels,
+    required this.infoButton,
   });
-
-
 
   final List<String> labels;
 
@@ -36,23 +36,19 @@ class CustomSwitchButton extends StatelessWidget {
               height: 50,
               decoration: BoxDecoration(
                   boxShadow: [
-                BoxShadow(color: AllColors.black.withOpacity(0.8),
-                        offset: Offset(0,0),
-                        blurRadius: 1,
-                        spreadRadius: 0,
-
-
+                    BoxShadow(
+                      color: AllColors.black.withOpacity(0.8),
+                      offset: Offset(0, 0),
+                      blurRadius: 1,
+                      spreadRadius: 0,
                     ),
-
-                  BoxShadow(color: AllColors.darkPurple,
-                        offset: Offset(1,1),
-                        blurRadius: 10,
-                        spreadRadius: 0,
-
-
+                    BoxShadow(
+                      color: AllColors.darkPurple,
+                      offset: Offset(1, 1),
+                      blurRadius: 10,
+                      spreadRadius: 0,
                     ),
                   ],
-
                   borderRadius: BorderRadius.circular(50),
                   border: Border.all(color: AllColors.superLitePurple)),
               child: Row(
@@ -92,15 +88,33 @@ class CustomSwitchButton extends StatelessWidget {
         SizedBox(
           width: 6,
         ),
-       infoButton? CupertinoButton(
-            onPressed: () {},
-            minSize: 0,
-            padding: EdgeInsets.zero,
-            child: Icon(
-              Icons.info_outline,
-              color: AllColors.white,
-              size: 36,
-            )):Container()
+        infoButton
+            ? CupertinoButton(
+                onPressed: () {
+                  CustomDialog()
+                      .showSuggestionDialog(context: context, suggestions: [
+                    Suggestion(
+                      'Maximum Word\nLength',
+                      'The maximum allowance for the length of a word is 14 letters.',
+                    ),
+                    Suggestion(
+                      'What is a\ndynamic word\nsearch?',
+                      'A dynamic word search is one in which the grid is different for each player. In addition, the creator can select the number of words that will be displayed in the word search.',
+                    ),
+                    Suggestion(
+                      'What is a\nchallenge?',
+                      'In a challenge, there are correct and incorrect words in the list and in the grid. You should only mark the words that correspond to the title of the challenge. For example, if the title of the challenge is: European Countries, you should only mark the European countries, those that are not from Europe should not be marked as they would be incorrect.',
+                    ),
+                  ]);
+                },
+                minSize: 0,
+                padding: EdgeInsets.zero,
+                child: Icon(
+                  Icons.info_outline,
+                  color: AllColors.white,
+                  size: 36,
+                ))
+            : Container()
       ],
     );
   }
@@ -120,50 +134,39 @@ class EnabledSwitch extends StatelessWidget {
       child: Container(
         width: double.maxFinite,
         height: double.maxFinite,
-        decoration: BoxDecoration(
-
-          borderRadius: BorderRadius.circular(50),
-boxShadow: [
-  BoxShadow(color: AllColors.superLitePurple,
-    offset: Offset(0,0),
-    blurRadius:0,
-    spreadRadius: 0,
-
-
-  ),
-  BoxShadow(color: AllColors.white.withOpacity(.4),
-    offset: Offset(-3,6),
-    blurRadius: 8,
-    spreadRadius: -13,
-
-
-  ),
-  BoxShadow(color: AllColors.white.withOpacity(.7),
-    offset: Offset(2,-6),
-    blurRadius: 5,
-    spreadRadius: -10,
-
-
-  ),
-  BoxShadow(color: AllColors.darkLitePurple,
-    offset: Offset(-1,-1),
-    blurRadius: 10,
-    spreadRadius: -3,
-
-
-  ),
-
-
-
-
-]
-        ),
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.circular(50), boxShadow: [
+          BoxShadow(
+            color: AllColors.superLitePurple,
+            offset: Offset(0, 0),
+            blurRadius: 0,
+            spreadRadius: 0,
+          ),
+          BoxShadow(
+            color: AllColors.white.withOpacity(.4),
+            offset: Offset(-3, 6),
+            blurRadius: 8,
+            spreadRadius: -13,
+          ),
+          BoxShadow(
+            color: AllColors.white.withOpacity(.7),
+            offset: Offset(2, -6),
+            blurRadius: 5,
+            spreadRadius: -10,
+          ),
+          BoxShadow(
+            color: AllColors.darkLitePurple,
+            offset: Offset(-1, -1),
+            blurRadius: 10,
+            spreadRadius: -3,
+          ),
+        ]),
         child: Center(
             child: Label(
-              text: labels.first,
-              fontSize: FontSize.p2,
-              fontWeight: FontWeight.w500,
-            )),
+          text: labels.first,
+          fontSize: FontSize.p2,
+          fontWeight: FontWeight.w500,
+        )),
       ),
     );
   }

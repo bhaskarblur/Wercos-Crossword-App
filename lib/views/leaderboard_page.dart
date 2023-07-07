@@ -18,7 +18,7 @@ class LeaderBoardPage extends StatelessWidget {
       decoration: const BoxDecoration(gradient: AllColors.bg),
       child: Scaffold(
         appBar: PreferredSize(preferredSize: Size.fromHeight(70),
-            child: CustomAppBar()),
+            child: CustomAppBar(isBack: false, isLang: true,)),
 
         body: Center(
           child: Column(
@@ -65,7 +65,7 @@ class LeaderBoardPage extends StatelessWidget {
                           text: '1 min 30 sec',
                           fontWeight: FontWeight.w600,
                           fontSize: FontSize.p5,
-                          color: AllColors.darkOrange,
+                          color: AllColors.orange,
                         ),
                       ],
                     ),
@@ -86,7 +86,15 @@ class LeaderBoardPage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 30,),
-              GreenShadowButton(onPressed: (){}, title: 'Back'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: ShadowButton(onPressed: (){
+                  Navigator.pop(context);
+                }, title: 'Back' , fillColors: [
+                  AllColors.liteOrange,
+                  AllColors.orange
+                  ],),
+              ),
             ],
           ),
         ),
