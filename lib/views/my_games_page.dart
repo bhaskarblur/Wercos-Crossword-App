@@ -19,38 +19,42 @@ class MyGamesPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           appBar: PreferredSize(
               preferredSize: Size.fromHeight(70), child: CustomAppBar()),
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Label(
-                    text: 'MY CREATED GAMES',
-                    fontSize: FontSize.p2,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  CustomSwitchButton(
-                    onPressed: () {},
-                    labels: ['WORD SEARCHES', 'CHALLENGES'],
-                    infoButton: false,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  CreatedGamesItem(),
-                  CreatedGamesItem()
-                ],
+          body: SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Label(
+                      text: 'MY CREATED GAMES',
+                      fontSize: FontSize.p2,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    CustomSwitchButton(
+                      onPressed: () {},
+                      labels: ['WORD SEARCHES', 'CHALLENGES'],
+                      infoButton: false,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    CreatedGamesItem(),
+                    CreatedGamesItem(),
+
+                    SizedBox(height: 80,),
+                  ],
+                ),
               ),
             ),
           ),
           floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 50, left: 24,right: 24),
+            padding: const EdgeInsets.only(bottom: 20, left: 24,right: 24),
             child: GreenShadowButton(onPressed: () {  }, title: 'CREATE CHALLENGE',),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

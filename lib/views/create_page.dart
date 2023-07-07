@@ -25,6 +25,7 @@ class CreatePage extends StatelessWidget {
             child: Column(
 
               children: [
+                SizedBox(height: 20,),
                 Label(text: 'CREATE', fontSize: FontSize.p2, fontWeight: FontWeight.bold,),
                 SizedBox(height: 20,),
                 CupertinoButton(

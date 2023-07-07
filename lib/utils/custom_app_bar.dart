@@ -65,7 +65,7 @@ class CustomAppBar extends StatelessWidget {
                     height: 5,
                   ),
                   Label(
-                      text: "Regresar",
+                      text: "Back",
                       fontSize: FontSize.p4,
                       color: AllColors.superLitePurple)
                 ],
@@ -86,7 +86,7 @@ class CustomAppBar extends StatelessWidget {
                     height: 5,
                   ),
                   Label(
-                    text: "Nível",
+                    text: "Level",
                     fontSize: FontSize.p4,
                     color: AllColors.superLitePurple,
                   )

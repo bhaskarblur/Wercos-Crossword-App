@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/components/model/bottom_navigation_item.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
+import 'package:mobile_app_word_search/views/create_page.dart';
 import 'package:mobile_app_word_search/views/create_word_page.dart';
 
 import 'package:mobile_app_word_search/views/language_selection_page.dart';
 import 'package:mobile_app_word_search/views/level_page.dart';
+import 'package:mobile_app_word_search/views/my_games_page.dart';
+import 'package:mobile_app_word_search/views/option_page.dart';
+import 'package:mobile_app_word_search/views/play_page.dart';
 
 
 
@@ -24,18 +28,18 @@ class _DashboardState extends State<Dashboard> {
   int _currentIndex=0;
 
   final List<Widget> pages=[
-    CreateWordPage(),
-    LanguageSelectionPage(),
-    CreateWordPage(),
-    LevelPage(),
+    CreatePage(),
+     PlayPage(),
+    MyGamesPage(),
+    OptionPage(),
 
 
   ];
   List<BottomNavigationItem> _iconList = [
-   BottomNavigationItem(iconData:  CupertinoIcons.square_grid_2x2_fill, text: "Crear"),
-   BottomNavigationItem(iconData:  CupertinoIcons.star_fill, text: "Jugar"),
-   BottomNavigationItem(iconData:  CupertinoIcons.person_3_fill, text: "Mis sopas"),
-   BottomNavigationItem(iconData:      Icons.settings, text: "Opciones"),
+   BottomNavigationItem(iconData:  CupertinoIcons.square_grid_2x2_fill, text: "Creat"),
+   BottomNavigationItem(iconData:  CupertinoIcons.star_fill, text: "Play"),
+   BottomNavigationItem(iconData:  CupertinoIcons.person_3_fill, text: "My games"),
+   BottomNavigationItem(iconData:      Icons.settings, text: "Options"),
 
 
 
