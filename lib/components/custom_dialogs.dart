@@ -52,7 +52,7 @@ class CustomDialog {
                           child: Label(
                             align: TextAlign.center,
                             text:
-                                "The maximum number of words to create in the free plan is 6 words.",
+                                "This feature is only available for premium users. Upgrade to use this feature.",
                             fontSize: FontSize.p2,
                           ),
                         ),

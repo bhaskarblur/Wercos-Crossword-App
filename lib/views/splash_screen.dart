@@ -63,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen>
   void gotoDashboard() {
     Future.delayed(Duration(milliseconds: 2250)).then((value) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Dashboard()));
+          context, MaterialPageRoute(builder: (context) => Dashboard2()));
     });
   }
 }

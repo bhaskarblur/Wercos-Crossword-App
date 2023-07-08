@@ -3,6 +3,7 @@ import 'package:mobile_app_word_search/views/category_page.dart';
 import 'package:mobile_app_word_search/views/create_page.dart';
 import 'package:mobile_app_word_search/views/create_word_page.dart';
 import 'package:mobile_app_word_search/views/dashboard.dart';
+import 'package:mobile_app_word_search/views/drug_page.dart';
 
 import 'package:mobile_app_word_search/views/language_selection_page.dart';
 import 'package:mobile_app_word_search/views/leaderboard_page.dart';

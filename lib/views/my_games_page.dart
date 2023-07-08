@@ -8,6 +8,7 @@ import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
+import 'package:mobile_app_word_search/views/create_word_page.dart';
 import 'package:mobile_app_word_search/views/leaderboard_page.dart';
 
 class MyGamesPage extends StatelessWidget {
@@ -63,7 +64,10 @@ class MyGamesPage extends StatelessWidget {
             child: ShadowButton(  fillColors: [
               AllColors.semiLiteGreen,
               AllColors.shineGreen
-            ],onPressed: () {  }, title: 'CREATE WORD SEARCH',),
+            ],onPressed: () {
+
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateWordPage()));
+            }, title: 'CREATE WORD SEARCH',),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         ));
