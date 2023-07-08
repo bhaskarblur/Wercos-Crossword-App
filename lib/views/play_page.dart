@@ -19,104 +19,106 @@ class PlayPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           appBar: PreferredSize(
               preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: false, isLang: true,)),
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Label(
-                    text: 'PLAY',
-                    fontWeight: FontWeight.bold,
-                    fontSize: FontSize.h5,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    height: 60,
-                    padding: EdgeInsets.only(left: 30, right: 20),
-                    width: double.maxFinite,
-                    decoration: BoxDecoration(
-                        color: AllColors.liteDarkPurple,
-                        borderRadius: BorderRadius.circular(50)),
-                    child: Center(
-                      child: TextFormField(
-                        style: TextStyle(
-                            fontSize: FontSize.p2, color: AllColors.white),
-                        decoration: InputDecoration(
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          hintText: 'Search',
-                          hintStyle: TextStyle(
+          body: SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Label(
+                      text: 'PLAY',
+                      fontWeight: FontWeight.bold,
+                      fontSize: FontSize.h5,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      height: 60,
+                      padding: EdgeInsets.only(left: 30, right: 20),
+                      width: double.maxFinite,
+                      decoration: BoxDecoration(
+                          color: AllColors.liteDarkPurple,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: Center(
+                        child: TextFormField(
+                          style: TextStyle(
                               fontSize: FontSize.p2, color: AllColors.white),
-                          suffixIcon: Icon(
-                            Icons.search_sharp,
-                            color: AllColors.white,
+                          decoration: InputDecoration(
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            hintText: 'Search',
+                            hintStyle: TextStyle(
+                                fontSize: FontSize.p2, color: AllColors.white),
+                            suffixIcon: Icon(
+                              Icons.search_sharp,
+                              color: AllColors.white,
+                            ),
                           ),
+                          onSaved: (value) {},
                         ),
-                        onSaved: (value) {},
                       ),
                     ),
-                  ),
-                  SearchButton(
-                    onPressed: () {},
-                    title: 'RANDOM WORD SEARCH',
-                  ),
-                  SearchButton(
-                    onPressed: () {},
-                    title: 'WORD SEARCH CATEGORIES',
-                  ),
-                  SearchButton(
-                    onPressed: () {},
-                    title: 'RANDOM CHALLENGE',
-                  ),
-                  SearchButton(
-                    onPressed: () {},
-                    title: 'CHALLENGE BY CATEGORY',
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  Label(
-                    text: 'Play by entering code',
-                    fontWeight: FontWeight.bold,
-                    fontSize: FontSize.h5,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    height: 60,
-                    padding: EdgeInsets.only(left: 30, right: 20),
-                    width: double.maxFinite,
-                    decoration: BoxDecoration(
-                        color: AllColors.liteDarkPurple,
-                        borderRadius: BorderRadius.circular(50)),
-                    child: Center(
-                      child: TextFormField(
-                        style: TextStyle(
-                            fontSize: FontSize.p2, color: AllColors.white),
-                        decoration: InputDecoration(
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          hintText: 'Enter  Code',
-                          hintStyle: TextStyle(
+                    SearchButton(
+                      onPressed: () {},
+                      title: 'RANDOM WORD SEARCH',
+                    ),
+                    SearchButton(
+                      onPressed: () {},
+                      title: 'WORD SEARCH CATEGORIES',
+                    ),
+                    SearchButton(
+                      onPressed: () {},
+                      title: 'RANDOM CHALLENGE',
+                    ),
+                    SearchButton(
+                      onPressed: () {},
+                      title: 'CHALLENGE BY CATEGORY',
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Label(
+                      text: 'Play by entering code',
+                      fontWeight: FontWeight.bold,
+                      fontSize: FontSize.h5,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      height: 60,
+                      padding: EdgeInsets.only(left: 30, right: 20),
+                      width: double.maxFinite,
+                      decoration: BoxDecoration(
+                          color: AllColors.liteDarkPurple,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: Center(
+                        child: TextFormField(
+                          style: TextStyle(
                               fontSize: FontSize.p2, color: AllColors.white),
+                          decoration: InputDecoration(
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            hintText: 'Enter  Code',
+                            hintStyle: TextStyle(
+                                fontSize: FontSize.p2, color: AllColors.white),
+                          ),
+                          onSaved: (value) {},
                         ),
-                        onSaved: (value) {},
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-               ShadowButton(
-                      onPressed: () {}, title: 'PLAY WITH THE ENTERED CODE', fillColors: [AllColors.liteOrange,
-                 AllColors.orange],)
-                ],
+                    SizedBox(
+                      height: 20,
+                    ),
+                 ShadowButton(
+                        onPressed: () {}, title: 'PLAY WITH THE ENTERED CODE', fillColors: [AllColors.liteOrange,
+                   AllColors.orange],)
+                  ],
+                ),
               ),
             ),
           ),

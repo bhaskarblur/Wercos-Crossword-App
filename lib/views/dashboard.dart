@@ -77,6 +77,10 @@ class _DashboardState extends State<Dashboard> {
             ),
           ),
         ),
+        resizeToAvoidBottomInset: false,
+
+
+
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: AnimatedBottomNavigationBar.builder(
           notchMargin: 20,

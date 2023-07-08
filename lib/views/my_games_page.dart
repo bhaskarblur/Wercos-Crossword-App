@@ -57,6 +57,7 @@ class MyGamesPage extends StatelessWidget {
               ),
             ),
           ),
+          resizeToAvoidBottomInset: false,
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 20, left: 24,right: 24),
             child: ShadowButton(  fillColors: [
