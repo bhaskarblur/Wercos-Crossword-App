@@ -127,10 +127,7 @@ class CreatedGamesItem extends StatelessWidget {
                   onPressed: () {},
                   padding: EdgeInsets.zero,
                   minSize: 0,
-                  child: Icon(
-                    Icons.share,
-                    color: AllColors.white,
-                  ))
+                  child:        Image.asset('assets/icons/edit_icon.png'))
             ],
           ),
           SizedBox(
@@ -190,6 +187,8 @@ class CreatedGamesItem extends StatelessWidget {
               child: Center(child: Label(text: 'Duplicate', fontSize: FontSize.p4,)),
             ),
           ),
+
+
         ],
       ),
     );
