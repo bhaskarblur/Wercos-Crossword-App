@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app_word_search/backend/user_data/model/user/user.dart';
+import 'package:mobile_app_word_search/backend/user_data/user_func.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/views/dashboard.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -60,11 +62,17 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
   }
-  void gotoDashboard() {
-    Future.delayed(Duration(milliseconds: 2250)).then((value) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Dashboard2()));
-    });
+  Future<void> gotoDashboard() async {
+
+    User? user= await UserFunc().getUser();
+    if(user!=null){
+
+      Future.delayed(Duration(milliseconds: 2250)).then((value) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Dashboard2()));
+      });
+    }
+
   }
 }
 
