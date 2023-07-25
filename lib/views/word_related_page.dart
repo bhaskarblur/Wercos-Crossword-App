@@ -14,30 +14,30 @@ class WordRelatedPage extends StatelessWidget {
       decoration: const BoxDecoration(gradient: AllColors.alertGradient),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: PreferredSize(
+        appBar: const PreferredSize(
             preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: true, isLang: true,)),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
             child: Column(
               children: [
-                SizedBox(height:100,),
-                Label(
+                const SizedBox(height:100,),
+                const Label(
                   text: 'Only mark the words \n related to:',
                   align: TextAlign.center,
                   fontSize: FontSize.h3,
                   fontWeight: FontWeight.w500,
                 ),
-                SizedBox(height: 80,),
-                Label(
+                const SizedBox(height: 80,),
+                const Label(
                   text: 'BEACH VACATION',
                   align: TextAlign.center,
                   fontSize: FontSize.h4,
                   fontWeight: FontWeight.bold,
                 ),
-                SizedBox(height: 120,),
+                const SizedBox(height: 120,),
 
-           ShadowButton(onPressed: (){}, title: 'CONTINUE', fillColors: [AllColors.liteOrange,
+           ShadowButton(onPressed: (){}, title: 'CONTINUE', fillColors: const [AllColors.liteOrange,
              AllColors.orange],)
               ],
             ),

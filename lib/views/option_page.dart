@@ -7,8 +7,6 @@ import 'package:mobile_app_word_search/utils/font_size.dart';
 import 'package:mobile_app_word_search/views/language_selection_page.dart';
 import 'package:mobile_app_word_search/views/level_page.dart';
 import 'package:mobile_app_word_search/views/my_account_page.dart';
-import 'package:mobile_app_word_search/views/my_games_page.dart';
-import 'package:mobile_app_word_search/views/play_page.dart';
 
 class OptionPage extends StatelessWidget {
   const OptionPage({Key? key}) : super(key: key);
@@ -19,21 +17,21 @@ class OptionPage extends StatelessWidget {
         decoration: const BoxDecoration(gradient: AllColors.bg),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: PreferredSize(
+          appBar: const PreferredSize(
               preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: false, isLang: true,)),
           body: Center(
             child: Column(
               children: [
-                SizedBox(height: 20,),
-                Label(
+                const SizedBox(height: 20,),
+                const Label(
                   text: 'OPTIONS',
                   fontSize: FontSize.p2,
                   fontWeight: FontWeight.bold,
                 ),
-                SizedBox(height: 14,),
+                const SizedBox(height: 14,),
                 CupertinoButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> LanguageSelectionPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const LanguageSelectionPage()));
                   },
                   padding: EdgeInsets.zero,
                   minSize: 0,
@@ -49,23 +47,23 @@ class OptionPage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Label(
+                        const Label(
                           text: 'APP LANGUAGE/IDIOMA',
                           fontSize: FontSize.p2,
                         ),
-                        SizedBox(width: 10,),
+                        const SizedBox(width: 10,),
 
                         Image.asset('assets/images/us_flag.png', height: 45,width: 45,),
-                        SizedBox(width: 5,),
+                        const SizedBox(width: 5,),
                         Image.asset('assets/images/spanish_flag.png', height: 45,width: 45,)
                       ],
                     )),
                 ),
 
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
 
                 OptionItem(optionName: 'LEVEL', onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> LevelPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const LevelPage()));
                 },),
                 OptionItem(optionName: 'MY GAMES', onPressed: () {
 
@@ -74,7 +72,7 @@ class OptionPage extends StatelessWidget {
 
                 },),
                 OptionItem(optionName: 'MY ACCOUNT', onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MyAccountPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const MyAccountPage()));
                 },),
               ],
             ),

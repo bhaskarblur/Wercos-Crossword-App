@@ -8,7 +8,7 @@ import 'package:mobile_app_word_search/utils/font_size.dart';
 class SubscriptionPage extends StatelessWidget {
   SubscriptionPage({Key? key}) : super(key: key);
 
-  List<String> benefits = [
+  final List<String> benefits = [
     'Ad free',
     'Unlimited daily matches',
     'Many more topics to choose from',
@@ -25,8 +25,12 @@ class SubscriptionPage extends StatelessWidget {
         decoration: const BoxDecoration(gradient: AllColors.bg),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: PreferredSize(
-              preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: true, isLang: true,)),
+          appBar: const PreferredSize(
+              preferredSize: Size.fromHeight(70),
+              child: CustomAppBar(
+                isBack: true,
+                isLang: true,
+              )),
           body: Column(
             children: [
               Padding(
@@ -34,47 +38,35 @@ class SubscriptionPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Center(
+                    const SizedBox(height: 20),
+                    const Center(
                         child: Label(
-                      text: "PREMIUM BENEFITS",
-                      fontWeight: FontWeight.bold,
-                      fontSize: FontSize.p2,
-                    )),
-                    SizedBox(
-                      height: 30,
-                    ),
+                            text: "PREMIUM BENEFITS",
+                            fontWeight: FontWeight.bold,
+                            fontSize: FontSize.p2)),
+                    const SizedBox(height: 30),
                     Column(
-                      children:
-                          benefits.map((e) => BenefitsItem(benefit: e)).toList(),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-
+                        children: benefits
+                            .map((e) => BenefitsItem(benefit: e))
+                            .toList()),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: ShadowButton(  fillColors: [
-                  AllColors.semiLiteGreen,
-                  AllColors.shineGreen
-                ],
-                    onPressed: () {}, title: 'MONTHLY \$99 / month'),
+                child: ShadowButton(
+                    fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
+                    onPressed: () {},
+                    title: 'MONTHLY \$99 / month'),
               ),
-              SizedBox(
-                height: 14,
-              ),
+              const SizedBox(height: 14),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: ShadowButton(  fillColors: [
-                  AllColors.semiLiteGreen,
-                  AllColors.shineGreen
-                ],
-                    onPressed: () {}, title: 'ANNUAL \$89 / month (Save 10%)'),
+                child: ShadowButton(
+                    fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
+                    onPressed: () {},
+                    title: 'ANNUAL \$89 / month (Save 10%)'),
               ),
             ],
           ),
@@ -94,12 +86,12 @@ class BenefitsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
+        const Icon(
           Icons.check,
           color: AllColors.superLightGreen,
           size: 36,
         ),
-        SizedBox(
+        const SizedBox(
           width: 20,
         ),
         Expanded(

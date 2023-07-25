@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/components/cutom_image_button.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
@@ -14,13 +13,13 @@ class LanguageSelectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(gradient: AllColors.bg),
-      child: Scaffold(
+      child: const Scaffold(
         backgroundColor: Colors.transparent,
         appBar: PreferredSize(preferredSize: Size.fromHeight(70),
             child: CustomAppBar(isBack: true, isLang: false,)),
         
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: EdgeInsets.symmetric(horizontal: 12),
           child: Column(
             children: [
               SizedBox(height: 20,),
@@ -54,8 +53,8 @@ class LangSelectionCard extends StatelessWidget {
       padding: EdgeInsets.zero,
       minSize: 0,
       child: Container(
-        margin: EdgeInsets.only(bottom: 14),
-        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+        margin: const EdgeInsets.only(bottom: 14),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
 
 
         width: double.maxFinite,
@@ -72,7 +71,7 @@ class LangSelectionCard extends StatelessWidget {
             Image.asset(image, height: 35, width: 35,),
 
             Label(text: langName, fontSize: FontSize.p2,),
-            SizedBox(width: 30,),
+            const SizedBox(width: 30,),
           ],
         ),
 

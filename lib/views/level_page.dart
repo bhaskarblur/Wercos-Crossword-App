@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 
-import '../components/cutom_image_button.dart';
 import '../components/labels.dart';
 import '../utils/all_colors.dart';
 import '../utils/font_size.dart';
@@ -15,14 +14,14 @@ class LevelPage extends StatelessWidget {
     return Container(
         decoration: const BoxDecoration(gradient: AllColors.bg),
 
-        child: Scaffold(
+        child: const Scaffold(
           backgroundColor: Colors.transparent,
 
           appBar: PreferredSize(preferredSize: Size.fromHeight(70),
               child: CustomAppBar(isBack: true, isLang: true,)),
 
           body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            padding: EdgeInsets.symmetric(horizontal: 14),
             child: Column(
               children: [
                 SizedBox(height: 20,),
@@ -55,8 +54,8 @@ class LevelCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 14),
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+      margin: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
       height: 50,
       width: double.maxFinite,
       decoration: BoxDecoration(
@@ -72,7 +71,7 @@ class LevelCard extends StatelessWidget {
           Icon(isPremium?CupertinoIcons.lock_fill:null, color: AllColors.liteGreen,),
 
           Label(text: level, fontSize: FontSize.p2,),
-          SizedBox(),
+          const SizedBox(),
         ],
       ),
 

@@ -38,11 +38,11 @@ class CustomSwitchButton extends StatelessWidget {
                   boxShadow: [
                     BoxShadow(
                       color: AllColors.black.withOpacity(0.8),
-                      offset: Offset(0, 0),
+                      offset: const Offset(0, 0),
                       blurRadius: 1,
                       spreadRadius: 0,
                     ),
-                    BoxShadow(
+                    const BoxShadow(
                       color: AllColors.darkPurple,
                       offset: Offset(1, 1),
                       blurRadius: 10,

@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/components/cutom_image_button.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
-import 'package:mobile_app_word_search/views/language_selection_page.dart';
 
 class PlayPage extends StatelessWidget {
   const PlayPage({Key? key}) : super(key: key);
@@ -17,7 +15,7 @@ class PlayPage extends StatelessWidget {
         decoration: const BoxDecoration(gradient: AllColors.bg),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: PreferredSize(
+          appBar: const PreferredSize(
               preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: false, isLang: true,)),
           body: SingleChildScrollView(
             child: Center(
@@ -25,29 +23,29 @@ class PlayPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Label(
+                    const Label(
                       text: 'PLAY',
                       fontWeight: FontWeight.bold,
                       fontSize: FontSize.h5,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Container(
                       height: 60,
-                      padding: EdgeInsets.only(left: 30, right: 20),
+                      padding: const EdgeInsets.only(left: 30, right: 20),
                       width: double.maxFinite,
                       decoration: BoxDecoration(
                           color: AllColors.liteDarkPurple,
                           borderRadius: BorderRadius.circular(50)),
                       child: Center(
                         child: TextFormField(
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: FontSize.p2, color: AllColors.white),
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             focusedBorder: InputBorder.none,
                             enabledBorder: InputBorder.none,
                             hintText: 'Search',
@@ -78,29 +76,29 @@ class PlayPage extends StatelessWidget {
                       onPressed: () {},
                       title: 'CHALLENGE BY CATEGORY',
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 12,
                     ),
-                    Label(
+                    const Label(
                       text: 'Play by entering code',
                       fontWeight: FontWeight.bold,
                       fontSize: FontSize.h5,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Container(
                       height: 60,
-                      padding: EdgeInsets.only(left: 30, right: 20),
+                      padding: const EdgeInsets.only(left: 30, right: 20),
                       width: double.maxFinite,
                       decoration: BoxDecoration(
                           color: AllColors.liteDarkPurple,
                           borderRadius: BorderRadius.circular(50)),
                       child: Center(
                         child: TextFormField(
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: FontSize.p2, color: AllColors.white),
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             focusedBorder: InputBorder.none,
                             enabledBorder: InputBorder.none,
                             hintText: 'Enter  Code',
@@ -111,7 +109,7 @@ class PlayPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                  ShadowButton(
@@ -142,7 +140,7 @@ class SearchButton extends StatelessWidget {
       minSize: 0,
       child: Container(
         height: 55,
-        margin: EdgeInsets.only(top: 12),
+        margin: const EdgeInsets.only(top: 12),
         width: double.maxFinite,
         decoration: BoxDecoration(
             color: AllColors.liteDarkPurple,

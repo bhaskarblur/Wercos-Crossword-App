@@ -17,8 +17,6 @@ class CategoryPage extends StatefulWidget {
 class _CategoryPageState extends State<CategoryPage> {
   bool isCategoryVisible = false;
 
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,7 +24,11 @@ class _CategoryPageState extends State<CategoryPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: PreferredSize(
-            preferredSize: Size.fromHeight(70), child: CustomAppBar(isBack: true, isLang: true,)),
+            preferredSize: Size.fromHeight(70),
+            child: CustomAppBar(
+              isBack: true,
+              isLang: true,
+            )),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
@@ -44,66 +46,52 @@ class _CategoryPageState extends State<CategoryPage> {
                   height: 20,
                 ),
                 ShadowButton(
-                    onPressed: () {
-                      setState(() {
-                        isCategoryVisible = !isCategoryVisible;
-                      });
-                    },
-                    title: 'CATEGORY 1', fillColors: [
-                      AllColors.semiLiteGreen,
-                  AllColors.shineGreen
-                ],),
+                  onPressed: () {
+                    setState(() {
+                      isCategoryVisible = !isCategoryVisible;
+                    });
+                  },
+                  title: 'CATEGORY 1',
+                  fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
+                ),
                 isCategoryVisible
                     ? SizedBox()
-                    : TopicButton(onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> WordRelatedPage()));
-                }, topicName: 'Beach vacation',),
-
+                    : TopicButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WordRelatedPage()));
+                        },
+                        topicName: 'Beach vacation',
+                      ),
                 SizedBox(
                   height: 20,
                 ),
-
                 ShadowButton(
-                    fillColors: [
-                      AllColors.semiLiteGreen,
-                      AllColors.shineGreen
-                    ],
-                    onPressed: () {
-
-                    },
+                    fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
+                    onPressed: () {},
                     title: 'CATEGORY 2'),
                 SizedBox(
                   height: 20,
                 ),
-                ShadowButton(  fillColors: [
-                  AllColors.semiLiteGreen,
-                  AllColors.shineGreen
-                ],
-                    onPressed: () {
-
-                    },
+                ShadowButton(
+                    fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
+                    onPressed: () {},
                     title: 'CATEGORY 3'),
                 SizedBox(
                   height: 20,
                 ),
-                ShadowButton(  fillColors: [
-                  AllColors.semiLiteGreen,
-                  AllColors.shineGreen
-                ],
-                    onPressed: () {
-
-                    },
+                ShadowButton(
+                    fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
+                    onPressed: () {},
                     title: 'CATEGORY 4'),
                 SizedBox(
                   height: 20,
                 ),
-                ShadowButton(  fillColors: [
-                  AllColors.semiLiteGreen,
-                  AllColors.shineGreen
-                ],
-                    onPressed: () {
-
-                    },
+                ShadowButton(
+                    fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
+                    onPressed: () {},
                     title: 'CATEGORY 5'),
               ],
             ),
@@ -116,7 +104,9 @@ class _CategoryPageState extends State<CategoryPage> {
 
 class TopicButton extends StatelessWidget {
   const TopicButton({
-    super.key, required this.onPressed, required this.topicName,
+    super.key,
+    required this.onPressed,
+    required this.topicName,
   });
 
   final VoidCallback onPressed;
@@ -125,22 +115,22 @@ class TopicButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
-        onPressed: onPressed,
-        padding: EdgeInsets.zero,
-        minSize: 0,
-        child: Container(
-          height: 55,
-          margin: EdgeInsets.only(top: 12),
-          width: double.maxFinite,
-          decoration: BoxDecoration(
-              color: AllColors.liteDarkPurple,
-              borderRadius: BorderRadius.circular(50)),
-          child: Center(
-              child: Label(
-            text: topicName,
-            fontSize: FontSize.p2,
-          )),
-        ),
-      );
+      onPressed: onPressed,
+      padding: EdgeInsets.zero,
+      minSize: 0,
+      child: Container(
+        height: 55,
+        margin: EdgeInsets.only(top: 12),
+        width: double.maxFinite,
+        decoration: BoxDecoration(
+            color: AllColors.liteDarkPurple,
+            borderRadius: BorderRadius.circular(50)),
+        child: Center(
+            child: Label(
+          text: topicName,
+          fontSize: FontSize.p2,
+        )),
+      ),
+    );
   }
 }

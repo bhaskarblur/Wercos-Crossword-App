@@ -6,6 +6,7 @@ import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
 import 'package:mobile_app_word_search/views/subscription_page.dart';
+import 'package:mobile_app_word_search/widget/navigator.dart';
 
 class CustomDialog {
   Future<void> showPurchaseDialog({required BuildContext context}) async {
@@ -57,12 +58,20 @@ class CustomDialog {
                           ),
                         ),
                         Spacer(),
-                        ShadowButton(fillColors: [
-                          AllColors.semiLiteGreen,
-                          AllColors.shineGreen
-                        ], onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=> SubscriptionPage()));
-                        }, title: "UPGRADE")
+                        ShadowButton(
+                            fillColors: [
+                              AllColors.semiLiteGreen,
+                              AllColors.shineGreen
+                            ],
+                            onPressed: () {
+                              Nav.pop(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SubscriptionPage()));
+                            },
+                            title: "UPGRADE")
                       ],
                     ),
                   ),
@@ -78,7 +87,6 @@ class CustomDialog {
   Future<void> showSuggestionDialog(
       {required BuildContext context,
       required List<Suggestion> suggestions}) async {
-
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -126,7 +134,7 @@ class _SuggestionHolderState extends State<SuggestionHolder> {
             padding: EdgeInsets.zero,
             minSize: 0,
             onPressed: () {
-              if (index == widget.suggestions.length-1) {
+              if (index == widget.suggestions.length - 1) {
                 Navigator.pop(context);
               } else {
                 index++;
@@ -140,8 +148,6 @@ class _SuggestionHolderState extends State<SuggestionHolder> {
             ),
           ),
         ),
-
-
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Center(
@@ -150,7 +156,9 @@ class _SuggestionHolderState extends State<SuggestionHolder> {
                 Container(
                   height: 50,
                   width: 50,
-                  decoration: BoxDecoration(color: AllColors.litePurple, borderRadius: BorderRadius.circular(50),
+                  decoration: BoxDecoration(
+                      color: AllColors.litePurple,
+                      borderRadius: BorderRadius.circular(50),
                       boxShadow: [
                         BoxShadow(
                           color: AllColors.superDarkPurple.withOpacity(0.6),
@@ -164,34 +172,30 @@ class _SuggestionHolderState extends State<SuggestionHolder> {
                           blurRadius: 10,
                           spreadRadius: 0,
                         ),
-                      ]
-
-                  ),
-
+                      ]),
                   child: Icon(
                     Icons.info_outline,
                     color: AllColors.white,
                     size: 30,
                   ),
                 ),
-
-                SizedBox(height: 40,),
+                SizedBox(
+                  height: 40,
+                ),
                 Label(
                   align: TextAlign.center,
                   text: suggestion.title,
                   fontSize: FontSize.h4,
                   fontWeight: FontWeight.bold,
-
                 ),
-
-                SizedBox(height: 10,),
-
+                SizedBox(
+                  height: 10,
+                ),
                 Label(
                   align: TextAlign.center,
                   text: suggestion.description,
                   fontSize: FontSize.p2,
                 ),
-
               ],
             ),
           ),
