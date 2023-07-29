@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app_word_search/api_services.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/buttons.dart';
@@ -7,15 +8,36 @@ import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
 import 'package:mobile_app_word_search/views/word_related_page.dart';
 
+import '../widget/sahared_prefs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class CategoryPage extends StatefulWidget {
-  CategoryPage({Key? key}) : super(key: key);
+  const CategoryPage({Key? key}) : super(key: key);
 
   @override
   State<CategoryPage> createState() => _CategoryPageState();
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  final ApiServices _apiServices = ApiServices();
+
   bool isCategoryVisible = false;
+
+  @override
+  void initState() {
+    getData();
+
+    super.initState();
+  }
+
+  getData() {
+    Prefs.getPrefs('wordLimit').then((wordLimit) {
+      _apiServices.post(
+          context: context,
+          endpoint: 'getcatstopics',
+          body: {}).then((value) {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,76 +45,62 @@ class _CategoryPageState extends State<CategoryPage> {
       decoration: const BoxDecoration(gradient: AllColors.bg),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: PreferredSize(
+        appBar: const PreferredSize(
             preferredSize: Size.fromHeight(70),
-            child: CustomAppBar(
-              isBack: true,
-              isLang: true,
-            )),
+            child: CustomAppBar(isBack: true, isLang: true)),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Column(
               children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Label(
-                  text: 'CATEGORIES',
-                  fontWeight: FontWeight.bold,
-                  fontSize: FontSize.h5,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
+                const Label(
+                    text: 'CATEGORIES',
+                    fontWeight: FontWeight.bold,
+                    fontSize: FontSize.h5),
+                const SizedBox(height: 20),
                 ShadowButton(
-                  onPressed: () {
-                    setState(() {
-                      isCategoryVisible = !isCategoryVisible;
-                    });
-                  },
-                  title: 'CATEGORY 1',
-                  fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
-                ),
+                    onPressed: () {
+                      setState(() {
+                        isCategoryVisible = !isCategoryVisible;
+                      });
+                    },
+                    title: 'CATEGORY 1',
+                    fillColors: const [
+                      AllColors.semiLiteGreen,
+                      AllColors.shineGreen
+                    ]),
                 isCategoryVisible
-                    ? SizedBox()
+                    ? const SizedBox()
                     : TopicButton(
                         onPressed: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => WordRelatedPage()));
+                                  builder: (context) =>
+                                      const WordRelatedPage()));
                         },
-                        topicName: 'Beach vacation',
-                      ),
-                SizedBox(
-                  height: 20,
-                ),
-                ShadowButton(
-                    fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
-                    onPressed: () {},
-                    title: 'CATEGORY 2'),
-                SizedBox(
-                  height: 20,
-                ),
-                ShadowButton(
-                    fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
-                    onPressed: () {},
-                    title: 'CATEGORY 3'),
-                SizedBox(
-                  height: 20,
-                ),
-                ShadowButton(
-                    fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
-                    onPressed: () {},
-                    title: 'CATEGORY 4'),
-                SizedBox(
-                  height: 20,
-                ),
-                ShadowButton(
-                    fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
-                    onPressed: () {},
-                    title: 'CATEGORY 5'),
+                        topicName: 'Beach vacation'),
+                const SizedBox(height: 20),
+                ShadowButton(fillColors: const [
+                  AllColors.semiLiteGreen,
+                  AllColors.shineGreen
+                ], onPressed: () {}, title: 'CATEGORY 2'),
+                const SizedBox(height: 20),
+                ShadowButton(fillColors: const [
+                  AllColors.semiLiteGreen,
+                  AllColors.shineGreen
+                ], onPressed: () {}, title: 'CATEGORY 3'),
+                const SizedBox(height: 20),
+                ShadowButton(fillColors: const [
+                  AllColors.semiLiteGreen,
+                  AllColors.shineGreen
+                ], onPressed: () {}, title: 'CATEGORY 4'),
+                const SizedBox(height: 20),
+                ShadowButton(fillColors: const [
+                  AllColors.semiLiteGreen,
+                  AllColors.shineGreen
+                ], onPressed: () {}, title: 'CATEGORY 5')
               ],
             ),
           ),
@@ -120,7 +128,7 @@ class TopicButton extends StatelessWidget {
       minSize: 0,
       child: Container(
         height: 55,
-        margin: EdgeInsets.only(top: 12),
+        margin: const EdgeInsets.only(top: 12),
         width: double.maxFinite,
         decoration: BoxDecoration(
             color: AllColors.liteDarkPurple,

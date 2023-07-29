@@ -4,10 +4,10 @@ import 'package:mobile_app_word_search/components/cutom_image_button.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
-import 'package:mobile_app_word_search/views/dashboard.dart';
 import 'package:mobile_app_word_search/views/language_selection_page.dart';
 import 'package:mobile_app_word_search/views/level_page.dart';
 import 'package:mobile_app_word_search/widget/navigator.dart';
+import 'package:mobile_app_word_search/widget/widgets.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
@@ -17,7 +17,7 @@ class CustomAppBar extends StatelessWidget {
     this.levelOnPressed,
     required this.isLang,
     required this.isBack,
-    this.isLevel,
+    this.isLevel = true,
   });
 
   final VoidCallback? languageOnPressed;
@@ -26,7 +26,7 @@ class CustomAppBar extends StatelessWidget {
 
   final bool isLang;
   final bool isBack;
-  final bool? isLevel;
+  final bool isLevel;
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +46,13 @@ class CustomAppBar extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => LanguageSelectionPage()));
+                              builder: (context) =>
+                                  const LanguageSelectionPage()));
                     },
-                    child: Column(
+                    child: const Column(
                       children: [
                         CustomImageButton(
-                          image: "assets/images/spanish_flag.png",
-                        ),
+                            image: "assets/images/spanish_flag.png"),
                         SizedBox(height: 5),
                         Label(
                             text: "Idioma/Languaje",
@@ -62,7 +62,7 @@ class CustomAppBar extends StatelessWidget {
                     ),
                   ),
                 )
-              : Expanded(child: SizedBox()),
+              : const Expanded(child: SizedBox()),
           isBack
               ? Expanded(
                   child: CupertinoButton(
@@ -73,19 +73,16 @@ class CustomAppBar extends StatelessWidget {
                     },
                     minSize: 0,
                     padding: EdgeInsets.zero,
-                    child: Column(
+                    child: const Column(
                       children: [
                         SizedBox(
                           height: 50,
                           child: Icon(
-                            CupertinoIcons.arrowshape_turn_up_left_fill,
-                            color: Colors.white,
-                            size: 34,
-                          ),
+                              CupertinoIcons.arrowshape_turn_up_left_fill,
+                              color: Colors.white,
+                              size: 34),
                         ),
-                        SizedBox(
-                          height: 5,
-                        ),
+                        SizedBox(height: 5),
                         Label(
                             text: "Back",
                             fontSize: FontSize.p4,
@@ -94,31 +91,30 @@ class CustomAppBar extends StatelessWidget {
                     ),
                   ),
                 )
-              : Expanded(child: SizedBox()),
+              : const Expanded(child: SizedBox()),
           Expanded(
-            child: CupertinoButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LevelPage()));
-              },
-              minSize: 0,
-              padding: EdgeInsets.zero,
-              child: Column(
-                children: [
-                  CustomImageButton(
-                    image: "assets/images/hash.png",
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Label(
-                    text: "Level",
-                    fontSize: FontSize.p4,
-                    color: AllColors.superLitePurple,
+            child: isLevel
+                ? CupertinoButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LevelPage()));
+                    },
+                    minSize: 0,
+                    padding: EdgeInsets.zero,
+                    child: const Column(
+                      children: [
+                        CustomImageButton(image: "assets/images/hash.png"),
+                        SizedBox(height: 5),
+                        Label(
+                            text: "Level",
+                            fontSize: FontSize.p4,
+                            color: AllColors.superLitePurple)
+                      ],
+                    ),
                   )
-                ],
-              ),
-            ),
+                : gap(0),
           )
         ],
       ),

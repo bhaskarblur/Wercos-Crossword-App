@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart'
-    as inset_box_shadow;
 import 'package:mobile_app_word_search/components/custom_dialogs.dart';
 import 'package:mobile_app_word_search/components/suggestion/model/suggestion.dart';
 

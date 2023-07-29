@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/profile_provider.dart';
 import '../widget/sahared_prefs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyAccountPage extends StatefulWidget {
   const MyAccountPage({Key? key}) : super(key: key);

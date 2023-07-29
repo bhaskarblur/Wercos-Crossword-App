@@ -1,9 +1,9 @@
-
 import 'package:flutter/cupertino.dart';
 
 class CustomImageButton extends StatelessWidget {
   const CustomImageButton({
-  super.key, required this.image,
+    super.key,
+    required this.image,
   });
 
   final String image;
@@ -16,13 +16,13 @@ class CustomImageButton extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Image.asset("assets/images/inner_shadow.png",
-           ),
+          Image.asset(
+            "assets/images/inner_shadow.png",
+          ),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Image.asset(
               image,
-
             ),
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app_word_search/api_services.dart';
 import 'package:mobile_app_word_search/utils/buttons.dart';
@@ -16,6 +17,7 @@ import 'package:mobile_app_word_search/components/custom_dialogs.dart';
 import '../widget/widgets.dart';
 import '../widget/sahared_prefs.dart';
 import '../providers/profile_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyGamesPage extends StatefulWidget {
   const MyGamesPage({Key? key}) : super(key: key);
@@ -31,21 +33,27 @@ class _MyGamesPageState extends State<MyGamesPage> {
 
   @override
   void initState() {
-    getData();
+    getData(true);
 
     super.initState();
   }
 
-  getData() {
+  getData(bool progressBar) {
     final provider = Provider.of<GamesProvider>(context, listen: false);
 
     Prefs.getToken().then((token) {
       Prefs.getPrefs('loginId').then((loginId) {
-        _apiServices.post(context: context, endpoint: 'getAllUserGames', body: {
-          "accessToken": token,
-          "userId": loginId,
-          "type": public ? 'search' : 'challenge'
-        }).then((value) {
+        _apiServices
+            .post(
+                context: context,
+                endpoint: 'getAllUserGames',
+                body: {
+                  "accessToken": token,
+                  "userId": loginId,
+                  "type": public ? 'search' : 'challenge'
+                },
+                progressBar: progressBar)
+            .then((value) {
           if (public) {
             provider.changeSearchGames(value['allGames']);
           } else {
@@ -89,7 +97,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
                             setState(() {
                               public = !public;
                             });
-                            getData();
+                            getData(true);
                           }
                         }, info: () {
                           CustomDialog().showPurchaseDialog(context: context);
@@ -105,8 +113,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
                                 return gap(10);
                               },
                               itemBuilder: (context, index) {
-                                return CreatedGamesItem(
-                                    details: provider.searchGames[index]);
+                                return gamesItem(provider.searchGames[index]);
                               },
                             ),
                         if (!public)
@@ -119,8 +126,8 @@ class _MyGamesPageState extends State<MyGamesPage> {
                                 return gap(10);
                               },
                               itemBuilder: (context, index) {
-                                return CreatedGamesItem(
-                                    details: provider.challengeGames[index]);
+                                return gamesItem(
+                                    provider.challengeGames[index]);
                               },
                             ),
                         const SizedBox(height: 80),
@@ -149,14 +156,8 @@ class _MyGamesPageState extends State<MyGamesPage> {
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked));
   }
-}
 
-class CreatedGamesItem extends StatelessWidget {
-  final dynamic details;
-  const CreatedGamesItem({super.key, this.details});
-
-  @override
-  Widget build(BuildContext context) {
+  gamesItem(var details) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       width: double.maxFinite,
@@ -237,7 +238,23 @@ class CreatedGamesItem extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           CupertinoButton(
-            onPressed: () {},
+            onPressed: () {
+              Prefs.getToken().then((token) {
+                Prefs.getPrefs('loginId').then((loginId) {
+                  _apiServices
+                      .post(context: context, endpoint: 'duplicateGame', body: {
+                    "accessToken": token,
+                    "gameid": details['id'].toString(),
+                    "userId": loginId,
+                  }).then((value) {
+                    dialog(context, value['message'], () {
+                      Nav.pop(context);
+                    });
+                    getData(false);
+                  });
+                });
+              });
+            },
             minSize: 0,
             padding: EdgeInsets.zero,
             child: Container(

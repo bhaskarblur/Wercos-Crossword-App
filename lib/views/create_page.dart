@@ -7,6 +7,7 @@ import 'package:mobile_app_word_search/components/custom_dialogs.dart';
 
 import '../components/labels.dart';
 import '../utils/font_size.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreatePage extends StatelessWidget {
   const CreatePage({Key? key}) : super(key: key);

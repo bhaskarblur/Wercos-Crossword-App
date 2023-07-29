@@ -1,6 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'dart:math' as math;
-
 
 class AllColors {
   static const LinearGradient bg = LinearGradient(

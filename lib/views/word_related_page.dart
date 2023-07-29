@@ -4,6 +4,7 @@ import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WordRelatedPage extends StatelessWidget {
   const WordRelatedPage({Key? key}) : super(key: key);

@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app_word_search/api_services.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
+import 'package:mobile_app_word_search/widget/navigator.dart';
+import 'package:mobile_app_word_search/widget/widgets.dart';
+import 'package:provider/provider.dart';
 
-class SubscriptionPage extends StatelessWidget {
-  SubscriptionPage({Key? key}) : super(key: key);
+import '../providers/profile_provider.dart';
+import '../widget/sahared_prefs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+class SubscriptionPage extends StatefulWidget {
+  const SubscriptionPage({Key? key}) : super(key: key);
+
+  @override
+  State<SubscriptionPage> createState() => _SubscriptionPageState();
+}
+
+class _SubscriptionPageState extends State<SubscriptionPage> {
+  final ApiServices _apiServices = ApiServices();
 
   final List<String> benefits = [
     'Ad free',
@@ -27,10 +42,7 @@ class SubscriptionPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           appBar: const PreferredSize(
               preferredSize: Size.fromHeight(70),
-              child: CustomAppBar(
-                isBack: true,
-                isLang: true,
-              )),
+              child: CustomAppBar(isBack: true, isLang: true)),
           body: Column(
             children: [
               Padding(
@@ -56,21 +68,61 @@ class SubscriptionPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: ShadowButton(
-                    fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
-                    onPressed: () {},
+                    fillColors: const [
+                      AllColors.semiLiteGreen,
+                      AllColors.shineGreen
+                    ],
+                    onPressed: () {
+                      subscribe('1month');
+                    },
                     title: 'MONTHLY \$99 / month'),
               ),
               const SizedBox(height: 14),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: ShadowButton(
-                    fillColors: [AllColors.semiLiteGreen, AllColors.shineGreen],
-                    onPressed: () {},
+                    fillColors: const [
+                      AllColors.semiLiteGreen,
+                      AllColors.shineGreen
+                    ],
+                    onPressed: () {
+                      subscribe('1year');
+                    },
                     title: 'ANNUAL \$89 / month (Save 10%)'),
               ),
             ],
           ),
         ));
+  }
+
+  subscribe(String subStatus) {
+    Prefs.getToken().then((token) {
+      Prefs.getPrefs('loginId').then((loginId) {
+        _apiServices.post(
+            context: context,
+            endpoint: 'updateUserSubscriptionStatus',
+            body: {
+              "accessToken": token,
+              "userId": loginId,
+              "subStatus": subStatus,
+            }).then((value) {
+          dialog(context, value['message'], () {
+            Nav.pop(context);
+          });
+          _apiServices
+              .post(
+                  context: context,
+                  endpoint: 'getUserInfo',
+                  body: {"accessToken": token, "userId": loginId},
+                  progressBar: false)
+              .then((value) {
+            final provider =
+                Provider.of<ProfileProvider>(context, listen: false);
+            provider.chnageProfile(value);
+          });
+        });
+      });
+    });
   }
 }
 
@@ -86,20 +138,13 @@ class BenefitsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Icon(
-          Icons.check,
-          color: AllColors.superLightGreen,
-          size: 36,
-        ),
-        const SizedBox(
-          width: 20,
-        ),
+        const Icon(Icons.check, color: AllColors.superLightGreen, size: 36),
+        const SizedBox(width: 20),
         Expanded(
             child: Label(
-          text: benefit,
-          fontSize: FontSize.p2,
-          fontWeight: FontWeight.bold,
-        ))
+                text: benefit,
+                fontSize: FontSize.p2,
+                fontWeight: FontWeight.bold))
       ],
     );
   }

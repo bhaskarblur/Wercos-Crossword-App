@@ -15,6 +15,7 @@ import 'package:mobile_app_word_search/widget/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../components/custom_dialogs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateWordPage extends StatefulWidget {
   const CreateWordPage({Key? key}) : super(key: key);

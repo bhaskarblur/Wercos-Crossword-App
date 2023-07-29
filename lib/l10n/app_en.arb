@@ -1,0 +1,11 @@
+{
+    "language" : "English",
+    "@language" : {
+        "description" : "The current language"
+    },
+    
+    "create" : "Create",
+    "play" : "Play",
+    "my_games" : "My Games",
+    "options" : "Options"
+}

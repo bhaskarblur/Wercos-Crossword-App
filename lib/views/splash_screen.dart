@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_word_search/api_services.dart';
+import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
 import 'package:mobile_app_word_search/providers/profile_provider.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/views/dashboard.dart';
+import 'package:mobile_app_word_search/views/tab_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../l10n/l10n.dart';
+import '../providers/language_provider.dart';
 import '../widget/sahared_prefs.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -22,17 +26,43 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void initState() {
+    localization();
+    final provider = Provider.of<GameScreenProvider>(context, listen: false);
+    provider.changeGameType('random');
+
+    gotoDashboard();
     controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 1),
     )..addListener(() {
         setState(() {});
       });
     controller.repeat(max: 1);
     controller.forward();
-    gotoDashboard();
 
     super.initState();
+  }
+
+  localization() {
+    print('localization');
+    Prefs.getPrefs('language').then((value) {
+      print(value);
+      final provider = Provider.of<LanguageProvider>(context, listen: false);
+      if (value == null) {
+        print('1');
+        Prefs.setPrefs('language', 'en');
+        provider.setLocale(L10n.all.first);
+      } else {
+        if (value == 'en') {
+          print('2');
+          provider.setLocale(L10n.all.first);
+        }
+        if (value == 'es') {
+          print('3');
+          provider.setLocale(L10n.all.last);
+        }
+      }
+    });
   }
 
   @override
@@ -59,11 +89,6 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> gotoDashboard() async {
-    Future.delayed(const Duration(seconds: 3)).then((value) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const Dashboard2()));
-    });
-
     Prefs.getToken().then((token) {
       if (token == null) {
         _apiServices
@@ -72,6 +97,7 @@ class _SplashScreenState extends State<SplashScreen>
           Prefs.setPrefs('token', value['accesstoken']);
           Prefs.setPrefs('loginId', value['id'].toString());
           Prefs.setPrefs('userName', value['username']);
+          gotoTab();
         });
       } else {
         Prefs.getPrefs('loginId').then((loginId) {
@@ -85,9 +111,15 @@ class _SplashScreenState extends State<SplashScreen>
             final provider =
                 Provider.of<ProfileProvider>(context, listen: false);
             provider.chnageProfile(value);
+            gotoTab();
           });
         });
       }
     });
+  }
+
+  gotoTab() {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const TabScreen()));
   }
 }

@@ -1,10 +1,7 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
-
-
 
 class Label extends StatelessWidget {
   final String text;
@@ -16,23 +13,21 @@ class Label extends StatelessWidget {
   final TextAlign? align;
   final Color? color;
 
-  const Label(
-      {Key? key,
-        required this.text,
-        this.fontSize,
-        this.fontWeight,
-        this.align,
-        this.color,
-        this.maxLine,
-        this.overflow,})
-      : super(key: key);
+  const Label({
+    Key? key,
+    required this.text,
+    this.fontSize,
+    this.fontWeight,
+    this.align,
+    this.color,
+    this.maxLine,
+    this.overflow,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
-        style: TextStyle(
-
-        ),
+        style: TextStyle(),
         child: Text(this.text,
             maxLines: this.maxLine ?? 50,
             overflow: overflow ?? TextOverflow.visible,
