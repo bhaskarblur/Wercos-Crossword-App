@@ -23,19 +23,20 @@ class SubscriptionPage extends StatefulWidget {
 class _SubscriptionPageState extends State<SubscriptionPage> {
   final ApiServices _apiServices = ApiServices();
 
-  final List<String> benefits = [
-    'Ad free',
-    'Unlimited daily matches',
-    'Many more topics to choose from',
-    'Share your created games withoutlimits',
-    '5 levels available instead of only  2',
-    'Create dynamic Word searches',
-    'Create challenges',
-    'Create private word seaches and challenges.'
-  ];
+  List<String>? benefits;
 
   @override
   Widget build(BuildContext context) {
+    benefits = [
+      AppLocalizations.of(context)!.add_free,
+      AppLocalizations.of(context)!.unlimited_match,
+      AppLocalizations.of(context)!.many_more_topics,
+      AppLocalizations.of(context)!.share_your,
+      AppLocalizations.of(context)!.levels_available,
+      AppLocalizations.of(context)!.create_dynamic,
+      AppLocalizations.of(context)!.create_challenges,
+      AppLocalizations.of(context)!.create_privet
+    ];
     return Container(
         decoration: const BoxDecoration(gradient: AllColors.bg),
         child: Scaffold(
@@ -51,14 +52,14 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
-                    const Center(
+                     Center(
                         child: Label(
-                            text: "PREMIUM BENEFITS",
+                            text: AppLocalizations.of(context)!.premium_benifits,
                             fontWeight: FontWeight.bold,
                             fontSize: FontSize.p2)),
                     const SizedBox(height: 30),
                     Column(
-                        children: benefits
+                        children: benefits!
                             .map((e) => BenefitsItem(benefit: e))
                             .toList()),
                     const SizedBox(height: 30),
@@ -75,7 +76,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     onPressed: () {
                       subscribe('1month');
                     },
-                    title: 'MONTHLY \$99 / month'),
+                    title: AppLocalizations.of(context)!.monthly),
               ),
               const SizedBox(height: 14),
               Padding(
@@ -88,7 +89,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     onPressed: () {
                       subscribe('1year');
                     },
-                    title: 'ANNUAL \$89 / month (Save 10%)'),
+                    title: AppLocalizations.of(context)!.annual),
               ),
             ],
           ),

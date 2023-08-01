@@ -34,28 +34,39 @@ class _LevelPageState extends State<LevelPage> {
               return Column(
                 children: [
                   const SizedBox(height: 20),
-                  const Label(
-                      text: "SELECT LEVEL",
+                  Label(
+                      text: AppLocalizations.of(context)!.select_level,
                       fontWeight: FontWeight.bold,
                       fontSize: FontSize.p2),
                   const SizedBox(height: 20),
-                  levelCard('6', '6 WORDS (EASY)', false),
-                  levelCard('9', '9 WORDS (MEDIUM)', false),
+                  levelCard(
+                      '6',
+                      '6 ${AppLocalizations.of(context)!.words} (${AppLocalizations.of(context)!.easy})'
+                          .toUpperCase(),
+                      false),
+                  levelCard(
+                      '9',
+                      '9 ${AppLocalizations.of(context)!.words} (${AppLocalizations.of(context)!.medium})'
+                          .toUpperCase(),
+                      false),
                   levelCard(
                       '12',
-                      '12 WORDS (ADVANCED)',
+                      '12 ${AppLocalizations.of(context)!.words} (${AppLocalizations.of(context)!.advanced})'
+                          .toUpperCase(),
                       provider.profile['subscriptionstatus'] == 'none'
                           ? true
                           : false),
                   levelCard(
                       '15',
-                      '15 WORDS (HARD)',
+                      '15 ${AppLocalizations.of(context)!.words} (${AppLocalizations.of(context)!.hard})'
+                          .toUpperCase(),
                       provider.profile['subscriptionstatus'] == 'none'
                           ? true
                           : false),
                   levelCard(
                       '18',
-                      '18  WORDS (EXPERT)',
+                      '18  ${AppLocalizations.of(context)!.words} (${AppLocalizations.of(context)!.expert})'
+                          .toUpperCase(),
                       provider.profile['subscriptionstatus'] == 'none'
                           ? true
                           : false),

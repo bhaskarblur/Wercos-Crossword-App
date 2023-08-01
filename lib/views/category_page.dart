@@ -10,9 +10,6 @@ import 'package:mobile_app_word_search/utils/font_size.dart';
 import 'package:mobile_app_word_search/views/word_related_page.dart';
 import 'package:mobile_app_word_search/widget/widgets.dart';
 import 'package:provider/provider.dart';
-
-import '../providers/game_screen_provider.dart';
-import '../widget/sahared_prefs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -58,8 +55,8 @@ class _CategoryPageState extends State<CategoryPage> {
               return Column(
                 children: [
                   const SizedBox(height: 20),
-                  const Label(
-                      text: 'CATEGORIES',
+                  Label(
+                      text: AppLocalizations.of(context)!.categories.toUpperCase(),
                       fontWeight: FontWeight.bold,
                       fontSize: FontSize.h5),
                   const SizedBox(height: 20),
@@ -98,8 +95,6 @@ class _CategoryPageState extends State<CategoryPage> {
                                     itemBuilder: (context, i) {
                                       return TopicButton(
                                           onPressed: () {
-                                            
-
                                             final provider =
                                                 Provider.of<CategoryProvider>(
                                                     context,

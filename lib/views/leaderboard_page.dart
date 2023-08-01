@@ -53,100 +53,105 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
               child: CustomAppBar(isBack: true, isLang: true)),
           body: Consumer<LeaderBoardProvider>(builder: (context, provider, _) {
             return Center(
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  const Label(
-                      text: 'Leaderboard',
-                      fontWeight: FontWeight.bold,
-                      fontSize: FontSize.h5),
-                  const Label(
-                      text: 'Word Search Name: Beach Vacation',
-                      fontWeight: FontWeight.w500,
-                      fontSize: FontSize.p2),
-                  const SizedBox(height: 10),
-                  if (provider.leaderboard != null)
-                    ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: provider.leaderboard['leaderboards'].length,
-                        separatorBuilder: (context, index) {
-                          return gap(10);
-                        },
-                        itemBuilder: (context, index) {
-                          return Stack(
-                            children: [
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 34),
-                                padding:
-                                    const EdgeInsets.only(left: 34, right: 10),
-                                width: double.maxFinite,
-                                height: 55,
-                                decoration: BoxDecoration(
-                                    color: AllColors.liteDarkPurple,
-                                    borderRadius: BorderRadius.circular(50)),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Label(
-                                        text:
-                                            provider.leaderboard['leaderboards']
+              child: provider.leaderboard == null
+                  ? gap(0)
+                  : Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Label(
+                            text: AppLocalizations.of(context)!.leaderboard,
+                            fontWeight: FontWeight.bold,
+                            fontSize: FontSize.h5),
+                        Label(
+                            text:
+                                '${AppLocalizations.of(context)!.word_search_name}: ${provider.leaderboard['gameName']}',
+                            fontWeight: FontWeight.w500,
+                            fontSize: FontSize.p2),
+                        const SizedBox(height: 10),
+                        ListView.separated(
+                            shrinkWrap: true,
+                            itemCount:
+                                provider.leaderboard['leaderboards'].length,
+                            separatorBuilder: (context, index) {
+                              return gap(10);
+                            },
+                            itemBuilder: (context, index) {
+                              return Stack(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 34),
+                                    padding: const EdgeInsets.only(
+                                        left: 34, right: 10),
+                                    width: double.maxFinite,
+                                    height: 55,
+                                    decoration: BoxDecoration(
+                                        color: AllColors.liteDarkPurple,
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Label(
+                                            text: provider
+                                                    .leaderboard['leaderboards']
                                                 [index]['playername'],
-                                        fontSize: FontSize.p2),
-                                    Label(
-                                        text:
-                                            '${provider.leaderboard['totalWords']} of ${provider.leaderboard['leaderboards'][index]['crosswordscore']}',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: FontSize.p5),
-                                    Label(
-                                        text:
-                                            provider.leaderboard['leaderboards']
+                                            fontSize: FontSize.p2),
+                                        Label(
+                                            text:
+                                                '${provider.leaderboard['totalWords']} of ${provider.leaderboard['leaderboards'][index]['crosswordscore']}',
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: FontSize.p5),
+                                        Label(
+                                            text: provider
+                                                    .leaderboard['leaderboards']
                                                 [index]['timescoretext'],
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: FontSize.p5,
-                                        color: AllColors.orange),
-                                  ],
-                                ),
-                              ),
-                              Positioned(
-                                left: 20,
-                                top: 14,
-                                child: Container(
-                                  height: 24,
-                                  width: 24,
-                                  decoration: BoxDecoration(
-                                      color: AllColors.white,
-                                      borderRadius: BorderRadius.circular(50)),
-                                  child: Center(
-                                      child: Label(
-                                    text: index.toString(),
-                                    color: AllColors.black,
-                                    fontSize: FontSize.p4,
-                                    fontWeight: FontWeight.w500,
-                                  )),
-                                ),
-                              ),
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: FontSize.p5,
+                                            color: AllColors.orange),
+                                      ],
+                                    ),
+                                  ),
+                                  Positioned(
+                                    left: 20,
+                                    top: 14,
+                                    child: Container(
+                                      height: 24,
+                                      width: 24,
+                                      decoration: BoxDecoration(
+                                          color: AllColors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                      child: Center(
+                                          child: Label(
+                                              text: index.toString(),
+                                              color: AllColors.black,
+                                              fontSize: FontSize.p4,
+                                              fontWeight: FontWeight.w500)),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                        const SizedBox(height: 30),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: ShadowButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            title: AppLocalizations.of(context)!.back,
+                            fillColors: const [
+                              AllColors.liteOrange,
+                              AllColors.orange
                             ],
-                          );
-                        }),
-                  const SizedBox(height: 30),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: ShadowButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      title: 'Back',
-                      fillColors: const [
-                        AllColors.liteOrange,
-                        AllColors.orange
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                ],
-              ),
             );
           }),
           backgroundColor: Colors.transparent),

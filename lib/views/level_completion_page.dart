@@ -6,12 +6,10 @@ import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class LevelCompletionPage extends StatelessWidget {
-   const LevelCompletionPage({Key? key}) : super(key: key);
+  const LevelCompletionPage({Key? key}) : super(key: key);
 
-  final isCompleted=false;
-
+  final isCompleted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,91 +22,82 @@ class LevelCompletionPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Column(
               children: [
-                SizedBox(
-                  height: 100,
-                ),
-                Label(
-                  text: 'RATE THIS WORD SEARCH',
-                  fontSize: FontSize.p2,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 100),
+                const Label(
+                    text: 'RATE THIS WORD SEARCH', fontSize: FontSize.p2),
+                const SizedBox(height: 10),
                 RatingBarIndicator(
                   rating: 5,
-                  itemBuilder: (context, index) => Icon(
-                    Icons.star,
-                    color: AllColors.superLightGreen,
-                  ),
+                  itemBuilder: (context, index) =>
+                      const Icon(Icons.star, color: AllColors.superLightGreen),
                   itemCount: 5,
-                  itemPadding: EdgeInsets.all(4),
+                  itemPadding: const EdgeInsets.all(4),
                   unratedColor: AllColors.grey,
                   itemSize: 30.0,
                 ),
-                SizedBox(
-                  height: 24,
+                const SizedBox(height: 24),
+                isCompleted
+                    ? const Label(
+                        text: 'Game',
+                        fontSize: FontSize.h4,
+                        fontWeight: FontWeight.bold)
+                    : const Label(
+                        text: 'CONGRATULATIONS!', fontSize: FontSize.h4),
+                const SizedBox(height: 4),
+                isCompleted
+                    ? const Label(
+                        text: 'NOT COMPLETED',
+                        fontSize: FontSize.h4,
+                        color: AllColors.liteRed,
+                        fontWeight: FontWeight.bold)
+                    : const Label(
+                        text: 'COMPLETED',
+                        fontSize: FontSize.h4,
+                        color: AllColors.liteGreen,
+                        fontWeight: FontWeight.bold),
+                const SizedBox(height: 40),
+                const Label(
+                  text: 'HITS',
+                  fontSize: FontSize.p1,
+                  fontWeight: FontWeight.w600,
                 ),
-               isCompleted?Label(
-                 text: 'Game',
-                 fontSize: FontSize.h4,
-                 fontWeight: FontWeight.bold,
-               ): Label(
-                  text: 'CONGRATULATIONS!',
-                  fontSize: FontSize.h4,
+                const SizedBox(height: 10),
+                const Label(
+                  text: '18 de 18',
+                  fontSize: FontSize.p1,
+                  fontWeight: FontWeight.w600,
                 ),
-                SizedBox(
-                  height: 4,
+                const SizedBox(height: 40),
+                const Label(
+                  text: 'TIME',
+                  fontSize: FontSize.p1,
+                  fontWeight: FontWeight.w600,
                 ),
-                isCompleted?Label(
-                  text: 'NOT COMPLETED',
-                  fontSize: FontSize.h4,
-                  color: AllColors.liteRed,
-                  fontWeight: FontWeight.bold,
-                ):Label(
-                  text: 'COMPLETED',
-                  fontSize: FontSize.h4,
-                  color: AllColors.liteGreen,
-                  fontWeight: FontWeight.bold,
-                ),
-
-                SizedBox(
-                  height: 40,
-                ),
-
-                Label(text: 'HITS', fontSize: FontSize.p1, fontWeight: FontWeight.w600,),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Label(text: '18 de 18', fontSize: FontSize.p1, fontWeight: FontWeight.w600,),
-                SizedBox(
-                  height: 40,
+                const Label(
+                  text: '1 minute 32 seconds',
+                  fontSize: FontSize.p1,
+                  fontWeight: FontWeight.w600,
                 ),
-                Label(text: 'TIME', fontSize: FontSize.p1, fontWeight: FontWeight.w600,),
-                SizedBox(
-                  height: 10,
-                ),
-                Label(text: '1 minute 32 seconds', fontSize: FontSize.p1, fontWeight: FontWeight.w600,),
-                SizedBox(
-                  height: 60,
-                ),
-                ShadowButton(  fillColors: [
+                const SizedBox(height: 60),
+                ShadowButton(fillColors: const [
                   AllColors.semiLiteGreen,
                   AllColors.shineGreen
-                ],onPressed: (){}, title: 'Back'),
-                SizedBox(
-                  height: 16,
-                ),
-              ShadowButton(  fillColors: [
-                AllColors.liteOrange,
-                AllColors.orange
-              ],onPressed: (){}, title: 'See leaderboard'),
-                SizedBox(
-                  height: 16,
-                ),
-                isCompleted? SizedBox():ShadowButton(  fillColors: [
-                  AllColors.semiLiteGreen,
-                  AllColors.shineGreen
-                ],onPressed: (){}, title: 'Starr new game'),
+                ], onPressed: () {}, title: 'Back'),
+                const SizedBox(height: 16),
+                ShadowButton(
+                    fillColors: const [AllColors.liteOrange, AllColors.orange],
+                    onPressed: () {},
+                    title: 'See leaderboard'),
+                const SizedBox(height: 16),
+                isCompleted
+                    ? const SizedBox()
+                    : ShadowButton(fillColors: const [
+                        AllColors.semiLiteGreen,
+                        AllColors.shineGreen
+                      ], onPressed: () {}, title: 'Starr new game'),
               ],
             ),
           ),

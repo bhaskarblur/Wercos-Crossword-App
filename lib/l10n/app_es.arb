@@ -42,5 +42,39 @@
     "challenge_by_category" : "Desafío por categoría",
     "play_by_entering_code" : "Juega por código",
     "enter_code" : "Introduzca el código",
-    "play_with_entered_code" : "Juega con el código ingresado"
+    "play_with_entered_code" : "Juega con el código ingresado",
+
+    "categories" : "Categorías",
+    "word_search_name" : "Nombre de la búsqueda de palabras",
+    "select_level" : "Selecciona el nivel",
+    "easy" : "Fácil",
+    "medium" : "Medio",
+    "advanced" : "Avanzado",
+    "hard" : "Duro",
+    "expert" : "Experto",
+    
+    "username" : "Nombre de usuario",
+    "change" : "Cambiar",
+    "save" : "Ahorrar",
+    "free" : "Gratis",
+    "premium" : "De primera calidad",
+    "current_plan" : "Plan actual",
+    "remaining_game_of_day" : "Juego restante del día",
+    "upgrade" : "Mejora",
+
+    "only_mark_the_words_related_to" : "Solo marca las palabras\nrelacionadas con",
+    "continuee" : "Continuar",
+
+    "add_free" : "Libre de anuncios",
+    "unlimited_match" : "Partidos diarios ilimitados",
+    "many_more_topics" : "Muchos más temas para elegir",
+    "share_your" : "Comparte tus juegos creados sin límites",
+    "levels_available" : "5 niveles disponibles en lugar de solo 2",
+    "create_dynamic" : "Crear búsquedas de palabras dinámicas",
+    "create_challenges" : "Crea desafíos",
+    "create_privet" : "Cree búsquedas de palabras y desafíos privados.",
+    "premium_benifits" : "BENEFICIOS PREMIUM",
+    "monthly" : "MENSUAL $99 / mes",
+    "annual" : "ANUAL $89 / mes (Ahorra 10%)"
+
 }

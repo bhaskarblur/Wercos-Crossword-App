@@ -61,24 +61,23 @@ class _MyAccountPageState extends State<MyAccountPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 20),
-                      const Center(
+                      Center(
                           child: Label(
-                              text: "MY ACCOUNT",
+                              text: AppLocalizations.of(context)!.my_account,
                               fontWeight: FontWeight.bold,
                               fontSize: FontSize.p2)),
                       const SizedBox(height: 30),
                       Row(
                         children: [
-                          const Label(
-                              text: "Username: ",
+                          Label(
+                              text:
+                                  "${AppLocalizations.of(context)!.username}: ",
                               fontWeight: FontWeight.bold,
                               fontSize: FontSize.p2),
                           change
-                              ? Container(
+                              ? SizedBox(
                                   width:
-                                      MediaQuery.of(context).size.width / 2.4,
-                                  // decoration: BoxDecoration(
-                                  //     border: Border.all(color: Colors.white)),
+                                      MediaQuery.of(context).size.width / 2.6,
                                   child: TextField(
                                     controller: _userName,
                                     cursorColor: Colors.white,
@@ -93,9 +92,6 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                           },
                                           child: const Icon(Icons.close,
                                               color: Colors.white)),
-                                      // contentPadding:
-                                      //     const EdgeInsets.symmetric(
-                                      //         horizontal: 10)
                                     ),
                                   ))
                               : Label(
@@ -143,7 +139,9 @@ class _MyAccountPageState extends State<MyAccountPage> {
                               }
                             },
                             child: Label(
-                                text: change ? "Save" : "Change",
+                                text: change
+                                    ? AppLocalizations.of(context)!.save
+                                    : AppLocalizations.of(context)!.change,
                                 fontSize: FontSize.p2,
                                 color: AllColors.superLightGreen),
                           ),
@@ -152,22 +150,23 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       const SizedBox(height: 10),
                       Row(
                         children: [
-                          const Label(
-                              text: "Current plan:",
+                          Label(
+                              text:
+                                  "${AppLocalizations.of(context)!.current_plan}: ",
                               fontWeight: FontWeight.bold,
                               fontSize: FontSize.p2),
                           Label(
                               text: provider.profile['subscriptionstatus'] ==
                                       'none'
-                                  ? ' Free'
-                                  : ' Premium',
+                                  ? AppLocalizations.of(context)!.free
+                                  : AppLocalizations.of(context)!.premium,
                               fontSize: FontSize.p2),
                         ],
                       ),
                       const SizedBox(height: 10),
                       Label(
                           text:
-                              "Remaining games of day: ${provider.profile['gamesleft']}/50",
+                              "${AppLocalizations.of(context)!.remaining_game_of_day}: ${provider.profile['gamesleft']}/50",
                           fontSize: FontSize.p2),
                       const SizedBox(height: 50),
                     ],
@@ -184,9 +183,10 @@ class _MyAccountPageState extends State<MyAccountPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SubscriptionPage()));
+                                builder: (context) =>
+                                    const SubscriptionPage()));
                       },
-                      title: 'UPGRADE'),
+                      title: AppLocalizations.of(context)!.upgrade),
                 )
               ],
             ),

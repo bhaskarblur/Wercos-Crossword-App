@@ -6,7 +6,6 @@ import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mobile_app_word_search/views/tab_screen.dart';
 import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:provider/provider.dart';
 
@@ -34,8 +33,8 @@ class WordRelatedPage extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 100),
-                const Label(
-                    text: 'Only mark the words \n related to:',
+                 Label(
+                    text: '${AppLocalizations.of(context)!.only_mark_the_words_related_to}:',
                     align: TextAlign.center,
                     fontSize: FontSize.h3,
                     fontWeight: FontWeight.w500),
@@ -60,7 +59,7 @@ class WordRelatedPage extends StatelessWidget {
                       provider.changeSelectedIndex(4);
                       // Nav.pushAndRemoveAll(context, TabScreen());
                     },
-                    title: 'CONTINUE',
+                    title: AppLocalizations.of(context)!.continuee,
                     fillColors: const [AllColors.liteOrange, AllColors.orange])
               ],
             ),

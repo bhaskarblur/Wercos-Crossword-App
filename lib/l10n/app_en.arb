@@ -45,6 +45,39 @@
     "challenge_by_category" : "Challange by category",
     "play_by_entering_code" : "Play by code",
     "enter_code" : "Enter code",
-    "play_with_entered_code" : "Play with the entered code"
+    "play_with_entered_code" : "Play with the entered code",
+
+    "categories" : "Categories",
+    "word_search_name" : "Word Search Name",
+    "select_level" : "Select Level",
+    "easy" : "Easy",
+    "medium" : "Medium",
+    "advanced" : "Advanced",
+    "hard" : "Hard",
+    "expert" : "Expert",
+    
+    "username" : "Username",
+    "change" : "Change",
+    "save" : "Save",
+    "free" : "Free",
+    "premium" : "Premium",
+    "current_plan" : "Current plan",
+    "remaining_game_of_day" : "Remaining game of day",
+    "upgrade" : "Upgrade",
+
+    "only_mark_the_words_related_to" : "Only mark the words\nrelated to",
+    "continuee" : "Continue",
+
+    "add_free" : "Ad free",
+    "unlimited_match" : "Unlimited daily matches",
+    "many_more_topics" : "Many more topics to choose from",
+    "share_your" : "Share your created games withoutlimits",
+    "levels_available" : "5 levels available instead of only  2",
+    "create_dynamic" : "Create dynamic Word searches",
+    "create_challenges" : "Create challenges",
+    "create_privet" : "Create private word seaches and challenges.",
+    "premium_benifits" : "PREMIUM BENEFITS",
+    "monthly" : "MONTHLY $99 / month",
+    "annual" : "ANNUAL $89 / month (Save 10%)"
 
 }
