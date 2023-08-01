@@ -25,9 +25,9 @@ class CreatePage extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                const Label(
-                    text: 'CREATE',
-                    fontSize: FontSize.p2,
+                Label(
+                    text: AppLocalizations.of(context)!.create.toUpperCase(),
+                    fontSize: FontSize.h4,
                     fontWeight: FontWeight.bold),
                 const SizedBox(height: 20),
                 CupertinoButton(
@@ -46,9 +46,12 @@ class CreatePage extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: AllColors.liteDarkPurple,
                         borderRadius: BorderRadius.circular(50)),
-                    child: const Center(
-                        child:
-                            Label(text: 'WORD SEARCH', fontSize: FontSize.p2)),
+                    child: Center(
+                        child: Label(
+                            text: AppLocalizations.of(context)!
+                                .word_search
+                                .toUpperCase(),
+                            fontSize: FontSize.p1)),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -66,13 +69,17 @@ class CreatePage extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: AllColors.liteDarkPurple,
                         borderRadius: BorderRadius.circular(50)),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(child: SizedBox()),
-                        Label(text: 'CHALLENGE', fontSize: FontSize.p2),
-                        Expanded(child: SizedBox()),
-                        Icon(CupertinoIcons.lock_fill,
+                        const Expanded(child: SizedBox()),
+                        Label(
+                            text: AppLocalizations.of(context)!
+                                .challenge
+                                .toUpperCase(),
+                            fontSize: FontSize.p1),
+                        const Expanded(child: SizedBox()),
+                        const Icon(CupertinoIcons.lock_fill,
                             color: AllColors.liteGreen, size: 28),
                       ],
                     ),

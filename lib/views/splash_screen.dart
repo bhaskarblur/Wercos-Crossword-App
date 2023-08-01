@@ -5,7 +5,6 @@ import 'package:mobile_app_word_search/providers/profile_provider.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/views/tab_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../l10n/l10n.dart';
 import '../providers/language_provider.dart';

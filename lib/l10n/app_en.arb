@@ -4,8 +4,47 @@
         "description" : "The current language"
     },
     
-    "create" : "Create",
     "play" : "Play",
     "my_games" : "My Games",
-    "options" : "Options"
+    
+    "create" : "Create",
+    "word_search" : "WORD SEARCH",
+    "challenge" : "CHALLENGE",
+    "level" : "Level",
+    
+    "options" : "Options",
+    "my_account" : "MY ACCOUNT",
+    "select_language" : "SELECT LANGUAGE",
+    "back" : "Back",
+
+    "publication_mode" : "Publication mode",
+    "public" : "Public",
+    "privet" : "Provet",
+    "fixed" : "Fixed",
+    "dynam" : "Dynamic",
+    "enter_name_of_the_word_search" : "Enter name of the word search",
+    "enter_word" : "Enter word",
+    "add" : "Add",
+    "generate" : "Generate",
+
+    "my_crated_games" : "My created games",
+    "word_searches" : "Word searches",
+    "challenges" : "CHALLENGES",
+    "code_to_share" : "Code to share",
+    "word_search_title" : "Word search title",
+    "words" : "Words",
+    "users" : "Users",
+    "leaderboard" : "Leaderboard",
+    "duplicate" : "Duplicate",
+    "create_word_search" : "Create word search",
+
+    "search" : "Search",
+    "random_word_search" : "Random word search",
+    "word_search_categories" : "Word search categories",
+    "random_challenge" : "Random Challenge",
+    "challenge_by_category" : "Challange by category",
+    "play_by_entering_code" : "Play by code",
+    "enter_code" : "Enter code",
+    "play_with_entered_code" : "Play with the entered code"
+
 }

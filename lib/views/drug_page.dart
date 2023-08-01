@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mobile_app_word_search/providers/category_provider.dart';
 import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/widget/navigator.dart';
@@ -181,6 +182,9 @@ class _DrugPageState extends State<DrugPage> {
     if (provider.gameType == 'randomwordchallenge') {
       getRandomWordSearch();
     }
+    if (provider.gameType == 'category') {
+      getCategorySearch();
+    }
   }
 
   void startTimer() {
@@ -267,9 +271,9 @@ class _DrugPageState extends State<DrugPage> {
               startTimer();
             } else {
               if (value['message'] != null) {
-              dialog(context, value['message'], () {
-                Nav.pop(context);
-              });
+                dialog(context, value['message'], () {
+                  Nav.pop(context);
+                });
               }
             }
           });
@@ -299,6 +303,41 @@ class _DrugPageState extends State<DrugPage> {
                 dialog(context, value['message'], () {
                   Nav.pop(context);
                 });
+              }
+            });
+          });
+        });
+      });
+    });
+  }
+
+  getCategorySearch() {
+    final provider = Provider.of<GameScreenProvider>(context, listen: false);
+    final categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
+    Prefs.getToken().then((token) {
+      Prefs.getPrefs('loginId').then((loginId) {
+        Prefs.getPrefs('language').then((language) {
+          Prefs.getPrefs('wordLimit').then((wordLimit) {
+            _apiServices
+                .post(context: context, endpoint: 'topicwise_crossword', body: {
+              "language": language,
+              "words_limit": wordLimit,
+              'type': 'search',
+              "category": categoryProvider.selectedCategory['categoryname']
+                  .toLowerCase(),
+              "topic":
+                  categoryProvider.selectedCategory['topicsname'].toLowerCase(),
+            }).then((value) {
+              if (value['gameDetails'] != null) {
+                provider.changeGameData(value);
+                startTimer();
+              } else {
+                if (value['message'] != null) {
+                  dialog(context, value['message'], () {
+                    Nav.pop(context);
+                  });
+                }
               }
             });
           });

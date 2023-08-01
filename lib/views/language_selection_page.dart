@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
-import 'package:mobile_app_word_search/l10n/l10n.dart';
 import 'package:mobile_app_word_search/providers/language_provider.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
@@ -11,7 +8,6 @@ import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/all_colors.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LanguageSelectionPage extends StatefulWidget {
   const LanguageSelectionPage({Key? key}) : super(key: key);

@@ -8,6 +8,7 @@ import 'package:mobile_app_word_search/views/language_selection_page.dart';
 import 'package:mobile_app_word_search/views/level_page.dart';
 import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:mobile_app_word_search/widget/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
@@ -55,7 +56,7 @@ class CustomAppBar extends StatelessWidget {
                             image: "assets/images/spanish_flag.png"),
                         SizedBox(height: 5),
                         Label(
-                            text: "Idioma/Languaje",
+                            text: "Idioma/Language",
                             fontSize: FontSize.p4,
                             color: AllColors.superLitePurple)
                       ],
@@ -73,18 +74,18 @@ class CustomAppBar extends StatelessWidget {
                     },
                     minSize: 0,
                     padding: EdgeInsets.zero,
-                    child: const Column(
+                    child:  Column(
                       children: [
-                        SizedBox(
+                     const   SizedBox(
                           height: 50,
                           child: Icon(
                               CupertinoIcons.arrowshape_turn_up_left_fill,
                               color: Colors.white,
-                              size: 34),
+                              size: 34)
                         ),
-                        SizedBox(height: 5),
+                      const  SizedBox(height: 5),
                         Label(
-                            text: "Back",
+                            text: AppLocalizations.of(context)!.back,
                             fontSize: FontSize.p4,
                             color: AllColors.superLitePurple)
                       ],
@@ -103,12 +104,13 @@ class CustomAppBar extends StatelessWidget {
                     },
                     minSize: 0,
                     padding: EdgeInsets.zero,
-                    child: const Column(
+                    child: Column(
                       children: [
-                        CustomImageButton(image: "assets/images/hash.png"),
-                        SizedBox(height: 5),
+                        const CustomImageButton(
+                            image: "assets/images/hash.png"),
+                        const SizedBox(height: 5),
                         Label(
-                            text: "Level",
+                            text: AppLocalizations.of(context)!.level,
                             fontSize: FontSize.p4,
                             color: AllColors.superLitePurple)
                       ],

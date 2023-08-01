@@ -41,8 +41,8 @@ class _PlayPageState extends State<PlayPage> {
                 child: Column(
                   children: [
                     const SizedBox(height: 20),
-                    const Label(
-                        text: 'PLAY',
+                    Label(
+                        text: AppLocalizations.of(context)!.play,
                         fontWeight: FontWeight.bold,
                         fontSize: FontSize.h5),
                     const SizedBox(height: 20),
@@ -57,17 +57,15 @@ class _PlayPageState extends State<PlayPage> {
                         child: TextFormField(
                             style: const TextStyle(
                                 fontSize: FontSize.p2, color: AllColors.white),
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
-                              hintText: 'Search',
-                              hintStyle: TextStyle(
+                              hintText: AppLocalizations.of(context)!.search,
+                              hintStyle: const TextStyle(
                                   fontSize: FontSize.p2,
                                   color: AllColors.white),
-                              suffixIcon: Icon(
-                                Icons.search_sharp,
-                                color: AllColors.white,
-                              ),
+                              suffixIcon: const Icon(Icons.search_sharp,
+                                  color: AllColors.white),
                             ),
                             onSaved: (value) {}),
                       ),
@@ -82,12 +80,14 @@ class _PlayPageState extends State<PlayPage> {
                               Provider.of<HomeProvider>(context, listen: false);
                           provider.changeSelectedIndex(4);
                         },
-                        title: 'RANDOM WORD SEARCH'),
+                        title:
+                            AppLocalizations.of(context)!.random_word_search),
                     SearchButton(
                         onPressed: () {
                           Nav.push(context, const CategoryPage());
                         },
-                        title: 'WORD SEARCH CATEGORIES'),
+                        title: AppLocalizations.of(context)!
+                            .word_search_categories),
                     SearchButton(
                         onPressed: () {
                           final gameScreenProvider =
@@ -99,15 +99,17 @@ class _PlayPageState extends State<PlayPage> {
                               Provider.of<HomeProvider>(context, listen: false);
                           provider.changeSelectedIndex(4);
                         },
-                        title: 'RANDOM CHALLENGE'),
+                        title: AppLocalizations.of(context)!.random_challenge),
                     SearchButton(
                         onPressed: () {
                           Nav.push(context, const CategoryPage());
                         },
-                        title: 'CHALLENGE BY CATEGORY'),
+                        title: AppLocalizations.of(context)!
+                            .challenge_by_category),
                     const SizedBox(height: 12),
-                    const Label(
-                        text: 'Play by entering code',
+                    Label(
+                        text:
+                            AppLocalizations.of(context)!.play_by_entering_code,
                         fontWeight: FontWeight.bold,
                         fontSize: FontSize.h5),
                     const SizedBox(height: 20),
@@ -124,11 +126,12 @@ class _PlayPageState extends State<PlayPage> {
                                 style: const TextStyle(
                                     fontSize: FontSize.p2,
                                     color: AllColors.white),
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                     focusedBorder: InputBorder.none,
                                     enabledBorder: InputBorder.none,
-                                    hintText: 'Enter  Code',
-                                    hintStyle: TextStyle(
+                                    hintText: AppLocalizations.of(context)!
+                                        .enter_code,
+                                    hintStyle: const TextStyle(
                                         fontSize: FontSize.p2,
                                         color: AllColors.white)),
                                 onSaved: (value) {}))),
@@ -146,7 +149,8 @@ class _PlayPageState extends State<PlayPage> {
                               Provider.of<HomeProvider>(context, listen: false);
                           provider.changeSelectedIndex(4);
                         },
-                        title: 'PLAY WITH THE ENTERED CODE',
+                        title: AppLocalizations.of(context)!
+                            .play_with_entered_code,
                         fillColors: const [
                           AllColors.liteOrange,
                           AllColors.orange

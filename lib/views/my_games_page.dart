@@ -81,13 +81,19 @@ class _MyGamesPageState extends State<MyGamesPage> {
                     child: Column(
                       children: [
                         const SizedBox(height: 20),
-                        const Label(
-                            text: 'MY CREATED GAMES',
+                        Label(
+                            text: AppLocalizations.of(context)!
+                                .my_crated_games
+                                .toUpperCase(),
                             fontSize: FontSize.p2,
                             fontWeight: FontWeight.w500),
                         const SizedBox(height: 20),
-                        customSwitch(['WORD SEARCHES', 'CHALLENGES'],
-                            value: public, onTap: () {
+                        customSwitch([
+                          AppLocalizations.of(context)!
+                              .word_searches
+                              .toUpperCase(),
+                          AppLocalizations.of(context)!.challenge.toUpperCase()
+                        ], value: public, onTap: () {
                           final provider = Provider.of<ProfileProvider>(context,
                               listen: false);
                           if (provider.profile['subscriptionstatus'] ==
@@ -151,7 +157,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
                         MaterialPageRoute(
                             builder: (context) => const CreateWordPage()));
                   },
-                  title: 'CREATE WORD SEARCH'),
+                  title: AppLocalizations.of(context)!.create_word_search),
             ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked));
@@ -170,15 +176,22 @@ class _MyGamesPageState extends State<MyGamesPage> {
         children: [
           Center(
               child: Label(
-                  text: 'CODE TO SHARE: ${details['sharecode'].toString()}',
-                  fontSize: FontSize.p2)),
+            text:
+                '${AppLocalizations.of(context)!.code_to_share.toUpperCase()}: ${details['sharecode'].toString()}',
+            fontSize: FontSize.p2,
+            align: TextAlign.center,
+            maxLine: 2,
+          )),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Label(
-                  text: 'Word search title: ${details['gamename']}',
-                  fontSize: FontSize.p2),
+              Expanded(
+                child: Label(
+                    text:
+                        '${AppLocalizations.of(context)!.word_search_title}: ${details['gamename']}',
+                    fontSize: FontSize.p2),
+              ),
               CupertinoButton(
                   onPressed: () {},
                   padding: EdgeInsets.zero,
@@ -191,7 +204,8 @@ class _MyGamesPageState extends State<MyGamesPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Label(
-                  text: 'Words: ${details['totalwords']}',
+                  text:
+                      '${AppLocalizations.of(context)!.words}: ${details['totalwords']}',
                   fontSize: FontSize.p2),
               CupertinoButton(
                   onPressed: () {},
@@ -204,7 +218,9 @@ class _MyGamesPageState extends State<MyGamesPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Label(text: 'Users: 4/10', fontSize: FontSize.p2),
+              Label(
+                  text: '${AppLocalizations.of(context)!.users}: 4/10',
+                  fontSize: FontSize.p2),
               RatingBarIndicator(
                   rating: 5,
                   itemBuilder: (context, index) =>
@@ -232,8 +248,10 @@ class _MyGamesPageState extends State<MyGamesPage> {
                   color: AllColors.litePurple,
                   borderRadius: BorderRadius.circular(50),
                   border: Border.all(color: AllColors.white, width: 1)),
-              child: const Center(
-                  child: Label(text: 'Leaderboard', fontSize: FontSize.p4)),
+              child: Center(
+                  child: Label(
+                      text: AppLocalizations.of(context)!.leaderboard,
+                      fontSize: FontSize.p4)),
             ),
           ),
           const SizedBox(height: 10),
@@ -264,8 +282,10 @@ class _MyGamesPageState extends State<MyGamesPage> {
                   color: AllColors.litePurple,
                   borderRadius: BorderRadius.circular(50),
                   border: Border.all(color: AllColors.white, width: 1)),
-              child: const Center(
-                  child: Label(text: 'Duplicate', fontSize: FontSize.p4)),
+              child: Center(
+                  child: Label(
+                      text: AppLocalizations.of(context)!.duplicate,
+                      fontSize: FontSize.p4)),
             ),
           ),
         ],

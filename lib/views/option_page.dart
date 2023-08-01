@@ -27,9 +27,9 @@ class OptionPage extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                const Label(
-                    text: 'OPTIONS',
-                    fontSize: FontSize.p2,
+                Label(
+                    text: AppLocalizations.of(context)!.options.toUpperCase(),
+                    fontSize: FontSize.p1,
                     fontWeight: FontWeight.bold),
                 const SizedBox(height: 14),
                 CupertinoButton(
@@ -66,7 +66,7 @@ class OptionPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 OptionItem(
-                  optionName: 'LEVEL',
+                  optionName: AppLocalizations.of(context)!.level.toUpperCase(),
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -75,7 +75,8 @@ class OptionPage extends StatelessWidget {
                   },
                 ),
                 OptionItem(
-                  optionName: 'MY GAMES',
+                  optionName:
+                      AppLocalizations.of(context)!.my_games.toUpperCase(),
                   onPressed: () {
                     final provider =
                         Provider.of<HomeProvider>(context, listen: false);
@@ -83,7 +84,7 @@ class OptionPage extends StatelessWidget {
                   },
                 ),
                 OptionItem(
-                  optionName: 'PLAY',
+                  optionName: AppLocalizations.of(context)!.play.toUpperCase(),
                   onPressed: () {
                     final provider =
                         Provider.of<HomeProvider>(context, listen: false);
@@ -91,7 +92,8 @@ class OptionPage extends StatelessWidget {
                   },
                 ),
                 OptionItem(
-                  optionName: 'MY ACCOUNT',
+                  optionName:
+                      AppLocalizations.of(context)!.my_account.toUpperCase(),
                   onPressed: () {
                     Navigator.push(
                         context,

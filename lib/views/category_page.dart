@@ -2,12 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app_word_search/api_services.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
+import 'package:mobile_app_word_search/providers/category_provider.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
 import 'package:mobile_app_word_search/views/word_related_page.dart';
+import 'package:mobile_app_word_search/widget/widgets.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/game_screen_provider.dart';
 import '../widget/sahared_prefs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -21,8 +25,6 @@ class CategoryPage extends StatefulWidget {
 class _CategoryPageState extends State<CategoryPage> {
   final ApiServices _apiServices = ApiServices();
 
-  bool isCategoryVisible = false;
-
   @override
   void initState() {
     getData();
@@ -31,11 +33,12 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   getData() {
-    Prefs.getPrefs('wordLimit').then((wordLimit) {
-      _apiServices.post(
-          context: context,
-          endpoint: 'getcatstopics',
-          body: {}).then((value) {});
+    final provider = Provider.of<CategoryProvider>(context, listen: false);
+
+    _apiServices
+        .post(context: context, endpoint: 'getcatstopics')
+        .then((value) {
+      provider.changeCategories(value['categoriesTopics']);
     });
   }
 
@@ -51,58 +54,80 @@ class _CategoryPageState extends State<CategoryPage> {
         body: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                const Label(
-                    text: 'CATEGORIES',
-                    fontWeight: FontWeight.bold,
-                    fontSize: FontSize.h5),
-                const SizedBox(height: 20),
-                ShadowButton(
-                    onPressed: () {
-                      setState(() {
-                        isCategoryVisible = !isCategoryVisible;
-                      });
-                    },
-                    title: 'CATEGORY 1',
-                    fillColors: const [
-                      AllColors.semiLiteGreen,
-                      AllColors.shineGreen
-                    ]),
-                isCategoryVisible
-                    ? const SizedBox()
-                    : TopicButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const WordRelatedPage()));
-                        },
-                        topicName: 'Beach vacation'),
-                const SizedBox(height: 20),
-                ShadowButton(fillColors: const [
-                  AllColors.semiLiteGreen,
-                  AllColors.shineGreen
-                ], onPressed: () {}, title: 'CATEGORY 2'),
-                const SizedBox(height: 20),
-                ShadowButton(fillColors: const [
-                  AllColors.semiLiteGreen,
-                  AllColors.shineGreen
-                ], onPressed: () {}, title: 'CATEGORY 3'),
-                const SizedBox(height: 20),
-                ShadowButton(fillColors: const [
-                  AllColors.semiLiteGreen,
-                  AllColors.shineGreen
-                ], onPressed: () {}, title: 'CATEGORY 4'),
-                const SizedBox(height: 20),
-                ShadowButton(fillColors: const [
-                  AllColors.semiLiteGreen,
-                  AllColors.shineGreen
-                ], onPressed: () {}, title: 'CATEGORY 5')
-              ],
-            ),
+            child: Consumer<CategoryProvider>(builder: (context, provider, _) {
+              return Column(
+                children: [
+                  const SizedBox(height: 20),
+                  const Label(
+                      text: 'CATEGORIES',
+                      fontWeight: FontWeight.bold,
+                      fontSize: FontSize.h5),
+                  const SizedBox(height: 20),
+                  if (provider.categories != null)
+                    ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: provider.categories.length,
+                      separatorBuilder: (context, index) {
+                        return gap(20);
+                      },
+                      itemBuilder: (context, index) {
+                        bool isCategoryVisible = false;
+                        return StatefulBuilder(builder: (context, st) {
+                          return Column(
+                            children: [
+                              ShadowButton(
+                                  onPressed: () {
+                                    st(() {
+                                      isCategoryVisible = !isCategoryVisible;
+                                    });
+                                  },
+                                  title: provider.categories[index]
+                                      ['categoryName'],
+                                  fillColors: const [
+                                    AllColors.semiLiteGreen,
+                                    AllColors.shineGreen
+                                  ]),
+                              if (isCategoryVisible)
+                                ListView.separated(
+                                    shrinkWrap: true,
+                                    itemCount: provider
+                                        .categories[index]['topicsList'].length,
+                                    separatorBuilder: (context, i) {
+                                      return gap(0);
+                                    },
+                                    itemBuilder: (context, i) {
+                                      return TopicButton(
+                                          onPressed: () {
+                                            
+
+                                            final provider =
+                                                Provider.of<CategoryProvider>(
+                                                    context,
+                                                    listen: false);
+                                            provider.changeSelectedCategory(
+                                                provider.categories[index]
+                                                    ['topicsList'][i]);
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        WordRelatedPage(
+                                                            data: provider.categories[
+                                                                        index][
+                                                                    'topicsList']
+                                                                [i])));
+                                          },
+                                          topicName: provider.categories[index]
+                                              ['topicsList'][i]['topicsname']);
+                                    }),
+                            ],
+                          );
+                        });
+                      },
+                    ),
+                ],
+              );
+            }),
           ),
         ),
       ),

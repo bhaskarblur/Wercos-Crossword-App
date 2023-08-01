@@ -35,7 +35,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
   final TextEditingController _c1 = TextEditingController();
   final TextEditingController _c2 = TextEditingController();
 
-  List<String> _list = [];
+  final List<String> _list = [];
 
   @override
   Widget build(BuildContext context) {
@@ -54,18 +54,23 @@ class _CreateWordPageState extends State<CreateWordPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  const Center(
+                  Center(
                       child: Label(
-                          text: "CREATE WORD SEARCH",
+                          text: AppLocalizations.of(context)!
+                              .create_word_search
+                              .toUpperCase(),
                           fontSize: FontSize.p2,
                           fontWeight: FontWeight.w500)),
                   const SizedBox(height: 10),
-                  const Label(
-                      text: "Publication mode",
+                  Label(
+                      text: AppLocalizations.of(context)!.publication_mode,
                       fontSize: FontSize.p4,
                       fontWeight: FontWeight.w500),
                   const SizedBox(height: 14),
-                  customSwitch(['Public', 'Privet'], value: public, onTap: () {
+                  customSwitch([
+                    AppLocalizations.of(context)!.public,
+                    AppLocalizations.of(context)!.privet
+                  ], value: public, onTap: () {
                     final provider =
                         Provider.of<ProfileProvider>(context, listen: false);
                     if (provider.profile['subscriptionstatus'] == 'none') {
@@ -79,7 +84,10 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     CustomDialog().showPurchaseDialog(context: context);
                   }),
                   gap(16),
-                  customSwitch(['Fixed', 'Dynamic'], value: public1, onTap: () {
+                  customSwitch([
+                    AppLocalizations.of(context)!.fixed,
+                    AppLocalizations.of(context)!.dynam
+                  ], value: public1, onTap: () {
                     final provider =
                         Provider.of<ProfileProvider>(context, listen: false);
                     if (provider.profile['subscriptionstatus'] == 'none') {
@@ -102,9 +110,13 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  customTextField(_c1, "Enter name of the Word search"),
+                  customTextField(
+                      _c1,
+                      AppLocalizations.of(context)!
+                          .enter_name_of_the_word_search),
                   const SizedBox(height: 14),
-                  customTextField(_c2, 'Enter word'),
+                  customTextField(
+                      _c2, AppLocalizations.of(context)!.enter_word),
                   const SizedBox(height: 14),
                   CupertinoButton(
                     onPressed: () {
@@ -124,8 +136,8 @@ class _CreateWordPageState extends State<CreateWordPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Label(
-                              text: "Add",
+                          Label(
+                              text: AppLocalizations.of(context)!.add,
                               fontSize: 16,
                               align: TextAlign.center),
                           horGap(5),
@@ -182,33 +194,35 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     AllColors.shineGreen
                   ],
                   onPressed: () {
-                    Prefs.getToken().then((token) {
-                      Prefs.getPrefs('loginId').then((loginId) {
-                        _apiServices.post(
-                            context: context,
-                            endpoint: 'createGame',
-                            body: {
-                              "accessToken": token,
-                              "userId": loginId,
-                              "gameName": _c1.text,
-                              "gameLanguage":
-                                  selectedLanguage == "English" ? 'en' : 'es',
-                              "totalWords": _list.length.toString(),
-                              "limitedWords": "2",
-                              "allWords": jsonEncode(_list),
-                              // "correctWords": "",
-                              // "incorrectWords": "",
-                              "gameType": public ? 'public' : 'privet',
-                              "searchType": "search",
-                            }).then((value) {
-                          dialog(context, value['message'], () {
-                            Nav.pop(context);
+                    if (_c2.text.isNotEmpty) {
+                      Prefs.getToken().then((token) {
+                        Prefs.getPrefs('loginId').then((loginId) {
+                          _apiServices.post(
+                              context: context,
+                              endpoint: 'createGame',
+                              body: {
+                                "accessToken": token,
+                                "userId": loginId,
+                                "gameName": _c1.text,
+                                "gameLanguage":
+                                    selectedLanguage == "English" ? 'en' : 'es',
+                                "totalWords": _list.length.toString(),
+                                "limitedWords": "2",
+                                "allWords": jsonEncode(_list),
+                                // "correctWords": "",
+                                // "incorrectWords": "",
+                                "gameType": public ? 'public' : 'privet',
+                                "searchType": "search",
+                              }).then((value) {
+                            dialog(context, value['message'], () {
+                              Nav.pop(context);
+                            });
                           });
                         });
                       });
-                    });
+                    }
                   },
-                  title: "GENERAR")),
+                  title: AppLocalizations.of(context)!.generate)),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked),
     );

@@ -26,15 +26,13 @@ class Label extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTextStyle(
-        style: TextStyle(),
-        child: Text(this.text,
-            maxLines: this.maxLine ?? 50,
-            overflow: overflow ?? TextOverflow.visible,
-            textAlign: align ?? TextAlign.left,
-            style: GoogleFonts.inter(
-                fontSize: this.fontSize ?? 14,
-                fontWeight: this.fontWeight ?? FontWeight.normal,
-                color: this.color ?? AllColors.white)));
+    return Text(text,
+        maxLines: maxLine ?? 50,
+        overflow: overflow ?? TextOverflow.visible,
+        textAlign: align ?? TextAlign.left,
+        style: GoogleFonts.inter(
+            fontSize: fontSize ?? 14,
+            fontWeight: fontWeight ?? FontWeight.normal,
+            color: color ?? AllColors.white));
   }
 }
