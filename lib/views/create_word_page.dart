@@ -17,6 +17,8 @@ import 'package:provider/provider.dart';
 import '../components/custom_dialogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../components/suggestion/model/suggestion.dart';
+
 class CreateWordPage extends StatefulWidget {
   const CreateWordPage({Key? key}) : super(key: key);
 
@@ -74,14 +76,29 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     final provider =
                         Provider.of<ProfileProvider>(context, listen: false);
                     if (provider.profile['subscriptionstatus'] == 'none') {
-                      CustomDialog().showPurchaseDialog(context: context);
+                      CustomDialog.showPurchaseDialog(context: context);
                     } else {
                       setState(() {
                         public = !public;
                       });
                     }
                   }, info: () {
-                    CustomDialog().showPurchaseDialog(context: context);
+                    CustomDialog.showSuggestionDialog(
+                        context: context,
+                        suggestions: [
+                          Suggestion(
+                              AppLocalizations.of(context)!.maximum_word_length,
+                              AppLocalizations.of(context)!
+                                  .maximum_word_length_description),
+                          Suggestion(
+                              AppLocalizations.of(context)!.dynamic_word_search,
+                              AppLocalizations.of(context)!
+                                  .dynamic_word_search_description),
+                          Suggestion(
+                              AppLocalizations.of(context)!.what_is_challenge,
+                              AppLocalizations.of(context)!
+                                  .what_is_challenge_description),
+                        ]);
                   }),
                   gap(16),
                   customSwitch([
@@ -91,14 +108,29 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     final provider =
                         Provider.of<ProfileProvider>(context, listen: false);
                     if (provider.profile['subscriptionstatus'] == 'none') {
-                      CustomDialog().showPurchaseDialog(context: context);
+                      CustomDialog.showPurchaseDialog(context: context);
                     } else {
                       setState(() {
                         public1 = !public1;
                       });
                     }
                   }, info: () {
-                    CustomDialog().showPurchaseDialog(context: context);
+                    CustomDialog.showSuggestionDialog(
+                      context: context,
+                      suggestions: [
+                        Suggestion(
+                            AppLocalizations.of(context)!.maximum_word_length,
+                            AppLocalizations.of(context)!
+                                .maximum_word_length_description),
+                        Suggestion(
+                            AppLocalizations.of(context)!.dynamic_word_search,
+                            AppLocalizations.of(context)!
+                                .dynamic_word_search_description),
+                        Suggestion(
+                            AppLocalizations.of(context)!.what_is_challenge,
+                            AppLocalizations.of(context)!
+                                .what_is_challenge_description),
+                      ]);
                   }),
                   const SizedBox(height: 20),
                   customDropdown(

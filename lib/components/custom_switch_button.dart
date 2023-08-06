@@ -6,6 +6,7 @@ import 'package:mobile_app_word_search/components/suggestion/model/suggestion.da
 import '../utils/all_colors.dart';
 import '../utils/font_size.dart';
 import 'labels.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomSwitchButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -35,17 +36,15 @@ class CustomSwitchButton extends StatelessWidget {
               decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: AllColors.black.withOpacity(0.8),
-                      offset: const Offset(0, 0),
-                      blurRadius: 1,
-                      spreadRadius: 0,
-                    ),
+                        color: AllColors.black.withOpacity(0.8),
+                        offset: const Offset(0, 0),
+                        blurRadius: 1,
+                        spreadRadius: 0),
                     const BoxShadow(
-                      color: AllColors.darkPurple,
-                      offset: Offset(1, 1),
-                      blurRadius: 10,
-                      spreadRadius: 0,
-                    ),
+                        color: AllColors.darkPurple,
+                        offset: Offset(1, 1),
+                        blurRadius: 10,
+                        spreadRadius: 0),
                   ],
                   borderRadius: BorderRadius.circular(50),
                   border: Border.all(color: AllColors.superLitePurple)),
@@ -61,19 +60,13 @@ class CustomSwitchButton extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            CupertinoIcons.lock_fill,
-                            color: AllColors.liteGreen,
-                            size: 28,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
+                          const Icon(CupertinoIcons.lock_fill,
+                              color: AllColors.liteGreen, size: 28),
+                          const SizedBox(width: 5),
                           Label(
-                            text: labels.last,
-                            fontSize: FontSize.p2,
-                            fontWeight: FontWeight.w500,
-                          )
+                              text: labels.last,
+                              fontSize: FontSize.p2,
+                              fontWeight: FontWeight.w500)
                         ],
                       ),
                     ),
@@ -83,35 +76,31 @@ class CustomSwitchButton extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          width: 6,
-        ),
+        const SizedBox(width: 6),
         infoButton
             ? CupertinoButton(
                 onPressed: () {
-                  CustomDialog()
-                      .showSuggestionDialog(context: context, suggestions: [
-                    Suggestion(
-                      'Maximum Word\nLength',
-                      'The maximum allowance for the length of a word is 14 letters.',
-                    ),
-                    Suggestion(
-                      'What is a\ndynamic word\nsearch?',
-                      'A dynamic word search is one in which the grid is different for each player. In addition, the creator can select the number of words that will be displayed in the word search.',
-                    ),
-                    Suggestion(
-                      'What is a\nchallenge?',
-                      'In a challenge, there are correct and incorrect words in the list and in the grid. You should only mark the words that correspond to the title of the challenge. For example, if the title of the challenge is: European Countries, you should only mark the European countries, those that are not from Europe should not be marked as they would be incorrect.',
-                    ),
-                  ]);
+                  CustomDialog.showSuggestionDialog(
+                      context: context,
+                      suggestions: [
+                        Suggestion(
+                            AppLocalizations.of(context)!.maximum_word_length,
+                            AppLocalizations.of(context)!
+                                .maximum_word_length_description),
+                        Suggestion(
+                            AppLocalizations.of(context)!.dynamic_word_search,
+                            AppLocalizations.of(context)!
+                                .dynamic_word_search_description),
+                        Suggestion(
+                            AppLocalizations.of(context)!.what_is_challenge,
+                            AppLocalizations.of(context)!
+                                .what_is_challenge_description),
+                      ]);
                 },
                 minSize: 0,
                 padding: EdgeInsets.zero,
-                child: Icon(
-                  Icons.info_outline,
-                  color: AllColors.white,
-                  size: 36,
-                ))
+                child: const Icon(Icons.info_outline,
+                    color: AllColors.white, size: 36))
             : Container()
       ],
     );
@@ -134,37 +123,32 @@ class EnabledSwitch extends StatelessWidget {
         height: double.maxFinite,
         decoration:
             BoxDecoration(borderRadius: BorderRadius.circular(50), boxShadow: [
+          const BoxShadow(
+              color: AllColors.superLitePurple,
+              offset: Offset(0, 0),
+              blurRadius: 0,
+              spreadRadius: 0),
           BoxShadow(
-            color: AllColors.superLitePurple,
-            offset: Offset(0, 0),
-            blurRadius: 0,
-            spreadRadius: 0,
-          ),
+              color: AllColors.white.withOpacity(.4),
+              offset: const Offset(-3, 6),
+              blurRadius: 8,
+              spreadRadius: -13),
           BoxShadow(
-            color: AllColors.white.withOpacity(.4),
-            offset: Offset(-3, 6),
-            blurRadius: 8,
-            spreadRadius: -13,
-          ),
-          BoxShadow(
-            color: AllColors.white.withOpacity(.7),
-            offset: Offset(2, -6),
-            blurRadius: 5,
-            spreadRadius: -10,
-          ),
-          BoxShadow(
-            color: AllColors.darkLitePurple,
-            offset: Offset(-1, -1),
-            blurRadius: 10,
-            spreadRadius: -3,
-          ),
+              color: AllColors.white.withOpacity(.7),
+              offset: const Offset(2, -6),
+              blurRadius: 5,
+              spreadRadius: -10),
+          const BoxShadow(
+              color: AllColors.darkLitePurple,
+              offset: Offset(-1, -1),
+              blurRadius: 10,
+              spreadRadius: -3),
         ]),
         child: Center(
             child: Label(
-          text: labels.first,
-          fontSize: FontSize.p2,
-          fontWeight: FontWeight.w500,
-        )),
+                text: labels.first,
+                fontSize: FontSize.p2,
+                fontWeight: FontWeight.w500)),
       ),
     );
   }

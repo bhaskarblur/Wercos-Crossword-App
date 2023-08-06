@@ -98,7 +98,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
                               listen: false);
                           if (provider.profile['subscriptionstatus'] ==
                               'none') {
-                            CustomDialog().showPurchaseDialog(context: context);
+                            CustomDialog.showPurchaseDialog(context: context);
                           } else {
                             setState(() {
                               public = !public;
@@ -106,7 +106,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
                             getData(true);
                           }
                         }, info: () {
-                          CustomDialog().showPurchaseDialog(context: context);
+                          CustomDialog.showPurchaseDialog(context: context);
                         }, showInfo: false),
                         const SizedBox(height: 20),
                         if (public)

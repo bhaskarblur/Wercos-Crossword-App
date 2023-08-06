@@ -19,7 +19,7 @@
 
     "publication_mode" : "Publication mode",
     "public" : "Public",
-    "privet" : "Provet",
+    "privet" : "Private",
     "fixed" : "Fixed",
     "dynam" : "Dynamic",
     "enter_name_of_the_word_search" : "Enter name of the word search",
@@ -78,6 +78,13 @@
     "create_privet" : "Create private word seaches and challenges.",
     "premium_benifits" : "PREMIUM BENEFITS",
     "monthly" : "MONTHLY $99 / month",
-    "annual" : "ANNUAL $89 / month (Save 10%)"
+    "annual" : "ANNUAL $89 / month (Save 10%)",
 
+    "maximum_word_length" : "Maximum Word Length",
+    "maximum_word_length_description" : "The maximum allowance for the length of a word is 14 letters.",
+    "dynamic_word_search" : "What is a dynamic word search?",
+    "dynamic_word_search_description" : "A dynamic word search is one in which the grid is different for each player. In addition, the creator can select the number of words that will be displayed in the word search.",
+    "what_is_challenge" : "What is a challenge?",
+    "what_is_challenge_description" : "In a challenge, there are correct and incorrect words in the list and in the grid. You should only mark the words that correspond to the title of the challenge. For example, if the title of the challenge is: European Countries, you should only mark the European countries, those that are not from Europe should not be marked as they would be incorrect.",
+    "this_feature" : "This feature is only available for premium users. Upgrade to use this feature."
 }

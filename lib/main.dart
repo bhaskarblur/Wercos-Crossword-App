@@ -57,10 +57,14 @@ class MyApp extends StatelessWidget {
     final provider = Provider.of<LanguageProvider>(context);
     return MaterialApp(
       title: 'Flutter Demo',
+      builder: (context, child) {
+        return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+            child: child!);
+      },
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true
-      ),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true),
       locale: provider.locale,
       supportedLocales: L10n.all,
       localizationsDelegates: const [

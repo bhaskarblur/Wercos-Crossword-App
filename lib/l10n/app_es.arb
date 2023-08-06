@@ -75,6 +75,15 @@
     "create_privet" : "Cree búsquedas de palabras y desafíos privados.",
     "premium_benifits" : "BENEFICIOS PREMIUM",
     "monthly" : "MENSUAL $99 / mes",
-    "annual" : "ANUAL $89 / mes (Ahorra 10%)"
+    "annual" : "ANUAL $89 / mes (Ahorra 10%)",
+
+    "maximum_word_length" : "Longitud máxima de palabra",
+    "maximum_word_length_description" : "La asignación máxima para la longitud de una palabra es de 14 letras.",
+    "dynamic_word_search" : "¿Qué es una búsqueda dinámica de palabras?",
+    "dynamic_word_search_description" : "Una sopa de letras dinámica es aquella en la que la cuadrícula es diferente para cada jugador. Además, el creador puede seleccionar la cantidad de palabras que se mostrarán en la búsqueda de palabras.",
+    "what_is_challenge" : "¿Qué es un desafío?",
+    "what_is_challenge_description" : "En un desafío, hay palabras correctas e incorrectas en la lista y en la cuadrícula. Solo debes marcar las palabras que correspondan al título del reto. Por ejemplo, si el título del reto es: Países Europeos, solo se deben marcar los países europeos, los que no son de Europa no se deben marcar ya que serían incorrectos.",
+    "this_feature" : "Esta característica solo está disponible para usuarios premium. Actualice para usar esta función."
+
 
 }
