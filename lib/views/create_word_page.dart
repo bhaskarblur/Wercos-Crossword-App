@@ -116,25 +116,25 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     }
                   }, info: () {
                     CustomDialog.showSuggestionDialog(
-                      context: context,
-                      suggestions: [
-                        Suggestion(
-                            AppLocalizations.of(context)!.maximum_word_length,
-                            AppLocalizations.of(context)!
-                                .maximum_word_length_description),
-                        Suggestion(
-                            AppLocalizations.of(context)!.dynamic_word_search,
-                            AppLocalizations.of(context)!
-                                .dynamic_word_search_description),
-                        Suggestion(
-                            AppLocalizations.of(context)!.what_is_challenge,
-                            AppLocalizations.of(context)!
-                                .what_is_challenge_description),
-                      ]);
+                        context: context,
+                        suggestions: [
+                          Suggestion(
+                              AppLocalizations.of(context)!.maximum_word_length,
+                              AppLocalizations.of(context)!
+                                  .maximum_word_length_description),
+                          Suggestion(
+                              AppLocalizations.of(context)!.dynamic_word_search,
+                              AppLocalizations.of(context)!
+                                  .dynamic_word_search_description),
+                          Suggestion(
+                              AppLocalizations.of(context)!.what_is_challenge,
+                              AppLocalizations.of(context)!
+                                  .what_is_challenge_description),
+                        ]);
                   }),
                   const SizedBox(height: 20),
                   customDropdown(
-                    ['English', 'ESPAÑOL'],
+                    ['ENGLISH', 'ESPAÑOL'],
                     (value) {
                       setState(() {
                         selectedLanguage = value;
@@ -226,31 +226,42 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     AllColors.shineGreen
                   ],
                   onPressed: () {
-                    if (_c2.text.isNotEmpty) {
-                      Prefs.getToken().then((token) {
-                        Prefs.getPrefs('loginId').then((loginId) {
-                          _apiServices.post(
-                              context: context,
-                              endpoint: 'createGame',
-                              body: {
-                                "accessToken": token,
-                                "userId": loginId,
-                                "gameName": _c1.text,
-                                "gameLanguage":
-                                    selectedLanguage == "English" ? 'en' : 'es',
-                                "totalWords": _list.length.toString(),
-                                "limitedWords": "2",
-                                "allWords": jsonEncode(_list),
-                                // "correctWords": "",
-                                // "incorrectWords": "",
-                                "gameType": public ? 'public' : 'privet',
-                                "searchType": "search",
-                              }).then((value) {
-                            dialog(context, value['message'], () {
-                              Nav.pop(context);
+                    if (_c1.text.isNotEmpty) {
+                      if (_list.isNotEmpty) {
+                        Prefs.getToken().then((token) {
+                          Prefs.getPrefs('loginId').then((loginId) {
+                            _apiServices.post(
+                                context: context,
+                                endpoint: 'createGame',
+                                body: {
+                                  "accessToken": token,
+                                  "userId": loginId,
+                                  "gameName": _c1.text,
+                                  "gameLanguage": selectedLanguage == "English"
+                                      ? 'en'
+                                      : 'es',
+                                  "totalWords": _list.length.toString(),
+                                  "limitedWords": "2",
+                                  "allWords": jsonEncode(_list),
+                                  // "correctWords": "",
+                                  // "incorrectWords": "",
+                                  "gameType": public ? 'public' : 'privet',
+                                  "searchType": "search",
+                                }).then((value) {
+                              dialog(context, value['message'], () {
+                                Nav.pop(context);
+                              });
                             });
                           });
                         });
+                      } else {
+                        dialog(context, 'Add some word.', () {
+                          Nav.pop(context);
+                        });
+                      }
+                    } else {
+                      dialog(context, 'Enter Name.', () {
+                        Nav.pop(context);
                       });
                     }
                   },

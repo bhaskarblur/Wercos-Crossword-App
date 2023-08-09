@@ -92,7 +92,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
                           AppLocalizations.of(context)!
                               .word_searches
                               .toUpperCase(),
-                          AppLocalizations.of(context)!.challenge.toUpperCase()
+                          AppLocalizations.of(context)!.challenges
                         ], value: public, onTap: () {
                           final provider = Provider.of<ProfileProvider>(context,
                               listen: false);
@@ -157,7 +157,9 @@ class _MyGamesPageState extends State<MyGamesPage> {
                         MaterialPageRoute(
                             builder: (context) => const CreateWordPage()));
                   },
-                  title: AppLocalizations.of(context)!.create_word_search),
+                  title: public
+                      ? AppLocalizations.of(context)!.create_word_search
+                      : ('${AppLocalizations.of(context)!.create} ${AppLocalizations.of(context)!.challenge.toLowerCase()}')),
             ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked));
@@ -219,7 +221,8 @@ class _MyGamesPageState extends State<MyGamesPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Label(
-                  text: '${AppLocalizations.of(context)!.users}: 4/10',
+                  text:
+                      '${AppLocalizations.of(context)!.users}: ${details["avgratings"] ?? '0'}/5',
                   fontSize: FontSize.p2),
               RatingBarIndicator(
                   rating: 5,

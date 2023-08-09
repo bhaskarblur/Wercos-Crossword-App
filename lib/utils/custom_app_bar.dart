@@ -47,8 +47,8 @@ class CustomAppBar extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  const LanguageSelectionPage()));
+                              builder: (context) => const LanguageSelectionPage(
+                                  changeType: 'game')));
                     },
                     child: const Column(
                       children: [
@@ -74,16 +74,15 @@ class CustomAppBar extends StatelessWidget {
                     },
                     minSize: 0,
                     padding: EdgeInsets.zero,
-                    child:  Column(
+                    child: Column(
                       children: [
-                     const   SizedBox(
-                          height: 50,
-                          child: Icon(
-                              CupertinoIcons.arrowshape_turn_up_left_fill,
-                              color: Colors.white,
-                              size: 34)
-                        ),
-                      const  SizedBox(height: 5),
+                        const SizedBox(
+                            height: 50,
+                            child: Icon(
+                                CupertinoIcons.arrowshape_turn_up_left_fill,
+                                color: Colors.white,
+                                size: 34)),
+                        const SizedBox(height: 5),
                         Label(
                             text: AppLocalizations.of(context)!.back,
                             fontSize: FontSize.p4,

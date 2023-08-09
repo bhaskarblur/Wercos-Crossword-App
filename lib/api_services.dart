@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -186,35 +186,35 @@ class ApiServices {
     return ck;
   }
 
-  Future<bool> multiplIemageUpload(
-      FilePickerResult file, String uploadUrl) async {
-    final prefs = await SharedPreferences.getInstance();
-    // debugPrint(file.path.split('/')[file.path.split('/').length - 1]);
+  // Future<bool> multiplIemageUpload(
+  //     FilePickerResult file, String uploadUrl) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   // debugPrint(file.path.split('/')[file.path.split('/').length - 1]);
 
-    bool ck = false;
-    final url = Uri.parse(uploadUrl);
-    var request = http.MultipartRequest('POST', url);
-    request.headers['Authorization'] = 'Bearer ${prefs.getString('token')!}';
+  //   bool ck = false;
+  //   final url = Uri.parse(uploadUrl);
+  //   var request = http.MultipartRequest('POST', url);
+  //   request.headers['Authorization'] = 'Bearer ${prefs.getString('token')!}';
 
-    for (int i = 0; i < file.files.length; i++) {
-      var pic = await http.MultipartFile.fromPath("image", file.files[i].path!);
-      request.files.add(pic);
-    }
+  //   for (int i = 0; i < file.files.length; i++) {
+  //     var pic = await http.MultipartFile.fromPath("image", file.files[i].path!);
+  //     request.files.add(pic);
+  //   }
 
-    var response = await request.send();
+  //   var response = await request.send();
 
-    debugPrint(response.stream.toString());
-    debugPrint(response.statusCode.toString());
+  //   debugPrint(response.stream.toString());
+  //   debugPrint(response.statusCode.toString());
 
-    var dt = await response.stream.bytesToString();
+  //   var dt = await response.stream.bytesToString();
 
-    debugPrint(dt);
+  //   debugPrint(dt);
 
-    if (response.statusCode == 200) {
-      ck = true;
-    } else {
-      ck = false;
-    }
-    return ck;
-  }
+  //   if (response.statusCode == 200) {
+  //     ck = true;
+  //   } else {
+  //     ck = false;
+  //   }
+  //   return ck;
+  // }
 }

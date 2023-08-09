@@ -37,8 +37,8 @@ class OptionPage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                const LanguageSelectionPage()));
+                            builder: (context) => const LanguageSelectionPage(
+                                changeType: 'app')));
                   },
                   padding: EdgeInsets.zero,
                   minSize: 0,

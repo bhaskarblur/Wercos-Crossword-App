@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+// import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_app_word_search/providers/profile_provider.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
+import 'package:provider/provider.dart';
 
 import '../app_config/app_details.dart';
 import '../app_config/colors.dart';
@@ -300,53 +302,53 @@ Widget dottedDivder() {
   );
 }
 
-Widget serachBar(
-  TextEditingController search,
-  Function()? onTap, {
-  void Function(String)? onChanged,
-  void Function()? onEditingComplete,
-  bool filter = true,
-}) {
-  return Row(
-    children: [
-      Expanded(
-          child: TextField(
-        controller: search,
-        decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.search, size: 26, color: Colors.black54),
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'Search anything',
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Colors.grey.shade300)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Colors.grey.shade300)),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Colors.grey.shade300)),
-        ),
-        onChanged: onChanged,
-        onEditingComplete: onEditingComplete,
-      )),
-      if (filter) horGap(10),
-      if (filter)
-        InkWell(
-          onTap: onTap,
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), color: Colors.black),
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: SvgPicture.asset('assets/icons/filter_lines.svg',
-                  height: 40, width: 40),
-            ),
-          ),
-        ),
-    ],
-  );
-}
+// Widget serachBar(
+//   TextEditingController search,
+//   Function()? onTap, {
+//   void Function(String)? onChanged,
+//   void Function()? onEditingComplete,
+//   bool filter = true,
+// }) {
+//   return Row(
+//     children: [
+//       Expanded(
+//           child: TextField(
+//         controller: search,
+//         decoration: InputDecoration(
+//           prefixIcon: const Icon(Icons.search, size: 26, color: Colors.black54),
+//           filled: true,
+//           fillColor: Colors.white,
+//           hintText: 'Search anything',
+//           enabledBorder: OutlineInputBorder(
+//               borderRadius: BorderRadius.circular(10),
+//               borderSide: BorderSide(color: Colors.grey.shade300)),
+//           focusedBorder: OutlineInputBorder(
+//               borderRadius: BorderRadius.circular(10),
+//               borderSide: BorderSide(color: Colors.grey.shade300)),
+//           border: OutlineInputBorder(
+//               borderRadius: BorderRadius.circular(10),
+//               borderSide: BorderSide(color: Colors.grey.shade300)),
+//         ),
+//         onChanged: onChanged,
+//         onEditingComplete: onEditingComplete,
+//       )),
+//       if (filter) horGap(10),
+//       if (filter)
+//         InkWell(
+//           onTap: onTap,
+//           child: Container(
+//             decoration: BoxDecoration(
+//                 borderRadius: BorderRadius.circular(10), color: Colors.black),
+//             child: Padding(
+//               padding: const EdgeInsets.all(10),
+//               child: SvgPicture.asset('assets/icons/filter_lines.svg',
+//                   height: 40, width: 40),
+//             ),
+//           ),
+//         ),
+//     ],
+//   );
+// }
 
 Widget customCard(dynamic data,
     {bool gallery = true, void Function()? byNowOnTap}) {
@@ -547,19 +549,26 @@ Widget customSwitch(List<String> words,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(CupertinoIcons.lock_fill,
-                                color: AllColors.liteGreen, size: 20),
-                            const SizedBox(width: 5),
-                            Label(
-                                text: words.last,
-                                align: TextAlign.center,
-                                fontSize: FontSize.p2,
-                                fontWeight: FontWeight.w500)
-                          ],
-                        ),
+                        child: Consumer<ProfileProvider>(
+                            builder: (context, pprovider, _) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              pprovider.profile['subscriptionstatus'] == 'none'
+                                  ? const Icon(CupertinoIcons.lock_fill,
+                                      color: AllColors.liteGreen, size: 20)
+                                  : gap(0),
+                              pprovider.profile['subscriptionstatus'] == 'none'
+                                  ? horGap(5)
+                                  : gap(0),
+                              Label(
+                                  text: words.last,
+                                  align: TextAlign.center,
+                                  fontSize: FontSize.p2,
+                                  fontWeight: FontWeight.w500)
+                            ],
+                          );
+                        }),
                       ),
                     )
                   : Expanded(

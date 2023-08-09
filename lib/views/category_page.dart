@@ -8,6 +8,7 @@ import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
 import 'package:mobile_app_word_search/views/word_related_page.dart';
+import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
 import 'package:mobile_app_word_search/widget/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,10 +33,13 @@ class _CategoryPageState extends State<CategoryPage> {
   getData() {
     final provider = Provider.of<CategoryProvider>(context, listen: false);
 
-    _apiServices
-        .post(context: context, endpoint: 'getcatstopics')
-        .then((value) {
-      provider.changeCategories(value['categoriesTopics']);
+    Prefs.getPrefs('language').then((language) {
+      _apiServices.post(
+          context: context,
+          endpoint: 'getcatstopics',
+          body: {"language": language}).then((value) {
+        provider.changeCategories(value['categoriesTopics']);
+      });
     });
   }
 
@@ -48,21 +52,24 @@ class _CategoryPageState extends State<CategoryPage> {
         appBar: const PreferredSize(
             preferredSize: Size.fromHeight(70),
             child: CustomAppBar(isBack: true, isLang: true)),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: Consumer<CategoryProvider>(builder: (context, provider, _) {
-              return Column(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+          child: Consumer<CategoryProvider>(builder: (context, provider, _) {
+            return SingleChildScrollView(
+              child: Column(
                 children: [
                   const SizedBox(height: 20),
                   Label(
-                      text: AppLocalizations.of(context)!.categories.toUpperCase(),
+                      text: AppLocalizations.of(context)!
+                          .categories
+                          .toUpperCase(),
                       fontWeight: FontWeight.bold,
                       fontSize: FontSize.h5),
                   const SizedBox(height: 20),
                   if (provider.categories != null)
                     ListView.separated(
                       shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: provider.categories.length,
                       separatorBuilder: (context, index) {
                         return gap(20);
@@ -87,6 +94,7 @@ class _CategoryPageState extends State<CategoryPage> {
                               if (isCategoryVisible)
                                 ListView.separated(
                                     shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
                                     itemCount: provider
                                         .categories[index]['topicsList'].length,
                                     separatorBuilder: (context, i) {
@@ -121,9 +129,9 @@ class _CategoryPageState extends State<CategoryPage> {
                       },
                     ),
                 ],
-              );
-            }),
-          ),
+              ),
+            );
+          }),
         ),
       ),
     );

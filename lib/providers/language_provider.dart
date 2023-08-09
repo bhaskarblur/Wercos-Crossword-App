@@ -11,8 +11,13 @@ class LanguageProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // clearLocale() {
-  //   _locale = null;
-  //   notifyListeners();
-  // }
+    Locale _gameLocale = L10n.all.first;
+  Locale get gameLocale => _gameLocale;
+
+  setGameLFocale(Locale locale) {
+    if (!L10n.all.contains(locale)) return;
+    _gameLocale = locale;
+    notifyListeners();
+  }
+
 }

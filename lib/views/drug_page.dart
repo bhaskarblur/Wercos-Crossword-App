@@ -56,6 +56,7 @@ class _DrugPageState extends State<DrugPage> {
                               borderRadius: BorderRadius.circular(20)),
                         ),
                       ),
+                      gap(10),
                       Expanded(
                           flex: 3,
                           child: Container(
@@ -168,6 +169,7 @@ class _DrugPageState extends State<DrugPage> {
 
   getData() {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
+    provider.changeGameData(null);
     print('--------------------');
     print(provider.gameType);
     if (provider.gameType == 'random') {
@@ -224,7 +226,7 @@ class _DrugPageState extends State<DrugPage> {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
     Prefs.getToken().then((token) {
       Prefs.getPrefs('loginId').then((loginId) {
-        Prefs.getPrefs('language').then((language) {
+        Prefs.getPrefs('gameLanguage').then((language) {
           _apiServices.post(
               context: context,
               endpoint: 'randomsystemgenerated_crossword',
@@ -254,7 +256,7 @@ class _DrugPageState extends State<DrugPage> {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
     Prefs.getToken().then((token) {
       Prefs.getPrefs('loginId').then((loginId) {
-        Prefs.getPrefs('language').then((language) {
+        Prefs.getPrefs('gameLanguage').then((language) {
           _apiServices.post(
               context: context,
               endpoint: 'randomusergenerated_crossword',
@@ -287,7 +289,7 @@ class _DrugPageState extends State<DrugPage> {
     Prefs.getToken().then((token) {
       Prefs.getPrefs('loginId').then((loginId) {
         Prefs.getPrefs('wordLimit').then((wordLimit) {
-          Prefs.getPrefs('language').then((language) {
+          Prefs.getPrefs('gameLanguage').then((language) {
             _apiServices
                 .post(context: context, endpoint: 'topicwise_crossword', body: {
               "language": language,
@@ -317,7 +319,7 @@ class _DrugPageState extends State<DrugPage> {
         Provider.of<CategoryProvider>(context, listen: false);
     Prefs.getToken().then((token) {
       Prefs.getPrefs('loginId').then((loginId) {
-        Prefs.getPrefs('language').then((language) {
+        Prefs.getPrefs('gameLanguage').then((language) {
           Prefs.getPrefs('wordLimit').then((wordLimit) {
             _apiServices
                 .post(context: context, endpoint: 'topicwise_crossword', body: {

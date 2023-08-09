@@ -55,42 +55,45 @@ class CreatePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              Consumer<ProfileProvider>(builder: (context, pprovider, _) {
-                return InkWell(
-                  onTap: () {
-                    if (pprovider.profile['subscriptionstatus'] == 'none') {
-                      CustomDialog.showPurchaseDialog(context: context);
-                    } else {}
-                  },
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: 55,
-                        decoration: BoxDecoration(
-                            color: AllColors.liteDarkPurple,
-                            borderRadius: BorderRadius.circular(50)),
-                        child: Center(
-                          child: Label(
-                              text: AppLocalizations.of(context)!
-                                  .challenge
-                                  .toUpperCase(),
-                              fontSize: FontSize.p1),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Consumer<ProfileProvider>(builder: (context, pprovider, _) {
+                  return InkWell(
+                    onTap: () {
+                      if (pprovider.profile['subscriptionstatus'] == 'none') {
+                        CustomDialog.showPurchaseDialog(context: context);
+                      } else {}
+                    },
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: 55,
+                          decoration: BoxDecoration(
+                              color: AllColors.liteDarkPurple,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: Center(
+                            child: Label(
+                                text: AppLocalizations.of(context)!
+                                    .challenge
+                                    .toUpperCase(),
+                                fontSize: FontSize.p1),
+                          ),
                         ),
-                      ),
-                      Positioned(
-                        top: 0,
-                        bottom: 0,
-                        right: 20,
-                        child: pprovider.profile['subscriptionstatus'] == 'none'
-                            ? const Icon(CupertinoIcons.lock_fill,
-                                color: AllColors.liteGreen, size: 28)
-                            : gap(0),
-                      ),
-                    ],
-                  ),
-                );
-              }),
+                        Positioned(
+                          top: 0,
+                          bottom: 0,
+                          right: 20,
+                          child: pprovider.profile['subscriptionstatus'] == 'none'
+                              ? const Icon(CupertinoIcons.lock_fill,
+                                  color: AllColors.liteGreen, size: 28)
+                              : gap(0),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ),
             ],
           ),
         ));

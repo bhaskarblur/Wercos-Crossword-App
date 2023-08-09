@@ -43,21 +43,31 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   localization() {
-    print('localization');
-    Prefs.getPrefs('language').then((value) {
-      print(value);
+    Prefs.getPrefs('gameLanguage').then((value) {
       final provider = Provider.of<LanguageProvider>(context, listen: false);
       if (value == null) {
-        print('1');
+        Prefs.setPrefs('gameLanguage', 'en');
+        provider.setLocale(L10n.all.first);
+      } else {
+        if (value == 'en') {
+          provider.setGameLFocale(L10n.all.first);
+        }
+        if (value == 'es') {
+          provider.setGameLFocale(L10n.all.last);
+        }
+      }
+    });
+
+    Prefs.getPrefs('language').then((value) {
+      final provider = Provider.of<LanguageProvider>(context, listen: false);
+      if (value == null) {
         Prefs.setPrefs('language', 'en');
         provider.setLocale(L10n.all.first);
       } else {
         if (value == 'en') {
-          print('2');
           provider.setLocale(L10n.all.first);
         }
         if (value == 'es') {
-          print('3');
           provider.setLocale(L10n.all.last);
         }
       }

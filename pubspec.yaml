@@ -40,22 +40,22 @@ dependencies:
   step_progress_indicator:
   flutter_rating_bar:
   http: ^1.1.0
-  freezed_annotation: ^2.4.1
-  json_annotation: ^4.8.1
+  # freezed_annotation: ^2.4.1
+  # json_annotation: ^4.8.1
   provider:
   flutter_local_notifications:
   intl:
-  image_picker:
+  # image_picker:
   shared_preferences:
-  font_awesome_flutter:
-  flutter_svg:
-  file_picker:
-  intl_phone_number_input:
+  # font_awesome_flutter:
+  # flutter_svg:
+  # file_picker:
+  # intl_phone_number_input:
   firebase_messaging: 
   firebase_core:
-  path_provider: 
-  permission_handler: 
-  dio:
+  # path_provider: 
+  # permission_handler: 
+  # dio:
   flutter_localizations:
     sdk: flutter
 

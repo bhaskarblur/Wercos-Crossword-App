@@ -11,7 +11,9 @@ import '../utils/all_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LanguageSelectionPage extends StatefulWidget {
-  const LanguageSelectionPage({Key? key}) : super(key: key);
+  final String changeType;
+  const LanguageSelectionPage({Key? key, required this.changeType})
+      : super(key: key);
 
   @override
   State<LanguageSelectionPage> createState() => _LanguageSelectionPageState();
@@ -29,28 +31,55 @@ class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
             child: CustomAppBar(isBack: true, isLang: false)),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: FutureBuilder(
-              future: Prefs.getPrefs('language'),
-              builder: (context, snapshot) {
-                return Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    Label(
-                        text: AppLocalizations.of(context)!.select_language.toUpperCase(),
-                        fontSize: FontSize.p2,
-                        fontWeight: FontWeight.bold),
-                    const SizedBox(height: 16),
-                    languageCard(
-                        image: 'assets/images/us_flag.png',
-                        langName: 'ENGLISH',
-                        selected: snapshot.data == 'en' ? true : false),
-                    languageCard(
-                        image: 'assets/images/spanish_flag.png',
-                        langName: 'ESPAÑOL',
-                        selected: snapshot.data == 'es' ? true : false)
-                  ],
-                );
-              }),
+          child: widget.changeType == 'app'
+              ? FutureBuilder(
+                  future: Prefs.getPrefs('language'),
+                  builder: (context, snapshot) {
+                    return Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Label(
+                            text: AppLocalizations.of(context)!
+                                .select_language
+                                .toUpperCase(),
+                            fontSize: FontSize.p2,
+                            fontWeight: FontWeight.bold),
+                        const SizedBox(height: 16),
+                        languageCard(
+                            image: 'assets/images/us_flag.png',
+                            langName: 'ENGLISH',
+                            selected: snapshot.data == 'en' ? true : false),
+                        languageCard(
+                            image: 'assets/images/spanish_flag.png',
+                            langName: 'ESPAÑOL',
+                            selected: snapshot.data == 'es' ? true : false)
+                      ],
+                    );
+                  })
+              : FutureBuilder(
+                  future: Prefs.getPrefs('gameLanguage'),
+                  builder: (context, snapshot) {
+                    return Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Label(
+                            text: AppLocalizations.of(context)!
+                                .select_language
+                                .toUpperCase(),
+                            fontSize: FontSize.p2,
+                            fontWeight: FontWeight.bold),
+                        const SizedBox(height: 16),
+                        languageCard(
+                            image: 'assets/images/us_flag.png',
+                            langName: 'ENGLISH',
+                            selected: snapshot.data == 'en' ? true : false),
+                        languageCard(
+                            image: 'assets/images/spanish_flag.png',
+                            langName: 'ESPAÑOL',
+                            selected: snapshot.data == 'es' ? true : false)
+                      ],
+                    );
+                  }),
         ),
       ),
     );
@@ -60,13 +89,22 @@ class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
     return CupertinoButton(
       onPressed: () {
         final provider = Provider.of<LanguageProvider>(context, listen: false);
-        if (langName == 'ENGLISH') {
-          Prefs.setPrefs('language', 'en');
-          provider.setLocale(const Locale('en'));
-        }
-        if (langName == 'ESPAÑOL') {
-          Prefs.setPrefs('language', 'es');
-          provider.setLocale(const Locale('es'));
+        if (widget.changeType == 'app') {
+          if (langName == 'ENGLISH') {
+            Prefs.setPrefs('language', 'en');
+            provider.setLocale(const Locale('en'));
+          }
+          if (langName == 'ESPAÑOL') {
+            Prefs.setPrefs('language', 'es');
+            provider.setLocale(const Locale('es'));
+          }
+        } else {
+          if (langName == 'ENGLISH') {
+            Prefs.setPrefs('gameLanguage', 'en');
+          }
+          if (langName == 'ESPAÑOL') {
+            Prefs.setPrefs('gameLanguage', 'es');
+          }
         }
         setState(() {});
       },
