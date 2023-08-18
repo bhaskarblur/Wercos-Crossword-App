@@ -12,7 +12,7 @@
     "options" : "Opciones",
     "my_account" : "Mi cuenta",
     "select_language" : "Seleccione el idioma",
-    "back" : "Atrás",
+    "back" : "Regresar",
 
     "publication_mode" : "Modo de publicación",
     "public" : "Público",
@@ -83,7 +83,18 @@
     "dynamic_word_search_description" : "Una sopa de letras dinámica es aquella en la que la cuadrícula es diferente para cada jugador. Además, el creador puede seleccionar la cantidad de palabras que se mostrarán en la búsqueda de palabras.",
     "what_is_challenge" : "¿Qué es un desafío?",
     "what_is_challenge_description" : "En un desafío, hay palabras correctas e incorrectas en la lista y en la cuadrícula. Solo debes marcar las palabras que correspondan al título del reto. Por ejemplo, si el título del reto es: Países Europeos, solo se deben marcar los países europeos, los que no son de Europa no se deben marcar ya que serían incorrectos.",
-    "this_feature" : "Esta característica solo está disponible para usuarios premium. Actualice para usar esta función."
+    "this_feature" : "Esta característica solo está disponible para usuarios premium. Actualice para usar esta función.",
 
+    "rate_this" : "CALAIFICAR ESTA SOPA DE LETRAS",
+    "rate_this_challange" : "CALAIFICAR ESTE RETO",
+    "game" : "JUEGO",
+    "not_complete" : "NO COMPLETADO",
+    "congratulations" : "!FELICIDADES!",
+    "complete" : "COMPLETADO",
+    "hits" : "ACIERTOS",
+    "offf" : "de",
+    "time" : "TIEMPO",
+    "see_leaderboard" : "Ver tabla de posiciones",
+    "startNew_game" : "Empezar juego nuevo"
 
 }

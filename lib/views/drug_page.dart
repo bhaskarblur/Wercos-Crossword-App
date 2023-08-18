@@ -1,5 +1,5 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:mobile_app_word_search/providers/category_provider.dart';
 import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import '../api_services.dart';
 import '../providers/timer_provider.dart';
 import '../widget/sahared_prefs.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DrugPage extends StatefulWidget {
   const DrugPage({Key? key}) : super(key: key);
@@ -22,7 +21,11 @@ class DrugPage extends StatefulWidget {
 class _DrugPageState extends State<DrugPage> {
   final ApiServices _apiServices = ApiServices();
 
-  Timer? timer;
+  Color selectedColor = Colors.red;
+
+  double strokeWidth = 20;
+
+  List<dynamic> drawingPoints = [];
 
   @override
   void initState() {
@@ -76,7 +79,6 @@ class _DrugPageState extends State<DrugPage> {
                         }),
                         gap(5),
                         Container(
-                          constraints: const BoxConstraints(minHeight: 150),
                           width: double.infinity,
                           decoration: BoxDecoration(
                               gradient: AllColors.bg,
@@ -92,23 +94,31 @@ class _DrugPageState extends State<DrugPage> {
                               GridView.builder(
                                 shrinkWrap: true,
                                 padding: const EdgeInsets.all(10),
-                                itemCount: provider
-                                        .gameData['limitedWords'].isEmpty
-                                    ? provider.gameData['allWords'].length
-                                    : provider.gameData['limitedWords'].length,
+                                itemCount: provider.correctWordsFromAPI.length,
                                 physics: const NeverScrollableScrollPhysics(),
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
-                                        childAspectRatio: 3, crossAxisCount: 3),
+                                        childAspectRatio: 5, crossAxisCount: 3),
                                 itemBuilder: (context, index) {
                                   return Center(
                                       child: Text(
-                                          provider.gameData['allWords'][index]
-                                                  ['words']
-                                              .toUpperCase(),
-                                          style: const TextStyle(
+                                          provider.correctWordsFromAPI[index],
+                                          style: TextStyle(
+                                              decoration: provider.correctWords
+                                                      .contains(provider
+                                                          .correctWordsFromAPI[
+                                                              index]
+                                                          .toUpperCase())
+                                                  ? TextDecoration.lineThrough
+                                                  : TextDecoration.none,
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.white)));
+                                              color: provider.correctWords
+                                                      .contains(provider
+                                                          .correctWordsFromAPI[
+                                                              index]
+                                                          .toUpperCase())
+                                                  ? Colors.green
+                                                  : Colors.white)));
                                 },
                               ),
                             ],
@@ -116,47 +126,62 @@ class _DrugPageState extends State<DrugPage> {
                         ),
                         gap(10),
                         Expanded(
-                            flex: 3,
+                            flex: 2,
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   color: Colors.white),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    for (int i = 0;
-                                        i <
-                                            provider.gameData['crossword_grid']
-                                                .length;
-                                        i++)
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            for (int j = 0;
-                                                j <
-                                                    provider
-                                                        .gameData[
-                                                            'crossword_grid'][i]
-                                                        .length;
-                                                j++)
-                                              Expanded(
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Listener(
+                                    onPointerDown: _detectTapedItem,
+                                    onPointerMove: _detectTapedItem,
+                                    onPointerUp: _clearSelection,
+                                    child: GridView.builder(
+                                      key: key,
+                                      shrinkWrap: true,
+                                      padding: EdgeInsets.zero,
+                                      itemCount: provider.tiles.length,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 11,
+                                              childAspectRatio: 1,
+                                              crossAxisSpacing: 3,
+                                              mainAxisSpacing: 3),
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              color: provider.tiles[index]
+                                                  .backgroundColor),
+                                          child: Center(
+                                            child: Foo(
+                                              index: index,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(0),
                                                 child: Text(
-                                                    provider.gameData[
-                                                        'crossword_grid'][i][j],
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 22)),
-                                              )
-                                          ]),
-                                  ],
+                                                  provider
+                                                      .tiles[index].alphabet!,
+                                                  style: TextStyle(
+                                                      color: provider
+                                                          .tiles[index]
+                                                          .textColor,
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                      fontSize: 18),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
                                 ),
                               ),
                             )),
@@ -169,9 +194,7 @@ class _DrugPageState extends State<DrugPage> {
 
   getData() {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
-    provider.changeGameData(null);
-    print('--------------------');
-    print(provider.gameType);
+    provider.resetGameData();
     if (provider.gameType == 'random') {
       getRandomGame();
     }
@@ -191,15 +214,8 @@ class _DrugPageState extends State<DrugPage> {
 
   void startTimer() {
     final provider = Provider.of<TimerProvider>(context, listen: false);
-    const oneSec = Duration(seconds: 1);
-    timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        setState(() {
-          provider.chnageSeconds();
-        });
-      },
-    );
+
+    provider.startTimer();
   }
 
   getGameWithCode() {
@@ -214,7 +230,14 @@ class _DrugPageState extends State<DrugPage> {
           }).then((value) {
             if (value['gameDetails'] != null) {
               provider.changeGameData(value);
+              provider.addToCorrectWordsFromAPI();
               startTimer();
+            } else {
+              if (value['message'] != null) {
+                dialog(context, value['message'], () {
+                  Nav.pop(context);
+                });
+              }
             }
           });
         });
@@ -227,25 +250,29 @@ class _DrugPageState extends State<DrugPage> {
     Prefs.getToken().then((token) {
       Prefs.getPrefs('loginId').then((loginId) {
         Prefs.getPrefs('gameLanguage').then((language) {
-          _apiServices.post(
-              context: context,
-              endpoint: 'randomsystemgenerated_crossword',
-              body: {
-                "language": language,
-                "userId": loginId,
-                "accessToken": token,
-                "type": 'search',
-              }).then((value) {
-            if (value['gameDetails'] != null) {
-              provider.changeGameData(value);
-              startTimer();
-            } else {
-              if (value['message'] != null) {
-                dialog(context, value['message'], () {
-                  Nav.pop(context);
-                });
+          Prefs.getPrefs('wordLimit').then((wordLimit) {
+            _apiServices.post(
+                context: context,
+                endpoint: 'randomsystemgenerated_crossword',
+                body: {
+                  "language": language,
+                  "userId": loginId,
+                  "words_limit": wordLimit,
+                  "accessToken": token,
+                  "type": 'search',
+                }).then((value) {
+              if (value['gameDetails'] != null) {
+                provider.changeGameData(value);
+                provider.addToCorrectWordsFromAPI();
+                startTimer();
+              } else {
+                if (value['message'] != null) {
+                  dialog(context, value['message'], () {
+                    Nav.pop(context);
+                  });
+                }
               }
-            }
+            });
           });
         });
       });
@@ -270,6 +297,7 @@ class _DrugPageState extends State<DrugPage> {
               }).then((value) {
             if (value['gameDetails'] != null) {
               provider.changeGameData(value);
+              provider.addToCorrectWordsFromAPI();
               startTimer();
             } else {
               if (value['message'] != null) {
@@ -300,6 +328,7 @@ class _DrugPageState extends State<DrugPage> {
             }).then((value) {
               if (value['gameDetails'] != null) {
                 provider.changeGameData(value);
+                provider.addToCorrectWordsFromAPI();
                 startTimer();
               } else {
                 dialog(context, value['message'], () {
@@ -333,6 +362,7 @@ class _DrugPageState extends State<DrugPage> {
             }).then((value) {
               if (value['gameDetails'] != null) {
                 provider.changeGameData(value);
+                provider.addToCorrectWordsFromAPI();
                 startTimer();
               } else {
                 if (value['message'] != null) {
@@ -348,28 +378,64 @@ class _DrugPageState extends State<DrugPage> {
     });
   }
 
-  String formatTime(int seconds) {
-    return '${(Duration(seconds: seconds))}'.split('.')[0].padLeft(8, '0');
+  // final Set<int> selectedIndexes = <int>{};
+  final key = GlobalKey();
+  // final Set<_Foo> _trackTaped = <_Foo>{};
+  String word = '';
+
+  _detectTapedItem(PointerEvent event) {
+    final provider = Provider.of<GameScreenProvider>(context, listen: false);
+
+    final RenderBox box =
+        key.currentContext!.findAncestorRenderObjectOfType<RenderBox>()!;
+    final result = BoxHitTestResult();
+    Offset local = box.globalToLocal(event.position);
+    if (box.hitTest(result, position: local)) {
+      for (final hit in result.path) {
+        /// temporary variable so that the [is] allows access of [index]
+        final target = hit.target;
+        if (target is _Foo) {
+          if (!provider.allSelectedIndex.contains(target.index)) {
+            provider.changeGridAndTextColor(target.index);
+          }
+          provider.addToTrackLastIndex(target.index);
+          provider.addToAllSelectedIndex(target.index);
+        }
+      }
+    }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    // timer!.cancel();
+  void _clearSelection(PointerUpEvent event) {
+    final provider = Provider.of<GameScreenProvider>(context, listen: false);
+    // change the color of selection of grid
+    provider.changeSelectedColor();
+
+    // // add the word to word list
+    provider.makeWord();
+    provider.addToCorrectWords();
+    provider.resetSelectedWord();
+    provider.resetTrackLastIndex();
   }
 }
 
-class LinePainter extends CustomPainter {
+class Foo extends SingleChildRenderObjectWidget {
+  final int index;
+
+  const Foo({required Widget child, required this.index, Key? key})
+      : super(child: child, key: key);
+
   @override
-  void paint(Canvas canvas, Size size) {
-    final p1 = Offset(size.width, 0);
-    final p2 = Offset(0, size.height);
-    final paint = Paint()
-      ..color = Colors.black
-      ..strokeWidth = 4;
-    canvas.drawLine(p1, p2, paint);
+  _Foo createRenderObject(BuildContext context) {
+    return _Foo(index);
   }
 
   @override
-  bool shouldRepaint(LinePainter oldDelegate) => false;
+  void updateRenderObject(BuildContext context, _Foo renderObject) {
+    renderObject.index = index;
+  }
+}
+
+class _Foo extends RenderProxyBox {
+  int index;
+  _Foo(this.index);
 }

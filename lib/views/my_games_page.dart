@@ -240,7 +240,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          LeaderBoardPage(gameDetails: details)));
+                          LeaderBoardPage(pageName: 'myGames',gameDetails: details)));
             },
             minSize: 0,
             padding: EdgeInsets.zero,

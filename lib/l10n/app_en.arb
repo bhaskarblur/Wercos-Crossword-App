@@ -86,5 +86,18 @@
     "dynamic_word_search_description" : "A dynamic word search is one in which the grid is different for each player. In addition, the creator can select the number of words that will be displayed in the word search.",
     "what_is_challenge" : "What is a challenge?",
     "what_is_challenge_description" : "In a challenge, there are correct and incorrect words in the list and in the grid. You should only mark the words that correspond to the title of the challenge. For example, if the title of the challenge is: European Countries, you should only mark the European countries, those that are not from Europe should not be marked as they would be incorrect.",
-    "this_feature" : "This feature is only available for premium users. Upgrade to use this feature."
+    "this_feature" : "This feature is only available for premium users. Upgrade to use this feature.",
+    
+    "rate_this" : "RATE THIS WORD SEARCH",
+    "rate_this_challange" : "RATE THIS CHALLANGE",
+    "game" : "GAME",
+    "not_complete" : "NOT COMPLETED",
+    "congratulations" : "CONGRATULATIONS!",
+    "complete" : "COMPLETED",
+    "hits" : "HITS",
+    "offf" : "of",
+    "time" : "TIME",
+    "see_leaderboard" : "See leaderboard",
+    "startNew_game" : "Start new game"
+
 }

@@ -4,6 +4,8 @@ import 'package:mobile_app_word_search/providers/leaderboard_provider.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
+import 'package:mobile_app_word_search/views/tab_screen.dart';
+import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
 import 'package:mobile_app_word_search/widget/widgets.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +15,10 @@ import '../utils/font_size.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LeaderBoardPage extends StatefulWidget {
+  final String pageName;
   final dynamic gameDetails;
-  const LeaderBoardPage({Key? key, this.gameDetails}) : super(key: key);
+  const LeaderBoardPage({Key? key, this.gameDetails, required this.pageName})
+      : super(key: key);
 
   @override
   State<LeaderBoardPage> createState() => _LeaderBoardPageState();
@@ -141,7 +145,13 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: ShadowButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              if (widget.pageName == 'myGames') {
+                                Navigator.pop(context);
+                              }
+                              if (widget.pageName == 'levelComplete') {
+                                Nav.pushAndRemoveAll(
+                                    context, const TabScreen());
+                              }
                             },
                             title: AppLocalizations.of(context)!.back,
                             fillColors: const [

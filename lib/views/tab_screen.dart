@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
+import 'package:mobile_app_word_search/views/level_completion_page.dart';
+import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app_word_search/views/play_page.dart';
 import 'package:mobile_app_word_search/views/drug_page.dart';
@@ -142,9 +145,19 @@ class TabScreenState extends State<TabScreen> {
                       onPressed: () {
                         final p =
                             Provider.of<TimerProvider>(context, listen: false);
-                        p.resetSeconds();
+                        final gameProvider = Provider.of<GameScreenProvider>(
+                            context,
+                            listen: false);
+
                         if (provider.selectedIndex == 4) {
-                          provider.changeSelectedIndex(0);
+                        p.cancelTimer();
+                          Nav.push(
+                              context,
+                              LevelCompletionPage(
+                                isCompleted: gameProvider.correctWordsFromAPI.length == gameProvider.correctWords.length,
+                                totalWord: gameProvider.correctWordsFromAPI.length,
+                                correctWord: gameProvider.correctWords.length,
+                              ));
                         } else {
                           provider.changeSelectedIndex(4);
                         }
