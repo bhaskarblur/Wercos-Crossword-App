@@ -98,6 +98,8 @@
     "offf" : "of",
     "time" : "TIME",
     "see_leaderboard" : "See leaderboard",
-    "startNew_game" : "Start new game"
+    "startNew_game" : "Start new game",
+
+    "ratings" : "Ratings"
 
 }

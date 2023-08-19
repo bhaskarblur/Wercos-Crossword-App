@@ -211,7 +211,14 @@ class _MyGamesPageState extends State<MyGamesPage> {
                       '${AppLocalizations.of(context)!.words}: ${details['totalwords']}',
                   fontSize: FontSize.p2),
               CupertinoButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Nav.push(
+                        context,
+                        CreateWordPage(
+                            type: details['searchtype'] == 'search'
+                                ? 'search'
+                                : 'challenge', gameDetails: details));
+                  },
                   padding: EdgeInsets.zero,
                   minSize: 0,
                   child: Image.asset('assets/icons/edit_icon.png'))
@@ -223,7 +230,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
             children: [
               Label(
                   text:
-                      '${AppLocalizations.of(context)!.users}: ${details["avgratings"] ?? '0'}/5',
+                      '${AppLocalizations.of(context)!.ratings}: ${details["avgratings"] ?? '0'}/5',
                   fontSize: FontSize.p2),
               RatingBarIndicator(
                   rating: 5,
@@ -231,7 +238,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
                       const Icon(Icons.star, color: AllColors.superLightGreen),
                   itemCount: 5,
                   unratedColor: AllColors.grey,
-                  itemSize: 22.0),
+                  itemSize: 22),
             ],
           ),
           const SizedBox(height: 10),

@@ -11,9 +11,9 @@ class GameScreenProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  resetGameData() {
-    _gameData = null;
-  }
+  // resetGameData() {
+  //   _gameData = null;
+  // }
 
   final List<String> _allWordsFromAPI = [];
   List<String> get allWordsFromAPI => _allWordsFromAPI;
@@ -88,12 +88,12 @@ class GameScreenProvider with ChangeNotifier {
     _gameType = value;
   }
 
-  String? _search;
-  String get search => _search!;
+  // String? _search;
+  // String get search => _search!;
 
-  changeSearch(String value) {
-    _search = value;
-  }
+  // changeSearch(String value) {
+  //   _search = value;
+  // }
 
   final List<String> _correctWords = [];
   List<String> get correctWords => _correctWords;
@@ -224,7 +224,6 @@ class GameScreenProvider with ChangeNotifier {
   }
 
   reset() {
-    _gameData = null;
     _allWordsFromAPI.clear();
     _correctWordsFromAPI.clear();
     _incorrectWordsFromAPI.clear();

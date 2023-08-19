@@ -18,10 +18,13 @@ import '../components/custom_dialogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../components/suggestion/model/suggestion.dart';
+import '../providers/games_provider.dart';
 
 class CreateWordPage extends StatefulWidget {
   final String type;
-  const CreateWordPage({Key? key, required this.type}) : super(key: key);
+  final dynamic gameDetails;
+  const CreateWordPage({Key? key, required this.type, this.gameDetails})
+      : super(key: key);
 
   @override
   State<CreateWordPage> createState() => _CreateWordPageState();
@@ -40,6 +43,64 @@ class _CreateWordPageState extends State<CreateWordPage> {
   final TextEditingController _c2 = TextEditingController();
 
   final List<Word> _list = [];
+
+  @override
+  void initState() {
+    if (widget.gameDetails != null) {
+      getGameWithCode();
+    }
+    super.initState();
+  }
+
+  getGameWithCode() {
+    Prefs.getToken().then((token) {
+      Prefs.getPrefs('loginId').then((loginId) {
+        Prefs.getPrefs('wordLimit').then((wordLimit) {
+          _apiServices.post(context: context, endpoint: 'getGameByCode', body: {
+            "accessToken": token,
+            "userId": loginId,
+            "sharecode": widget.gameDetails['sharecode'],
+          }).then((value) {
+            if (value['gameDetails'] != null) {
+              if (value['gameDetails']['gametype'] == 'public') {
+                public = true;
+              } else {
+                public = false;
+              }
+              public1 = true;
+              if (value['gameDetails']['gamelanguage'] == 'en') {
+                selectedLanguage = 'ENGLISH';
+              } else {
+                selectedLanguage = 'ESPAÑOL';
+              }
+              selectedWordCount =
+                  value['gameDetails']['limitedwords'].toString();
+              _c1.text = value['gameDetails']['gamename'];
+              if (value['gameDetails']['searchtype'] == 'search') {
+                value['allWords'].forEach((e) {
+                  _list.add(Word(word: e['words'], correct: true));
+                });
+              } else {
+                value['correctWords'].forEach((e) {
+                  _list.add(Word(word: e['words'], correct: true));
+                });
+                value['incorrectWords'].forEach((e) {
+                  _list.add(Word(word: e['words'], correct: false));
+                });
+              }
+              setState(() {});
+            } else {
+              if (value['message'] != null) {
+                dialog(context, value['message'], () {
+                  Nav.pop(context);
+                });
+              }
+            }
+          });
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -288,31 +349,39 @@ class _CreateWordPageState extends State<CreateWordPage> {
 
                               _apiServices.post(
                                   context: context,
-                                  endpoint: 'createGame',
+                                  endpoint: widget.gameDetails != null
+                                      ? 'editGame'
+                                      : 'createGame',
                                   body: {
                                     "accessToken": token,
                                     "userId": loginId,
                                     "gameName": _c1.text,
                                     "gameLanguage":
-                                        selectedLanguage == "English"
+                                        selectedLanguage == "ENGLISH"
                                             ? 'en'
                                             : 'es',
                                     "totalWords": _list.length.toString(),
-                                    "limitedWords": widget.type == 'search'
-                                        ? _list.length
-                                        : (!public1 &&
-                                                selectedWordCount != null)
-                                            ? selectedLanguage
-                                            : wordLimit,
+                                    "limitedWords": 
+                                    // widget.type == 'search'
+                                    //     ? 
+                                        _list.length.toString()
+                                        // : (!public1 &&
+                                        //         selectedWordCount != null)
+                                        //     ? selectedLanguage
+                                        //     : wordLimit
+                                            ,
                                     "allWords": jsonEncode(allWords),
                                     "correctWords": jsonEncode(correctWords),
                                     "incorrectWords":
                                         jsonEncode(incorrectWords),
+                                    "gameId":
+                                        widget.gameDetails['gameid'].toString(),
                                     "gameType": public ? 'public' : 'privet',
                                     "searchType": widget.type == 'challenge'
                                         ? 'challenge'
                                         : "search",
                                   }).then((value) {
+                                getData(false);
                                 dialog(context, value['message'], () {
                                   Nav.pop(context);
                                 });
@@ -331,7 +400,9 @@ class _CreateWordPageState extends State<CreateWordPage> {
                       });
                     }
                   },
-                  title: AppLocalizations.of(context)!.generate)),
+                  title: widget.gameDetails != null
+                      ? AppLocalizations.of(context)!.save
+                      : AppLocalizations.of(context)!.generate)),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked),
     );
@@ -403,6 +474,42 @@ class _CreateWordPageState extends State<CreateWordPage> {
             onChanged: onChanged),
       ),
     );
+  }
+
+  getData(bool progressBar) {
+    final provider = Provider.of<GamesProvider>(context, listen: false);
+
+    Prefs.getToken().then((token) {
+      Prefs.getPrefs('loginId').then((loginId) {
+        _apiServices
+            .post(
+                context: context,
+                endpoint: 'getAllUserGames',
+                body: {
+                  "accessToken": token,
+                  "userId": loginId,
+                  "type": 'search'
+                },
+                progressBar: progressBar)
+            .then((value) {
+          provider.changeSearchGames(value['allGames']);
+        });
+
+        _apiServices
+            .post(
+                context: context,
+                endpoint: 'getAllUserGames',
+                body: {
+                  "accessToken": token,
+                  "userId": loginId,
+                  "type": 'challenge'
+                },
+                progressBar: progressBar)
+            .then((value) {
+          provider.changeChallengeGames(value['allGames']);
+        });
+      });
+    });
   }
 }
 

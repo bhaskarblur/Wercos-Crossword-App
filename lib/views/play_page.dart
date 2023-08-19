@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app_word_search/api_services.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
 import 'package:mobile_app_word_search/providers/home_provider.dart';
@@ -8,9 +9,13 @@ import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
 import 'package:mobile_app_word_search/views/category_page.dart';
+import 'package:mobile_app_word_search/views/word_related_page.dart';
 import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../widget/sahared_prefs.dart';
+import '../widget/widgets.dart';
 
 class PlayPage extends StatefulWidget {
   const PlayPage({Key? key}) : super(key: key);
@@ -20,6 +25,8 @@ class PlayPage extends StatefulWidget {
 }
 
 class _PlayPageState extends State<PlayPage> {
+  final ApiServices _apiServices = ApiServices();
+
   final TextEditingController _playByCodeController = TextEditingController();
 
   @override
@@ -142,12 +149,9 @@ class _PlayPageState extends State<PlayPage> {
                               Provider.of<GameScreenProvider>(context,
                                   listen: false);
                           gameScreenProvider.changeGameType('gamewithcode');
-                          gameScreenProvider
-                              .changeSearch(_playByCodeController.text);
-
-                          final provider =
-                              Provider.of<HomeProvider>(context, listen: false);
-                          provider.changeSelectedIndex(4);
+                          // gameScreenProvider
+                          //     .changeSearch(_playByCodeController.text);
+                          getGameWithCode();
                         },
                         title: AppLocalizations.of(context)!
                             .play_with_entered_code,
@@ -161,6 +165,40 @@ class _PlayPageState extends State<PlayPage> {
             ),
           ),
         ));
+  }
+
+  getGameWithCode() {
+    final provider = Provider.of<GameScreenProvider>(context, listen: false);
+    provider.reset();
+    Prefs.getToken().then((token) {
+      Prefs.getPrefs('loginId').then((loginId) {
+        Prefs.getPrefs('wordLimit').then((wordLimit) {
+          _apiServices.post(context: context, endpoint: 'getGameByCode', body: {
+            "accessToken": token,
+            "userId": loginId,
+            "sharecode": _playByCodeController.text,
+          }).then((value) {
+            if (value['gameDetails'] != null) {
+              provider.changeGameData(value);
+              provider.addToCorrectWordsIncorrectWordsFromAPI();
+              if (value['gameDetails']['searchtype'] == 'search') {
+                final provider =
+                    Provider.of<HomeProvider>(context, listen: false);
+                provider.changeSelectedIndex(4);
+              } else {
+               Nav.push(context, WordRelatedPage(data: value));
+              }
+            } else {
+              if (value['message'] != null) {
+                dialog(context, value['message'], () {
+                  Nav.pop(context);
+                });
+              }
+            }
+          });
+        });
+      });
+    });
   }
 }
 

@@ -5,7 +5,7 @@ import 'package:mobile_app_word_search/views/level_completion_page.dart';
 import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app_word_search/views/play_page.dart';
-import 'package:mobile_app_word_search/views/drug_page.dart';
+import 'package:mobile_app_word_search/views/drag_page.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/views/create_page.dart';
 import 'package:mobile_app_word_search/components/labels.dart';

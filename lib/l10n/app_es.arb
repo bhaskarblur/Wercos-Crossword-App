@@ -95,6 +95,7 @@
     "offf" : "de",
     "time" : "TIEMPO",
     "see_leaderboard" : "Ver tabla de posiciones",
-    "startNew_game" : "Empezar juego nuevo"
+    "startNew_game" : "Empezar juego nuevo",
 
+    "ratings" : "clasificación"
 }

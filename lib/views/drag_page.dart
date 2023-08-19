@@ -77,7 +77,7 @@ class _DrugPageState extends State<DrugPage> {
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
-                                      fontSize: 16));
+                                      fontSize: 18));
                             }),
                             gap(5),
                             Expanded(
@@ -91,8 +91,7 @@ class _DrugPageState extends State<DrugPage> {
                                     gap(5),
                                     Text(
                                         provider.gameData['gameDetails']
-                                                ['gamename']
-                                            .toUpperCase(),
+                                                ['gamename'],
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
@@ -114,8 +113,7 @@ class _DrugPageState extends State<DrugPage> {
                                                 crossAxisCount: 3),
                                         itemBuilder: (context, index) {
                                           return Text(
-                                              provider
-                                                  .allWordsFromAPI[index]
+                                              provider.allWordsFromAPI[index]
                                                   .toUpperCase(),
                                               textAlign: (index + 1) % 3 == 0
                                                   ? TextAlign.end
@@ -168,6 +166,7 @@ class _DrugPageState extends State<DrugPage> {
                                                       ? TextAlign.start
                                                       : TextAlign.center,
                                               style: TextStyle(
+                                                fontSize: 16,
                                                   decoration: provider
                                                           .correctWords
                                                           .contains(
@@ -222,8 +221,9 @@ class _DrugPageState extends State<DrugPage> {
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 11,
                                           childAspectRatio: 1,
-                                          crossAxisSpacing: 3,
-                                          mainAxisSpacing: 3),
+                                          // crossAxisSpacing: 3,
+                                          // mainAxisSpacing: 3
+                                          ),
                                   itemBuilder: (context, index) {
                                     return Container(
                                       decoration: BoxDecoration(
@@ -231,7 +231,7 @@ class _DrugPageState extends State<DrugPage> {
                                               color: provider
                                                   .tiles[index].borderColor!),
                                           borderRadius:
-                                              BorderRadius.circular(5),
+                                              BorderRadius.circular(0),
                                           color: provider
                                               .tiles[index].backgroundColor),
                                       child: Center(
@@ -272,15 +272,17 @@ class _DrugPageState extends State<DrugPage> {
   getData() {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
     final timerProvider = Provider.of<TimerProvider>(context, listen: false);
-    provider.resetGameData();
-    provider.reset();
+    // provider.reset();
     timerProvider.resetSeconds();
     // provider.changeSelectedColor();
+
+    print(provider.gameType);
     if (provider.gameType == 'random') {
       getRandomGame();
     }
     if (provider.gameType == 'gamewithcode') {
-      getGameWithCode();
+      // getGameWithCode();
+      startTimer();
     }
     if (provider.gameType == 'randomwordsearch') {
       getRandomWordSearch();
@@ -301,32 +303,32 @@ class _DrugPageState extends State<DrugPage> {
     });
   }
 
-  getGameWithCode() {
-    final provider = Provider.of<GameScreenProvider>(context, listen: false);
-    Prefs.getToken().then((token) {
-      Prefs.getPrefs('loginId').then((loginId) {
-        Prefs.getPrefs('wordLimit').then((wordLimit) {
-          _apiServices.post(context: context, endpoint: 'getGameByCode', body: {
-            "accessToken": token,
-            "userId": loginId,
-            "sharecode": provider.search,
-          }).then((value) {
-            if (value['gameDetails'] != null) {
-              provider.changeGameData(value);
-              provider.addToCorrectWordsIncorrectWordsFromAPI();
-              startTimer();
-            } else {
-              if (value['message'] != null) {
-                dialog(context, value['message'], () {
-                  Nav.pop(context);
-                });
-              }
-            }
-          });
-        });
-      });
-    });
-  }
+  // getGameWithCode() {
+  //   final provider = Provider.of<GameScreenProvider>(context, listen: false);
+  //   Prefs.getToken().then((token) {
+  //     Prefs.getPrefs('loginId').then((loginId) {
+  //       Prefs.getPrefs('wordLimit').then((wordLimit) {
+  //         _apiServices.post(context: context, endpoint: 'getGameByCode', body: {
+  //           "accessToken": token,
+  //           "userId": loginId,
+  //           "sharecode": provider.search,
+  //         }).then((value) {
+  //           if (value['gameDetails'] != null) {
+  //             provider.changeGameData(value);
+  //             provider.addToCorrectWordsIncorrectWordsFromAPI();
+  //             startTimer();
+  //           } else {
+  //             if (value['message'] != null) {
+  //               dialog(context, value['message'], () {
+  //                 Nav.pop(context);
+  //               });
+  //             }
+  //           }
+  //         });
+  //       });
+  //     });
+  //   });
+  // }
 
   getRandomGame() {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
@@ -498,7 +500,6 @@ class _DrugPageState extends State<DrugPage> {
     // // add the word to word list
     provider.makeWord();
     provider.addToCorrectOrIncorrectWords();
-
 
     print('all');
     print(provider.allWordsFromAPI);

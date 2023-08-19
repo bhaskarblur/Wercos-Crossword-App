@@ -23,24 +23,22 @@ class WordRelatedPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         appBar: const PreferredSize(
             preferredSize: Size.fromHeight(70),
-            child: CustomAppBar(
-              isBack: true,
-              isLang: true,
-            )),
+            child: CustomAppBar(isBack: true, isLang: true)),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
             child: Column(
               children: [
                 const SizedBox(height: 100),
-                 Label(
-                    text: '${AppLocalizations.of(context)!.only_mark_the_words_related_to}:',
+                Label(
+                    text:
+                        '${AppLocalizations.of(context)!.only_mark_the_words_related_to}:',
                     align: TextAlign.center,
                     fontSize: FontSize.h3,
                     fontWeight: FontWeight.w500),
                 const SizedBox(height: 80),
                 Label(
-                    text: data['topicsname'],
+                    text: data['gameDetails']['gamename'],
                     align: TextAlign.center,
                     fontSize: FontSize.h4,
                     fontWeight: FontWeight.bold),
@@ -50,14 +48,21 @@ class WordRelatedPage extends StatelessWidget {
                       final gameScreenProvider =
                           Provider.of<GameScreenProvider>(context,
                               listen: false);
-                      gameScreenProvider.changeGameType('category');
+                      if (gameScreenProvider.gameType == 'gamewithcode') {
+                        Nav.pop(context);
+                        final provider =
+                            Provider.of<HomeProvider>(context, listen: false);
+                        provider.changeSelectedIndex(4);
+                      } else {
+                        gameScreenProvider.changeGameType('category');
 
-                      Nav.pop(context);
-                      Nav.pop(context);
-                      final provider =
-                          Provider.of<HomeProvider>(context, listen: false);
-                      provider.changeSelectedIndex(4);
-                      // Nav.pushAndRemoveAll(context, TabScreen());
+                        Nav.pop(context);
+                        Nav.pop(context);
+                        final provider =
+                            Provider.of<HomeProvider>(context, listen: false);
+                        provider.changeSelectedIndex(4);
+                        // Nav.pushAndRemoveAll(context, TabScreen());
+                      }
                     },
                     title: AppLocalizations.of(context)!.continuee,
                     fillColors: const [AllColors.liteOrange, AllColors.orange])
