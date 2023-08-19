@@ -15,21 +15,49 @@ class GameScreenProvider with ChangeNotifier {
     _gameData = null;
   }
 
+  final List<String> _allWordsFromAPI = [];
+  List<String> get allWordsFromAPI => _allWordsFromAPI;
+
   final List<String> _correctWordsFromAPI = [];
   List<String> get correctWordsFromAPI => _correctWordsFromAPI;
 
-  addToCorrectWordsFromAPI() {
+  final List<String> _incorrectWordsFromAPI = [];
+  List<String> get incorrectWordsFromAPI => _incorrectWordsFromAPI;
+
+  addToCorrectWordsIncorrectWordsFromAPI() {
+    _allWordsFromAPI.clear();
     _correctWordsFromAPI.clear();
-    if (_gameData['limitedWords'].isNotEmpty) {
+    _incorrectWordsFromAPI.clear();
+
+    // if (_gameData['limitedWords'].isNotEmpty) {
+    //   for (int i = 0; i < _gameData['limitedWords'].length; i++) {
+    //     _correctWordsFromAPI.add(_gameData['limitedWords'][i].toUpperCase());
+    //     _allWordsFromAPI.add(_gameData['limitedWords'][i].toUpperCase());
+    //   }
+
+    if (gameData['gameDetails']['searchtype'] == 'search') {
       for (int i = 0; i < _gameData['limitedWords'].length; i++) {
-        _correctWordsFromAPI.add(_gameData['limitedWords'][i].toUpperCase());
+        _allWordsFromAPI.add(_gameData['limitedWords'][i].toUpperCase());
       }
     } else {
       for (int i = 0; i < _gameData['allWords'].length; i++) {
-        _correctWordsFromAPI
-            .add(_gameData['allWords'][i]['words'].toUpperCase());
+        _allWordsFromAPI.add(_gameData['allWords'][i]['words'].toUpperCase());
       }
     }
+
+    if (_gameData['correctWords'] != null) {
+      for (int i = 0; i < _gameData['correctWords'].length; i++) {
+        _correctWordsFromAPI
+            .add(_gameData['correctWords'][i]['words'].toUpperCase());
+      }
+    }
+    if (_gameData['incorrectWords'] != null) {
+      for (int i = 0; i < _gameData['incorrectWords'].length; i++) {
+        _incorrectWordsFromAPI
+            .add(_gameData['incorrectWords'][i]['words'].toUpperCase());
+      }
+    }
+    notifyListeners();
   }
 
   resetCorrectWordsFromAPI() {
@@ -37,17 +65,23 @@ class GameScreenProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  resetIncorrectWordsFromAPI() {
+    _incorrectWordsFromAPI.clear();
+    notifyListeners();
+  }
+
   final _random = Random();
   final List<Color> randomColors = [
-    Colors.red,
     Colors.blue,
     Colors.yellow,
     Colors.green,
     Colors.purple,
     Colors.cyan,
+    Colors.lime,
+    Colors.indigo,
   ];
 
-  Color _selectedColor = Colors.red;
+  Color _selectedColor = Colors.blue;
   Color get selectedColor => _selectedColor;
 
   changeSelectedColor() {
@@ -71,23 +105,47 @@ class GameScreenProvider with ChangeNotifier {
   final List<String> _correctWords = [];
   List<String> get correctWords => _correctWords;
 
-  addToCorrectWords() {
-    print(_selectedWord);
-    int index = _correctWordsFromAPI.indexOf(_selectedWord.toUpperCase());
-    print(index);
-    print(_correctWordsFromAPI.length);
-    _correctWordsFromAPI.forEach((element) {
-      print(element);
-    });
-    if (index > -1) {
+  final List<String> _incorrectWords = [];
+  List<String> get incorrectWords => _incorrectWords;
+
+  addToCorrectOrIncorrectWords() {
+    int correctIndex = _allWordsFromAPI.indexOf(_selectedWord.toUpperCase());
+
+    if (correctIndex > -1) {
       _correctWords.add(_selectedWord);
+      for (var element in _trackLastIndex) {
+        _tiles[element].backgroundColor = _selectedColor;
+        _tiles[element].textColor = Colors.white;
+        _tiles[element].borderColor = Colors.transparent;
+      }
     } else {
       for (var element in _trackLastIndex) {
         _allSelectedIndex.remove(element);
         _tiles[element].backgroundColor = Colors.white;
-        _tiles[element].textColor = Colors.black;
+        _tiles[element].textColor = const Color(0xFF221962);
+        _tiles[element].borderColor = Colors.transparent;
       }
     }
+
+    int incorrectIndex =
+        _incorrectWordsFromAPI.indexOf(_selectedWord.toUpperCase());
+
+    if (incorrectIndex > -1) {
+      _inCorrectWords.add(_selectedWord);
+      for (var element in _trackLastIndex) {
+        _tiles[element].backgroundColor = Colors.white;
+        _tiles[element].textColor = Colors.black;
+        _tiles[element].borderColor = Colors.red;
+      }
+    }
+    // else {
+    //   for (var element in _trackLastIndex) {
+    //     _tiles[element].backgroundColor = Colors.white;
+    //     _tiles[element].textColor = const Color(0xFF221962);
+    //     _tiles[element].borderColor = Colors.transparent;
+    //   }
+    // }
+
     notifyListeners();
   }
 
@@ -136,7 +194,8 @@ class GameScreenProvider with ChangeNotifier {
         _tiles.add(SingleTileModel(
             alphabet: _gameData['crossword_grid'][i][j].toUpperCase(),
             backgroundColor: Colors.white,
-            textColor: const Color(0xFF221962)));
+            textColor: const Color(0xFF221962),
+            borderColor: Colors.transparent));
       }
     }
     notifyListeners();
@@ -173,9 +232,11 @@ class GameScreenProvider with ChangeNotifier {
 
   reset() {
     _gameData = null;
+    _allWordsFromAPI.clear();
     _correctWordsFromAPI.clear();
+    _incorrectWordsFromAPI.clear();
     _correctWords.clear();
-    _inCorrectWords.clear();
+    _incorrectWords.clear();
     _trackLastIndex.clear();
     _tiles.clear();
     _allSelectedIndex.clear();
@@ -187,7 +248,12 @@ class SingleTileModel {
   int? index;
   Color? backgroundColor;
   Color? textColor;
+  Color? borderColor;
 
   SingleTileModel(
-      {this.alphabet, this.index, this.backgroundColor, this.textColor});
+      {this.alphabet,
+      this.index,
+      this.backgroundColor,
+      this.textColor,
+      this.borderColor});
 }

@@ -20,7 +20,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../components/suggestion/model/suggestion.dart';
 
 class CreateWordPage extends StatefulWidget {
-  const CreateWordPage({Key? key}) : super(key: key);
+  final String type;
+  const CreateWordPage({Key? key, required this.type}) : super(key: key);
 
   @override
   State<CreateWordPage> createState() => _CreateWordPageState();
@@ -33,11 +34,12 @@ class _CreateWordPageState extends State<CreateWordPage> {
   bool public1 = true;
 
   String? selectedLanguage;
+  String? selectedWordCount;
 
   final TextEditingController _c1 = TextEditingController();
   final TextEditingController _c2 = TextEditingController();
 
-  final List<String> _list = [];
+  final List<Word> _list = [];
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +60,8 @@ class _CreateWordPageState extends State<CreateWordPage> {
                   const SizedBox(height: 20),
                   Center(
                       child: Label(
-                          text: AppLocalizations.of(context)!
-                              .create_word_search
-                              .toUpperCase(),
+                          text:
+                              '${AppLocalizations.of(context)!.create.toUpperCase()}  ${widget.type == 'challenge' ? AppLocalizations.of(context)!.challenge.toUpperCase() : AppLocalizations.of(context)!.word_search.toUpperCase()}',
                           fontSize: FontSize.p2,
                           fontWeight: FontWeight.w500)),
                   const SizedBox(height: 10),
@@ -111,6 +112,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                       CustomDialog.showPurchaseDialog(context: context);
                     } else {
                       setState(() {
+                        selectedWordCount = null;
                         public1 = !public1;
                       });
                     }
@@ -132,15 +134,19 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                   .what_is_challenge_description),
                         ]);
                   }),
-                  const SizedBox(height: 20),
-                  customDropdown(
-                    ['ENGLISH', 'ESPAÑOL'],
-                    (value) {
+                  if (!public1) const SizedBox(height: 20),
+                  if (!public1)
+                    customDropdown(['6', '9', '12', '15', '18'], (value) {
                       setState(() {
-                        selectedLanguage = value;
+                        selectedWordCount = value;
                       });
-                    },
-                  ),
+                    }, "Word Count"),
+                  const SizedBox(height: 20),
+                  customDropdown(['ENGLISH', 'ESPAÑOL'], (value) {
+                    setState(() {
+                      selectedLanguage = value;
+                    });
+                  }, "Language/Idioma"),
                   const SizedBox(height: 20),
                   customTextField(
                       _c1,
@@ -152,9 +158,9 @@ class _CreateWordPageState extends State<CreateWordPage> {
                   const SizedBox(height: 14),
                   CupertinoButton(
                     onPressed: () {
-                      _list.add(_c2.text.toUpperCase());
+                      _list.add(
+                          Word(word: _c2.text.toUpperCase(), correct: false));
                       _c2.clear();
-                      print(_list.length);
                       setState(() {});
                     },
                     padding: EdgeInsets.zero,
@@ -188,29 +194,65 @@ class _CreateWordPageState extends State<CreateWordPage> {
                         return gap(10);
                       },
                       itemBuilder: (context, index) {
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 15),
-                          height: 50,
-                          width: double.maxFinite,
-                          decoration: BoxDecoration(
-                              color: AllColors.liteDarkPurple,
-                              borderRadius: BorderRadius.circular(50)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Label(text: _list[index], fontSize: FontSize.p2),
-                              CupertinoButton(
-                                  onPressed: () {
-                                    _list.remove(_list[index]);
-                                    setState(() {});
-                                  },
-                                  padding: EdgeInsets.zero,
-                                  minSize: 0,
-                                  child: const Icon(Icons.close,
-                                      color: AllColors.white)),
-                            ],
-                          ),
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 15),
+                                height: 60,
+                                width: double.maxFinite,
+                                decoration: BoxDecoration(
+                                    color: AllColors.liteDarkPurple,
+                                    borderRadius: BorderRadius.circular(50)),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Label(
+                                        text: _list[index].word!,
+                                        fontSize: FontSize.p2),
+                                    CupertinoButton(
+                                        onPressed: () {
+                                          _list.remove(_list[index]);
+                                          setState(() {});
+                                        },
+                                        padding: EdgeInsets.zero,
+                                        minSize: 0,
+                                        child: const Icon(Icons.close,
+                                            color: AllColors.white)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            if (widget.type == 'challenge') horGap(10),
+                            if (widget.type == 'challenge')
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _list[index].correct =
+                                        !(_list[index].correct!);
+                                  });
+                                },
+                                child: Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                        color: _list[index].correct!
+                                            ? const Color.fromARGB(
+                                                255, 196, 238, 197)
+                                            : Colors.transparent,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            width: 2,
+                                            color: _list[index].correct!
+                                                ? Colors.transparent
+                                                : Colors.green)),
+                                    child: const Center(
+                                        child: Icon(Icons.done,
+                                            color: Colors.green, size: 40))),
+                              )
+                          ],
                         );
                       }),
                   const SizedBox(height: 90),
@@ -230,26 +272,50 @@ class _CreateWordPageState extends State<CreateWordPage> {
                       if (_list.isNotEmpty) {
                         Prefs.getToken().then((token) {
                           Prefs.getPrefs('loginId').then((loginId) {
-                            _apiServices.post(
-                                context: context,
-                                endpoint: 'createGame',
-                                body: {
-                                  "accessToken": token,
-                                  "userId": loginId,
-                                  "gameName": _c1.text,
-                                  "gameLanguage": selectedLanguage == "English"
-                                      ? 'en'
-                                      : 'es',
-                                  "totalWords": _list.length.toString(),
-                                  "limitedWords": "2",
-                                  "allWords": jsonEncode(_list),
-                                  // "correctWords": "",
-                                  // "incorrectWords": "",
-                                  "gameType": public ? 'public' : 'privet',
-                                  "searchType": "search",
-                                }).then((value) {
-                              dialog(context, value['message'], () {
-                                Nav.pop(context);
+                            Prefs.getPrefs('wordLimit').then((wordLimit) {
+                              List<String> allWords = [];
+                              List<String> correctWords = [];
+                              List<String> incorrectWords = [];
+
+                              for (var element in _list) {
+                                allWords.add(element.word!);
+                                if (element.correct!) {
+                                  correctWords.add(element.word!);
+                                } else {
+                                  incorrectWords.add(element.word!);
+                                }
+                              }
+
+                              _apiServices.post(
+                                  context: context,
+                                  endpoint: 'createGame',
+                                  body: {
+                                    "accessToken": token,
+                                    "userId": loginId,
+                                    "gameName": _c1.text,
+                                    "gameLanguage":
+                                        selectedLanguage == "English"
+                                            ? 'en'
+                                            : 'es',
+                                    "totalWords": _list.length.toString(),
+                                    "limitedWords": widget.type == 'search'
+                                        ? _list.length
+                                        : (!public1 &&
+                                                selectedWordCount != null)
+                                            ? selectedLanguage
+                                            : wordLimit,
+                                    "allWords": jsonEncode(allWords),
+                                    "correctWords": jsonEncode(correctWords),
+                                    "incorrectWords":
+                                        jsonEncode(incorrectWords),
+                                    "gameType": public ? 'public' : 'privet',
+                                    "searchType": widget.type == 'challenge'
+                                        ? 'challenge'
+                                        : "search",
+                                  }).then((value) {
+                                dialog(context, value['message'], () {
+                                  Nav.pop(context);
+                                });
                               });
                             });
                           });
@@ -306,7 +372,8 @@ class _CreateWordPageState extends State<CreateWordPage> {
     );
   }
 
-  Widget customDropdown(List<String> list, void Function(String?)? onChanged) {
+  Widget customDropdown(
+      List<String> list, void Function(String?)? onChanged, String hint) {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(90),
@@ -318,9 +385,10 @@ class _CreateWordPageState extends State<CreateWordPage> {
             alignment: AlignmentDirectional.center,
             underline: gap(0),
             dropdownColor: AllColors.superLitePurple,
-            hint: const Text("Language/Idioma",
+            hint: Text(hint,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: FontSize.p4, color: Colors.white)),
+                style: const TextStyle(
+                    fontSize: FontSize.p4, color: Colors.white)),
             icon: const Icon(CupertinoIcons.arrowtriangle_down_fill,
                 color: AllColors.white, size: 20),
             value: selectedLanguage,
@@ -329,11 +397,18 @@ class _CreateWordPageState extends State<CreateWordPage> {
                 value: value,
                 child: Text(value,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white)),
+                    style: const TextStyle(color: Colors.white)),
               );
             }).toList(),
             onChanged: onChanged),
       ),
     );
   }
+}
+
+class Word {
+  String? word;
+  bool? correct;
+
+  Word({this.word, this.correct});
 }

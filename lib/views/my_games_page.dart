@@ -152,10 +152,11 @@ class _MyGamesPageState extends State<MyGamesPage> {
                     AllColors.shineGreen
                   ],
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CreateWordPage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return CreateWordPage(
+                          type: public ? 'search' : 'challenge');
+                    }));
                   },
                   title: public
                       ? AppLocalizations.of(context)!.create_word_search
@@ -239,8 +240,8 @@ class _MyGamesPageState extends State<MyGamesPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          LeaderBoardPage(pageName: 'myGames',gameDetails: details)));
+                      builder: (context) => LeaderBoardPage(
+                          pageName: 'myGames', gameDetails: details)));
             },
             minSize: 0,
             padding: EdgeInsets.zero,

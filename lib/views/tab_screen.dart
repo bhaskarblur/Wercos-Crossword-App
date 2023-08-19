@@ -150,14 +150,25 @@ class TabScreenState extends State<TabScreen> {
                             listen: false);
 
                         if (provider.selectedIndex == 4) {
-                        p.cancelTimer();
-                          Nav.push(
-                              context,
-                              LevelCompletionPage(
-                                isCompleted: gameProvider.correctWordsFromAPI.length == gameProvider.correctWords.length,
-                                totalWord: gameProvider.correctWordsFromAPI.length,
-                                correctWord: gameProvider.correctWords.length,
-                              ));
+                          p.cancelTimer();
+                          print(gameProvider.gameData['gameDetails']
+                                  ['searchtype']);
+                          if (gameProvider.gameData['gameDetails']
+                                  ['searchtype'] ==
+                              'search') {
+                            Nav.push(
+                                context,
+                                LevelCompletionPage(
+                                  isCompleted:
+                                      gameProvider.allWordsFromAPI.length ==
+                                          gameProvider.correctWords.length,
+                                  totalWord:
+                                      gameProvider.allWordsFromAPI.length,
+                                  correctWord: gameProvider.correctWords.length,
+                                ));
+                          } else {
+                            // TODO:
+                          }
                         } else {
                           provider.changeSelectedIndex(4);
                         }

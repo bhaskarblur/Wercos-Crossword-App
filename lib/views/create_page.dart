@@ -12,6 +12,8 @@ import '../components/labels.dart';
 import '../utils/font_size.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../widget/navigator.dart';
+
 class CreatePage extends StatelessWidget {
   const CreatePage({Key? key}) : super(key: key);
 
@@ -37,7 +39,7 @@ class CreatePage extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CreateWordPage()));
+                          builder: (context) => const CreateWordPage(type: 'search')));
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -62,7 +64,10 @@ class CreatePage extends StatelessWidget {
                     onTap: () {
                       if (pprovider.profile['subscriptionstatus'] == 'none') {
                         CustomDialog.showPurchaseDialog(context: context);
-                      } else {}
+                      } else {
+                        Nav.push(context, const CreateWordPage(type: 'challenge'));
+                        
+                      }
                     },
                     child: Stack(
                       children: [

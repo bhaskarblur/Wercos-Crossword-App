@@ -21,12 +21,6 @@ class DrugPage extends StatefulWidget {
 class _DrugPageState extends State<DrugPage> {
   final ApiServices _apiServices = ApiServices();
 
-  Color selectedColor = Colors.red;
-
-  double strokeWidth = 20;
-
-  List<dynamic> drawingPoints = [];
-
   @override
   void initState() {
     getData();
@@ -68,123 +62,192 @@ class _DrugPageState extends State<DrugPage> {
                                   color: Colors.white)))
                     ])
                   : Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        statusBar(context),
-                        Consumer<TimerProvider>(builder: (context, timer, _) {
-                          return Text(formatTime(timer.seconds),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 16));
-                        }),
-                        gap(5),
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              gradient: AllColors.bg,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Column(
-                            children: [
-                              gap(5),
-                              Text(provider.gameData['gameDetails']['gamename'],
+                        Expanded(
+                          child: Column(children: [
+                            statusBar(context),
+                            Consumer<TimerProvider>(
+                                builder: (context, timer, _) {
+                              return Text(formatTime(timer.seconds),
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
-                                      fontSize: 18)),
-                              GridView.builder(
-                                shrinkWrap: true,
-                                padding: const EdgeInsets.all(10),
-                                itemCount: provider.correctWordsFromAPI.length,
-                                physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        childAspectRatio: 5, crossAxisCount: 3),
-                                itemBuilder: (context, index) {
-                                  return Center(
-                                      child: Text(
-                                          provider.correctWordsFromAPI[index],
-                                          style: TextStyle(
-                                              decoration: provider.correctWords
-                                                      .contains(provider
-                                                          .correctWordsFromAPI[
-                                                              index]
-                                                          .toUpperCase())
-                                                  ? TextDecoration.lineThrough
-                                                  : TextDecoration.none,
-                                              fontWeight: FontWeight.bold,
-                                              color: provider.correctWords
-                                                      .contains(provider
-                                                          .correctWordsFromAPI[
-                                                              index]
-                                                          .toUpperCase())
-                                                  ? Colors.green
-                                                  : Colors.white)));
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        gap(10),
-                        Expanded(
-                            flex: 2,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white),
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Listener(
-                                    onPointerDown: _detectTapedItem,
-                                    onPointerMove: _detectTapedItem,
-                                    onPointerUp: _clearSelection,
-                                    child: GridView.builder(
-                                      key: key,
-                                      shrinkWrap: true,
-                                      padding: EdgeInsets.zero,
-                                      itemCount: provider.tiles.length,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 11,
-                                              childAspectRatio: 1,
-                                              crossAxisSpacing: 3,
-                                              mainAxisSpacing: 3),
-                                      itemBuilder: (context, index) {
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: provider.tiles[index]
-                                                  .backgroundColor),
-                                          child: Center(
-                                            child: Foo(
-                                              index: index,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(0),
-                                                child: Text(
-                                                  provider
-                                                      .tiles[index].alphabet!,
-                                                  style: TextStyle(
-                                                      color: provider
-                                                          .tiles[index]
-                                                          .textColor,
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      fontSize: 18),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
+                                      fontSize: 16));
+                            }),
+                            gap(5),
+                            Expanded(
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    gradient: AllColors.bg,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Column(
+                                  children: [
+                                    gap(5),
+                                    Text(
+                                        provider.gameData['gameDetails']
+                                                ['gamename']
+                                            .toUpperCase(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            fontSize: 18)),
+                                    if (provider.gameData['gameDetails']
+                                            ['searchtype'] ==
+                                        'search')
+                                      GridView.builder(
+                                        shrinkWrap: true,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 10),
+                                        itemCount:
+                                            provider.allWordsFromAPI.length,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                childAspectRatio: 5,
+                                                crossAxisCount: 3),
+                                        itemBuilder: (context, index) {
+                                          return Text(
+                                              provider.allWordsFromAPI[index]
+                                                  .toUpperCase(),
+                                              textAlign: (index + 1) % 3 == 0
+                                                  ? TextAlign.end
+                                                  : (index) % 3 == 0
+                                                      ? TextAlign.start
+                                                      : TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  decoration: provider
+                                                          .correctWords
+                                                          .contains(provider
+                                                              .allWordsFromAPI[
+                                                                  index]
+                                                              .toUpperCase())
+                                                      ? TextDecoration
+                                                          .lineThrough
+                                                      : TextDecoration.none,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: provider.correctWords
+                                                          .contains(provider
+                                                              .allWordsFromAPI[
+                                                                  index]
+                                                              .toUpperCase())
+                                                      ? Colors.green
+                                                      : Colors.white));
+                                        },
+                                      ),
+                                    if (provider.gameData['gameDetails']
+                                            ['searchtype'] ==
+                                        'challenge')
+                                      GridView.builder(
+                                        shrinkWrap: true,
+                                        padding: const EdgeInsets.all(10),
+                                        itemCount:
+                                            provider.allWordsFromAPI.length,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                childAspectRatio: 5,
+                                                crossAxisCount: 3),
+                                        itemBuilder: (context, index) {
+                                          return Text(
+                                              provider.allWordsFromAPI[index]
+                                                  .toUpperCase(),
+                                              textAlign: (index + 1) % 3 == 0
+                                                  ? TextAlign.end
+                                                  : (index) % 3 == 0
+                                                      ? TextAlign.start
+                                                      : TextAlign.center,
+                                              style: TextStyle(
+                                                  decoration: provider
+                                                          .correctWords
+                                                          .contains(
+                                                              provider.allWordsFromAPI[index]
+                                                                  .toUpperCase())
+                                                      ? TextDecoration
+                                                          .lineThrough
+                                                      : provider.incorrectWords
+                                                              .contains(provider
+                                                                  .allWordsFromAPI[
+                                                                      index]
+                                                                  .toUpperCase())
+                                                          ? TextDecoration
+                                                              .lineThrough
+                                                          : TextDecoration.none,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: provider.correctWords
+                                                          .contains(provider
+                                                              .allWordsFromAPI[index]
+                                                              .toUpperCase())
+                                                      ? Colors.green
+                                                      : provider.incorrectWords.contains(provider.allWordsFromAPI[index].toUpperCase())
+                                                          ? Colors.red
+                                                          : Colors.white));
+                                        },
+                                      ),
+                                  ],
                                 ),
                               ),
-                            )),
+                            ),
+                            gap(10),
+                          ]),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white),
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Listener(
+                                onPointerDown: _detectTapedItem,
+                                onPointerMove: _detectTapedItem,
+                                onPointerUp: _clearSelection,
+                                child: GridView.builder(
+                                  key: key,
+                                  shrinkWrap: true,
+                                  padding: EdgeInsets.zero,
+                                  itemCount: provider.tiles.length,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 11,
+                                          childAspectRatio: 1,
+                                          crossAxisSpacing: 3,
+                                          mainAxisSpacing: 3),
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: provider
+                                                  .tiles[index].borderColor!),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: provider
+                                              .tiles[index].backgroundColor),
+                                      child: Center(
+                                        child: Foo(
+                                          index: index,
+                                          child: Text(
+                                            provider.tiles[index].alphabet!,
+                                            style: TextStyle(
+                                                color: provider
+                                                    .tiles[index].textColor,
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 22),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
             );
@@ -192,9 +255,18 @@ class _DrugPageState extends State<DrugPage> {
         ));
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    final provider = Provider.of<TimerProvider>(context, listen: false);
+    provider.cancelTimer();
+  }
+
   getData() {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
     provider.resetGameData();
+    provider.reset();
+    // provider.changeSelectedColor();
     if (provider.gameType == 'random') {
       getRandomGame();
     }
@@ -230,7 +302,7 @@ class _DrugPageState extends State<DrugPage> {
           }).then((value) {
             if (value['gameDetails'] != null) {
               provider.changeGameData(value);
-              provider.addToCorrectWordsFromAPI();
+              provider.addToCorrectWordsIncorrectWordsFromAPI();
               startTimer();
             } else {
               if (value['message'] != null) {
@@ -263,7 +335,8 @@ class _DrugPageState extends State<DrugPage> {
                 }).then((value) {
               if (value['gameDetails'] != null) {
                 provider.changeGameData(value);
-                provider.addToCorrectWordsFromAPI();
+                provider.addToCorrectWordsIncorrectWordsFromAPI();
+
                 startTimer();
               } else {
                 if (value['message'] != null) {
@@ -297,7 +370,8 @@ class _DrugPageState extends State<DrugPage> {
               }).then((value) {
             if (value['gameDetails'] != null) {
               provider.changeGameData(value);
-              provider.addToCorrectWordsFromAPI();
+              provider.addToCorrectWordsIncorrectWordsFromAPI();
+
               startTimer();
             } else {
               if (value['message'] != null) {
@@ -328,7 +402,8 @@ class _DrugPageState extends State<DrugPage> {
             }).then((value) {
               if (value['gameDetails'] != null) {
                 provider.changeGameData(value);
-                provider.addToCorrectWordsFromAPI();
+                provider.addToCorrectWordsIncorrectWordsFromAPI();
+
                 startTimer();
               } else {
                 dialog(context, value['message'], () {
@@ -362,7 +437,8 @@ class _DrugPageState extends State<DrugPage> {
             }).then((value) {
               if (value['gameDetails'] != null) {
                 provider.changeGameData(value);
-                provider.addToCorrectWordsFromAPI();
+                provider.addToCorrectWordsIncorrectWordsFromAPI();
+
                 startTimer();
               } else {
                 if (value['message'] != null) {
@@ -407,14 +483,22 @@ class _DrugPageState extends State<DrugPage> {
 
   void _clearSelection(PointerUpEvent event) {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
-    // change the color of selection of grid
-    provider.changeSelectedColor();
 
     // // add the word to word list
     provider.makeWord();
-    provider.addToCorrectWords();
+    provider.addToCorrectOrIncorrectWords();
     provider.resetSelectedWord();
     provider.resetTrackLastIndex();
+    
+    print('all');
+    print(provider.allWordsFromAPI);
+    print('correct');
+    print(provider.correctWordsFromAPI);
+    print('incorrect');
+    print(provider.incorrectWordsFromAPI);
+
+    // change the color of selection of grid
+    provider.changeSelectedColor();
   }
 }
 
