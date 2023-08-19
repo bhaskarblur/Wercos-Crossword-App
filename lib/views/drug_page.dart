@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:mobile_app_word_search/providers/category_provider.dart';
@@ -26,6 +28,8 @@ class _DrugPageState extends State<DrugPage> {
     getData();
     super.initState();
   }
+
+  Timer? timer;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +114,8 @@ class _DrugPageState extends State<DrugPage> {
                                                 crossAxisCount: 3),
                                         itemBuilder: (context, index) {
                                           return Text(
-                                              provider.allWordsFromAPI[index]
+                                              provider
+                                                  .allWordsFromAPI[index]
                                                   .toUpperCase(),
                                               textAlign: (index + 1) % 3 == 0
                                                   ? TextAlign.end
@@ -143,7 +148,8 @@ class _DrugPageState extends State<DrugPage> {
                                         'challenge')
                                       GridView.builder(
                                         shrinkWrap: true,
-                                        padding: const EdgeInsets.all(10),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 10),
                                         itemCount:
                                             provider.allWordsFromAPI.length,
                                         physics:
@@ -258,14 +264,17 @@ class _DrugPageState extends State<DrugPage> {
   @override
   void dispose() {
     super.dispose();
-    final provider = Provider.of<TimerProvider>(context, listen: false);
-    provider.cancelTimer();
+    timer!.cancel();
+    // final provider = Provider.of<TimerProvider>(context, listen: false);
+    // // provider.cancelTimer();
   }
 
   getData() {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
+    final timerProvider = Provider.of<TimerProvider>(context, listen: false);
     provider.resetGameData();
     provider.reset();
+    timerProvider.resetSeconds();
     // provider.changeSelectedColor();
     if (provider.gameType == 'random') {
       getRandomGame();
@@ -286,8 +295,10 @@ class _DrugPageState extends State<DrugPage> {
 
   void startTimer() {
     final provider = Provider.of<TimerProvider>(context, listen: false);
-
-    provider.startTimer();
+    provider.resetSeconds();
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      provider.changeSeconds();
+    });
   }
 
   getGameWithCode() {
@@ -487,15 +498,18 @@ class _DrugPageState extends State<DrugPage> {
     // // add the word to word list
     provider.makeWord();
     provider.addToCorrectOrIncorrectWords();
-    provider.resetSelectedWord();
-    provider.resetTrackLastIndex();
-    
+
+
     print('all');
     print(provider.allWordsFromAPI);
     print('correct');
     print(provider.correctWordsFromAPI);
     print('incorrect');
     print(provider.incorrectWordsFromAPI);
+    print('correct selected');
+    print(provider.correctWords);
+    print('incorrect selected');
+    print(provider.incorrectWords);
 
     // change the color of selection of grid
     provider.changeSelectedColor();

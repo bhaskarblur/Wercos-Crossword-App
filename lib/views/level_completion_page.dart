@@ -21,11 +21,13 @@ class LevelCompletionPage extends StatefulWidget {
   final bool isCompleted;
   final int totalWord;
   final int correctWord;
+  final int seconds;
   const LevelCompletionPage(
       {Key? key,
       required this.isCompleted,
       required this.totalWord,
-      required this.correctWord})
+      required this.correctWord,
+      required this.seconds})
       : super(key: key);
 
   @override
@@ -74,7 +76,7 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
 
         final p = Provider.of<TimerProvider>(context, listen: false);
         p.resetSeconds();
-        p.startTimer();
+        p.resetSeconds();
 
         return true;
       },
@@ -145,7 +147,7 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                   const SizedBox(height: 10),
                   Consumer<TimerProvider>(builder: (context, provider, _) {
                     return Label(
-                        text: formatTime(provider.seconds),
+                        text: formatTime(widget.seconds),
                         fontSize: FontSize.p1,
                         fontWeight: FontWeight.w600);
                   }),
@@ -184,7 +186,7 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                         Nav.push(
                             context,
                             LeaderBoardPage(
-                              pageName: 'levelComplete',
+                                pageName: 'levelComplete',
                                 gameDetails: provider.gameData['gameDetails']));
 
                         provider.reset();
@@ -207,7 +209,7 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                             final p = Provider.of<TimerProvider>(context,
                                 listen: false);
                             p.resetSeconds();
-                            p.startTimer();
+                            p.resetSeconds();
                             Nav.pop(context);
                           },
                           title: AppLocalizations.of(context)!.startNew_game),

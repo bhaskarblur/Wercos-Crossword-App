@@ -37,11 +37,6 @@ class TabScreenState extends State<TabScreen> {
   List<BottomNavigationItem>? iconList;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
     iconList = [
       BottomNavigationItem(
@@ -150,9 +145,6 @@ class TabScreenState extends State<TabScreen> {
                             listen: false);
 
                         if (provider.selectedIndex == 4) {
-                          p.cancelTimer();
-                          print(gameProvider.gameData['gameDetails']
-                                  ['searchtype']);
                           if (gameProvider.gameData['gameDetails']
                                   ['searchtype'] ==
                               'search') {
@@ -165,9 +157,20 @@ class TabScreenState extends State<TabScreen> {
                                   totalWord:
                                       gameProvider.allWordsFromAPI.length,
                                   correctWord: gameProvider.correctWords.length,
+                                  seconds: p.seconds,
                                 ));
                           } else {
-                            // TODO:
+                            Nav.push(
+                                context,
+                                LevelCompletionPage(
+                                  isCompleted:
+                                      gameProvider.correctWordsFromAPI.length ==
+                                          gameProvider.correctWords.length,
+                                  totalWord:
+                                      gameProvider.correctWordsFromAPI.length,
+                                  correctWord: gameProvider.correctWords.length,
+                                  seconds: p.seconds,
+                                ));
                           }
                         } else {
                           provider.changeSelectedIndex(4);
