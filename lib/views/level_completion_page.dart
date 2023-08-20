@@ -37,6 +37,8 @@ class LevelCompletionPage extends StatefulWidget {
 class _LevelCompletionPageState extends State<LevelCompletionPage> {
   final ApiServices _apiServices = ApiServices();
 
+  double rating = 0.00;
+
   @override
   void initState() {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
@@ -69,6 +71,7 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        rate();
         final pProvider =
             Provider.of<GameScreenProvider>(context, listen: false);
 
@@ -99,14 +102,23 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                         fontSize: FontSize.p2);
                   }),
                   const SizedBox(height: 10),
-                  RatingBarIndicator(
-                      rating: 5,
-                      itemBuilder: (context, index) => const Icon(Icons.star,
-                          color: AllColors.superLightGreen),
-                      itemCount: 5,
-                      itemPadding: const EdgeInsets.all(4),
-                      unratedColor: AllColors.grey,
-                      itemSize: 30.0),
+                  StatefulBuilder(builder: (context, st) {
+                    return RatingBarIndicator(
+                        rating: rating,
+                        itemBuilder: (context, index) => InkWell(
+                              onTap: () {
+                                st(() {
+                                  rating = index + 1;
+                                });
+                              },
+                              child: const Icon(Icons.star,
+                                  color: AllColors.superLightGreen),
+                            ),
+                        itemCount: 5,
+                        itemPadding: const EdgeInsets.all(4),
+                        unratedColor: AllColors.grey,
+                        itemSize: 30);
+                  }),
                   const SizedBox(height: 24),
                   !widget.isCompleted
                       ? Label(
@@ -158,6 +170,8 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                         AllColors.shineGreen
                       ],
                       onPressed: () {
+                        rate();
+
                         final p =
                             Provider.of<TimerProvider>(context, listen: false);
                         p.resetSeconds();
@@ -179,6 +193,8 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                         AllColors.orange
                       ],
                       onPressed: () {
+                        rate();
+
                         final provider = Provider.of<GameScreenProvider>(
                             context,
                             listen: false);
@@ -201,6 +217,8 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                               AllColors.shineGreen
                             ],
                           onPressed: () {
+                            rate();
+
                             final pProvider = Provider.of<GameScreenProvider>(
                                 context,
                                 listen: false);
@@ -220,5 +238,19 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
         ),
       ),
     );
+  }
+
+  rate() {
+    final provider = Provider.of<GameScreenProvider>(context, listen: false);
+    Prefs.getToken().then((token) {
+      Prefs.getPrefs('loginId').then((loginId) {
+        _apiServices.post(context: context, endpoint: 'addGameRating', body: {
+          "accessToken": token,
+          "gameid": provider.gameData['gameDetails']['gameid'].toString(),
+          "userId": loginId,
+          "rating": rating.toString(),
+        }, progressBar: false);
+      });
+    });
   }
 }

@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import '../api_services.dart';
 import '../providers/timer_provider.dart';
 import '../widget/sahared_prefs.dart';
+import 'level_completion_page.dart';
 
 class DrugPage extends StatefulWidget {
   const DrugPage({Key? key}) : super(key: key);
@@ -91,7 +92,7 @@ class _DrugPageState extends State<DrugPage> {
                                     gap(5),
                                     Text(
                                         provider.gameData['gameDetails']
-                                                ['gamename'],
+                                            ['gamename'],
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
@@ -166,7 +167,7 @@ class _DrugPageState extends State<DrugPage> {
                                                       ? TextAlign.start
                                                       : TextAlign.center,
                                               style: TextStyle(
-                                                fontSize: 16,
+                                                  fontSize: 16,
                                                   decoration: provider
                                                           .correctWords
                                                           .contains(
@@ -219,11 +220,11 @@ class _DrugPageState extends State<DrugPage> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 11,
-                                          childAspectRatio: 1,
-                                          // crossAxisSpacing: 3,
-                                          // mainAxisSpacing: 3
-                                          ),
+                                    crossAxisCount: 11,
+                                    childAspectRatio: 1,
+                                    // crossAxisSpacing: 3,
+                                    // mainAxisSpacing: 3
+                                  ),
                                   itemBuilder: (context, index) {
                                     return Container(
                                       decoration: BoxDecoration(
@@ -512,8 +513,50 @@ class _DrugPageState extends State<DrugPage> {
     print('incorrect selected');
     print(provider.incorrectWords);
 
+    // to automatically travel to result screen after selecting all screens
+
+    if (provider.gameData['gameDetails']['searchtype'] == 'search') {
+      if (provider.allWordsFromAPI.length == provider.correctWords.length) {
+        navigate();
+      }
+    } else {
+      if (provider.correctWordsFromAPI.length == provider.correctWords.length) {
+        navigate();
+      }
+    }
+
     // change the color of selection of grid
     provider.changeSelectedColor();
+  }
+
+  navigate() {
+    final gameProvider =
+        Provider.of<GameScreenProvider>(context, listen: false);
+    final p = Provider.of<TimerProvider>(context, listen: false);
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (gameProvider.gameData['gameDetails']['searchtype'] == 'search') {
+        Nav.push(
+            context,
+            LevelCompletionPage(
+              isCompleted: gameProvider.allWordsFromAPI.length ==
+                  gameProvider.correctWords.length,
+              totalWord: gameProvider.allWordsFromAPI.length,
+              correctWord: gameProvider.correctWords.length,
+              seconds: p.seconds,
+            ));
+      } else {
+        Nav.push(
+            context,
+            LevelCompletionPage(
+              isCompleted: gameProvider.correctWordsFromAPI.length ==
+                  gameProvider.correctWords.length,
+              totalWord: gameProvider.correctWordsFromAPI.length,
+              correctWord: gameProvider.correctWords.length,
+              seconds: p.seconds,
+            ));
+      }
+    });
   }
 }
 

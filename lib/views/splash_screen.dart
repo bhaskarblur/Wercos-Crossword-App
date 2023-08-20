@@ -106,24 +106,30 @@ class _SplashScreenState extends State<SplashScreen>
           Prefs.setPrefs('token', value['accesstoken']);
           Prefs.setPrefs('loginId', value['id'].toString());
           Prefs.setPrefs('userName', value['username']);
+          getProfile();
           gotoTab();
         });
       } else {
-        Prefs.getPrefs('loginId').then((loginId) {
-          _apiServices
-              .post(
-                  context: context,
-                  endpoint: 'getUserInfo',
-                  body: {"accessToken": token, "userId": loginId},
-                  progressBar: false)
-              .then((value) {
-            final provider =
-                Provider.of<ProfileProvider>(context, listen: false);
-            provider.chnageProfile(value);
-            gotoTab();
-          });
-        });
+        getProfile();
       }
+    });
+  }
+
+  getProfile() {
+    Prefs.getToken().then((token) {
+      Prefs.getPrefs('loginId').then((loginId) {
+        _apiServices
+            .post(
+                context: context,
+                endpoint: 'getUserInfo',
+                body: {"accessToken": token, "userId": loginId},
+                progressBar: false)
+            .then((value) {
+          final provider = Provider.of<ProfileProvider>(context, listen: false);
+          provider.chnageProfile(value);
+          gotoTab();
+        });
+      });
     });
   }
 

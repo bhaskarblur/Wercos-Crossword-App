@@ -219,9 +219,11 @@ class _CreateWordPageState extends State<CreateWordPage> {
                   const SizedBox(height: 14),
                   CupertinoButton(
                     onPressed: () {
-                      _list.add(
-                          Word(word: _c2.text.toUpperCase(), correct: false));
-                      _c2.clear();
+                      if (_c2.text.isNotEmpty) {
+                        _list.add(
+                            Word(word: _c2.text.toUpperCase(), correct: false));
+                        _c2.clear();
+                      }
                       setState(() {});
                     },
                     padding: EdgeInsets.zero,
@@ -361,21 +363,22 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                             ? 'en'
                                             : 'es',
                                     "totalWords": _list.length.toString(),
-                                    "limitedWords": 
-                                    // widget.type == 'search'
-                                    //     ? 
+                                    "limitedWords":
+                                        // widget.type == 'search'
+                                        //     ?
                                         _list.length.toString()
-                                        // : (!public1 &&
-                                        //         selectedWordCount != null)
-                                        //     ? selectedLanguage
-                                        //     : wordLimit
-                                            ,
+                                    // : (!public1 &&
+                                    //         selectedWordCount != null)
+                                    //     ? selectedLanguage
+                                    //     : wordLimit
+                                    ,
                                     "allWords": jsonEncode(allWords),
                                     "correctWords": jsonEncode(correctWords),
                                     "incorrectWords":
                                         jsonEncode(incorrectWords),
-                                    "gameId":
-                                        widget.gameDetails['gameid'].toString(),
+                                    if (widget.gameDetails != null)
+                                      "gameId": widget.gameDetails['gameid']
+                                          .toString(),
                                     "gameType": public ? 'public' : 'privet',
                                     "searchType": widget.type == 'challenge'
                                         ? 'challenge'

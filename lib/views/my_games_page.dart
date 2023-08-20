@@ -217,7 +217,8 @@ class _MyGamesPageState extends State<MyGamesPage> {
                         CreateWordPage(
                             type: details['searchtype'] == 'search'
                                 ? 'search'
-                                : 'challenge', gameDetails: details));
+                                : 'challenge',
+                            gameDetails: details));
                   },
                   padding: EdgeInsets.zero,
                   minSize: 0,
@@ -233,7 +234,9 @@ class _MyGamesPageState extends State<MyGamesPage> {
                       '${AppLocalizations.of(context)!.ratings}: ${details["avgratings"] ?? '0'}/5',
                   fontSize: FontSize.p2),
               RatingBarIndicator(
-                  rating: 5,
+                  rating: details["avgratings"] == null
+                      ? 0
+                      : double.parse(details["avgratings"]),
                   itemBuilder: (context, index) =>
                       const Icon(Icons.star, color: AllColors.superLightGreen),
                   itemCount: 5,

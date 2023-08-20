@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 
 class GameScreenProvider with ChangeNotifier {
@@ -10,10 +9,6 @@ class GameScreenProvider with ChangeNotifier {
     addToTiles();
     notifyListeners();
   }
-
-  // resetGameData() {
-  //   _gameData = null;
-  // }
 
   final List<String> _allWordsFromAPI = [];
   List<String> get allWordsFromAPI => _allWordsFromAPI;
@@ -63,7 +58,7 @@ class GameScreenProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  final _random = Random();
+  // final _random = Random();
   final List<Color> randomColors = [
     Colors.blue,
     Colors.yellow,
@@ -74,11 +69,16 @@ class GameScreenProvider with ChangeNotifier {
     Colors.indigo,
   ];
 
-  Color _selectedColor = Colors.blue;
+  Color _selectedColor = Colors.cyan;
   Color get selectedColor => _selectedColor;
 
   changeSelectedColor() {
-    _selectedColor = randomColors[_random.nextInt(randomColors.length)];
+    int index = randomColors.indexOf(_selectedColor);
+    if (index == (randomColors.length - 1)) {
+      _selectedColor = randomColors[0];
+    } else {
+      _selectedColor = randomColors[index + 1];
+    }
   }
 
   String? _gameType;
@@ -87,13 +87,6 @@ class GameScreenProvider with ChangeNotifier {
   changeGameType(String value) {
     _gameType = value;
   }
-
-  // String? _search;
-  // String get search => _search!;
-
-  // changeSearch(String value) {
-  //   _search = value;
-  // }
 
   final List<String> _correctWords = [];
   List<String> get correctWords => _correctWords;
@@ -147,19 +140,6 @@ class GameScreenProvider with ChangeNotifier {
     _correctWords.clear();
     notifyListeners();
   }
-
-  // final List<String> _inCorrectWords = [];
-  // List<String> get inCorrectWords => _inCorrectWords;
-
-  // addToIncorrectWrods(String value) {
-  //   _inCorrectWords.add(value);
-  //   notifyListeners();
-  // }
-
-  // resetIncorrectWords() {
-  //   _inCorrectWords.clear();
-  //   notifyListeners();
-  // }
 
   final List<int> _trackLastIndex = [];
   List<int> get trackLastIndex => _trackLastIndex;
