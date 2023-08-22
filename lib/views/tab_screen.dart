@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:mobile_app_word_search/api_services.dart';
 import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
 import 'package:mobile_app_word_search/views/level_completion_page.dart';
 import 'package:mobile_app_word_search/widget/navigator.dart';
+import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app_word_search/views/play_page.dart';
 import 'package:mobile_app_word_search/views/drag_page.dart';
@@ -26,6 +30,8 @@ class TabScreen extends StatefulWidget {
 }
 
 class TabScreenState extends State<TabScreen> {
+  final ApiServices _apiServices = ApiServices();
+
   final List<Widget> pages = [
     const CreatePage(),
     const PlayPage(),
@@ -145,34 +151,58 @@ class TabScreenState extends State<TabScreen> {
                             listen: false);
 
                         if (provider.selectedIndex == 4) {
+                          print(1);
                           if (gameProvider.gameData['gameDetails']
                                   ['searchtype'] ==
                               'search') {
-                            Nav.push(
-                                context,
-                                LevelCompletionPage(
-                                  isCompleted:
-                                      gameProvider.allWordsFromAPI.length ==
-                                          gameProvider.correctWords.length,
-                                  totalWord:
-                                      gameProvider.allWordsFromAPI.length,
-                                  correctWord: gameProvider.correctWords.length,
-                                  seconds: p.seconds,
-                                ));
+                            print(2);
+                            if (gameProvider.allWordsFromAPI.length ==
+                                gameProvider.correctWords.length) {
+                              print(3);
+                              Nav.push(
+                                  context,
+                                  LevelCompletionPage(
+                                    isCompleted:
+                                        gameProvider.allWordsFromAPI.length ==
+                                            gameProvider.correctWords.length,
+                                    totalWord:
+                                        gameProvider.allWordsFromAPI.length,
+                                    correctWord:
+                                        gameProvider.correctWords.length,
+                                    seconds: p.seconds,
+                                  ));
+                            } else {
+                              print(4);
+                              borderRest();
+                            }
                           } else {
-                            Nav.push(
-                                context,
-                                LevelCompletionPage(
-                                  isCompleted:
-                                      gameProvider.correctWordsFromAPI.length ==
-                                          gameProvider.correctWords.length,
-                                  totalWord:
-                                      gameProvider.correctWordsFromAPI.length,
-                                  correctWord: gameProvider.correctWords.length,
-                                  seconds: p.seconds,
-                                ));
+                            print(5);
+
+                            if (gameProvider.correctWordsFromAPI.length ==
+                                gameProvider.correctWords.length) {
+                              print(6);
+
+                              Nav.push(
+                                  context,
+                                  LevelCompletionPage(
+                                    isCompleted: gameProvider
+                                            .correctWordsFromAPI.length ==
+                                        gameProvider.correctWords.length,
+                                    totalWord:
+                                        gameProvider.correctWordsFromAPI.length,
+                                    correctWord:
+                                        gameProvider.correctWords.length,
+                                    seconds: p.seconds,
+                                  ));
+                            } else {
+                              print(7);
+
+                              borderRest();
+                            }
                           }
                         } else {
+                          print(8);
+
                           gameProvider.changeGameType('random');
                           provider.changeSelectedIndex(4);
                         }
@@ -180,6 +210,58 @@ class TabScreenState extends State<TabScreen> {
                     ),
                   ),
           ));
+    });
+  }
+
+  borderRest() {
+    final provider = Provider.of<GameScreenProvider>(context, listen: false);
+    final p = Provider.of<TimerProvider>(context, listen: false);
+    List<String> rest = [];
+    provider.allWordsFromAPI.forEach((element) {
+      if (!provider.correctWords.contains(element)) {
+        rest.add(element);
+      }
+    });
+
+    Prefs.getToken().then((token) {
+      Prefs.getPrefs('loginId').then((loginId) {
+        _apiServices.post(
+            context: context,
+            endpoint: 'gamewords_resultposition',
+            body: {
+              "userId": loginId,
+              "accessToken": token,
+              "grid": jsonEncode(provider.gameData['crossword_grid']),
+              "words": json.encode(rest),
+            }).then((value) {
+          provider.changeTile(value);
+          if (provider.gameData['gameDetails']['searchtype'] == 'search') {
+            Future.delayed(const Duration(seconds: 5), () {
+              Nav.push(
+                  context,
+                  LevelCompletionPage(
+                    isCompleted: provider.allWordsFromAPI.length ==
+                        provider.correctWords.length,
+                    totalWord: provider.allWordsFromAPI.length,
+                    correctWord: provider.correctWords.length,
+                    seconds: p.seconds,
+                  ));
+            });
+          } else {
+            Future.delayed(const Duration(seconds: 5), () {
+              Nav.push(
+                  context,
+                  LevelCompletionPage(
+                    isCompleted: provider.correctWordsFromAPI.length ==
+                        provider.correctWords.length,
+                    totalWord: provider.correctWordsFromAPI.length,
+                    correctWord: provider.correctWords.length,
+                    seconds: p.seconds,
+                  ));
+            });
+          }
+        });
+      });
     });
   }
 }

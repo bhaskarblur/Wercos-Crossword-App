@@ -359,7 +359,7 @@ class _DrugPageState extends State<DrugPage> {
                 startTimer();
               } else {
                 if (value['message'] != null) {
-                  dialog(context, value['message'], () {
+                  dialog(context, 'No Game Available', () {
                     Nav.pop(context);
                   });
                 }
@@ -393,7 +393,7 @@ class _DrugPageState extends State<DrugPage> {
 
               startTimer();
             } else {
-                dialog(context, ' no user game', () {
+                dialog(context, 'No Game Available', () {
                   Nav.pop(context);
                 });
               
@@ -443,7 +443,7 @@ class _DrugPageState extends State<DrugPage> {
 
                 startTimer();
               } else {
-                dialog(context, value['message'], () {
+                dialog(context, 'No Game Available', () {
                   Nav.pop(context);
                 });
               }
@@ -479,7 +479,7 @@ class _DrugPageState extends State<DrugPage> {
                 startTimer();
               } else {
                 if (value['message'] != null) {
-                  dialog(context, value['message'], () {
+                  dialog(context, 'No Game Available', () {
                     Nav.pop(context);
                   });
                 }

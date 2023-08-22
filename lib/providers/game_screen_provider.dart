@@ -126,7 +126,7 @@ class GameScreenProvider with ChangeNotifier {
       _incorrectWords.add(_selectedWord);
       for (var element in _trackLastIndex) {
         _tiles[element].backgroundColor = Colors.white;
-        _tiles[element].textColor =const Color(0xFF221962);
+        _tiles[element].textColor = const Color(0xFF221962);
         _tiles[element].borderColor = Colors.red;
       }
     }
@@ -134,6 +134,17 @@ class GameScreenProvider with ChangeNotifier {
     resetSelectedWord();
     resetTrackLastIndex();
 
+    notifyListeners();
+  }
+
+  changeTile(dynamic value) {
+    for (int i = 0; i < value['wordsFound'].length; i++) {
+      for (int j = 0; j < value['wordsFound'][i].length; j++) {
+        _tiles[value['wordsFound'][i][j]].backgroundColor = Colors.white;
+        _tiles[value['wordsFound'][i][j]].textColor = const Color(0xFF221962);
+        _tiles[value['wordsFound'][i][j]].borderColor = Colors.red;
+      }
+    }
     notifyListeners();
   }
 
