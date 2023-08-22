@@ -173,6 +173,7 @@ class TabScreenState extends State<TabScreen> {
                                 ));
                           }
                         } else {
+                          gameProvider.changeGameType('random');
                           provider.changeSelectedIndex(4);
                         }
                       },

@@ -5,6 +5,7 @@ class GameScreenProvider with ChangeNotifier {
   dynamic get gameData => _gameData;
 
   changeGameData(dynamic value) {
+    print('add data');
     _gameData = value;
     addToTiles();
     notifyListeners();
@@ -125,7 +126,7 @@ class GameScreenProvider with ChangeNotifier {
       _incorrectWords.add(_selectedWord);
       for (var element in _trackLastIndex) {
         _tiles[element].backgroundColor = Colors.white;
-        _tiles[element].textColor = Colors.black;
+        _tiles[element].textColor =const Color(0xFF221962);
         _tiles[element].borderColor = Colors.red;
       }
     }
@@ -161,6 +162,7 @@ class GameScreenProvider with ChangeNotifier {
   List<SingleTileModel> get tiles => _tiles;
 
   addToTiles() {
+    print('add tiles');
     _tiles.clear();
     for (int i = 0; i < _gameData['crossword_grid'].length; i++) {
       for (int j = 0; j < _gameData['crossword_grid'][i].length; j++) {

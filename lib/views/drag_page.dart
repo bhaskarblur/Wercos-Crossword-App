@@ -100,47 +100,47 @@ class _DrugPageState extends State<DrugPage> {
                                     if (provider.gameData['gameDetails']
                                             ['searchtype'] ==
                                         'search')
-                                      GridView.builder(
-                                        shrinkWrap: true,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 10),
-                                        itemCount:
-                                            provider.allWordsFromAPI.length,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        gridDelegate:
-                                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                                childAspectRatio: 5,
-                                                crossAxisCount: 3),
-                                        itemBuilder: (context, index) {
-                                          return Text(
-                                              provider.allWordsFromAPI[index]
-                                                  .toUpperCase(),
-                                              textAlign: (index + 1) % 3 == 0
-                                                  ? TextAlign.end
-                                                  : (index) % 3 == 0
-                                                      ? TextAlign.start
-                                                      : TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  decoration: provider
-                                                          .correctWords
-                                                          .contains(provider
-                                                              .allWordsFromAPI[
-                                                                  index]
-                                                              .toUpperCase())
-                                                      ? TextDecoration
-                                                          .lineThrough
-                                                      : TextDecoration.none,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: provider.correctWords
-                                                          .contains(provider
-                                                              .allWordsFromAPI[
-                                                                  index]
-                                                              .toUpperCase())
-                                                      ? Colors.green
-                                                      : Colors.white));
-                                        },
+                                      Expanded(
+                                        child: GridView.builder(
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          itemCount:
+                                              provider.allWordsFromAPI.length,
+                                          gridDelegate:
+                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                                  childAspectRatio: 5,
+                                                  crossAxisCount: 3),
+                                          itemBuilder: (context, index) {
+                                            return Text(
+                                                provider.allWordsFromAPI[index]
+                                                    .toUpperCase(),
+                                                textAlign: (index + 1) % 3 == 0
+                                                    ? TextAlign.end
+                                                    : (index) % 3 == 0
+                                                        ? TextAlign.start
+                                                        : TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    decoration: provider
+                                                            .correctWords
+                                                            .contains(provider
+                                                                .allWordsFromAPI[
+                                                                    index]
+                                                                .toUpperCase())
+                                                        ? TextDecoration
+                                                            .lineThrough
+                                                        : TextDecoration.none,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: provider.correctWords
+                                                            .contains(provider
+                                                                .allWordsFromAPI[
+                                                                    index]
+                                                                .toUpperCase())
+                                                        ? Colors.green
+                                                        : Colors.white));
+                                          },
+                                        ),
                                       ),
                                     if (provider.gameData['gameDetails']
                                             ['searchtype'] ==
@@ -294,6 +294,11 @@ class _DrugPageState extends State<DrugPage> {
     if (provider.gameType == 'category') {
       getCategorySearch();
     }
+
+    if (provider.gameType == 'challengebycategory' ||
+        provider.gameType == 'searchbycategory') {
+          categorySearch();
+        }
   }
 
   void startTimer() {
@@ -388,11 +393,10 @@ class _DrugPageState extends State<DrugPage> {
 
               startTimer();
             } else {
-              if (value['message'] != null) {
-                dialog(context, value['message'], () {
+                dialog(context, ' no user game', () {
                   Nav.pop(context);
                 });
-              }
+              
             }
           });
         });
@@ -400,19 +404,38 @@ class _DrugPageState extends State<DrugPage> {
     });
   }
 
-  challengeByCategory() {
+  categorySearch() {
+    print('------------------');
+    print('categorySearch');
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
+    final cProvider = Provider.of<CategoryProvider>(context, listen: false);
     Prefs.getToken().then((token) {
       Prefs.getPrefs('loginId').then((loginId) {
         Prefs.getPrefs('wordLimit').then((wordLimit) {
           Prefs.getPrefs('gameLanguage').then((language) {
+            print(cProvider.selectedCategory.toString());
+            print({
+              "language": language,
+              "userId": loginId,
+              "words_limit": wordLimit,
+              'type': provider.gameType == 'challengebycategory'
+                  ? 'challenge'
+                  : 'search',
+              "accessToken": token,
+              "category" : '',
+              "topic": cProvider.selectedCategory['topicsname'].toString(),
+            });
             _apiServices
                 .post(context: context, endpoint: 'topicwise_crossword', body: {
               "language": language,
               "userId": loginId,
               "words_limit": wordLimit,
-              'type': 'challenge',
+              'type': provider.gameType == 'challengebycategory'
+                  ? 'challenge'
+                  : 'search',
               "accessToken": token,
+              "category" : cProvider.selectedCategory['categoryname'],
+              "topic": cProvider.selectedCategory['topicsname'],
             }).then((value) {
               if (value['gameDetails'] != null) {
                 provider.changeGameData(value);
@@ -534,7 +557,7 @@ class _DrugPageState extends State<DrugPage> {
         Provider.of<GameScreenProvider>(context, listen: false);
     final p = Provider.of<TimerProvider>(context, listen: false);
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       if (gameProvider.gameData['gameDetails']['searchtype'] == 'search') {
         Nav.push(
             context,

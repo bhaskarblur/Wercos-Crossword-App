@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app_word_search/api_services.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/providers/category_provider.dart';
+import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/utils/buttons.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
@@ -13,8 +14,13 @@ import 'package:mobile_app_word_search/widget/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../components/custom_dialogs.dart';
+import '../providers/home_provider.dart';
+import '../widget/navigator.dart';
+
 class CategoryPage extends StatefulWidget {
-  const CategoryPage({Key? key}) : super(key: key);
+  final String? type;
+  const CategoryPage({Key? key, this.type}) : super(key: key);
 
   @override
   State<CategoryPage> createState() => _CategoryPageState();
@@ -94,7 +100,8 @@ class _CategoryPageState extends State<CategoryPage> {
                               if (isCategoryVisible)
                                 ListView.separated(
                                     shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     itemCount: provider
                                         .categories[index]['topicsList'].length,
                                     separatorBuilder: (context, i) {
@@ -103,23 +110,55 @@ class _CategoryPageState extends State<CategoryPage> {
                                     itemBuilder: (context, i) {
                                       return TopicButton(
                                           onPressed: () {
-                                            final provider =
-                                                Provider.of<CategoryProvider>(
+                                            if (provider.categories[index]
+                                                        ['topicsList'][i]
+                                                    ['status'] ==
+                                                'locked') {
+                                              CustomDialog.showPurchaseDialog(
+                                                  context: context);
+                                            } else {
+                                              final provider =
+                                                  Provider.of<CategoryProvider>(
+                                                      context,
+                                                      listen: false);
+                                              final gamePvider = Provider.of<
+                                                      GameScreenProvider>(
+                                                  context,
+                                                  listen: false);
+
+                                              if (widget.type == 'search') {
+                                                gamePvider.changeGameType(
+                                                    'searchbycategory');
+                                                provider.changeSelectedCategory(
+                                                    provider.categories[index]
+                                                        ['topicsList'][i]);
+                                                Nav.pop(context);
+                                                final hprovider =
+                                                    Provider.of<HomeProvider>(
+                                                        context,
+                                                        listen: false);
+                                                hprovider
+                                                    .changeSelectedIndex(4);
+                                              } else {
+                                                gamePvider.changeGameType(
+                                                    'challengebycategory');
+                                                provider.changeSelectedCategory(
+                                                    provider.categories[index]
+                                                        ['topicsList'][i]);
+                                                Navigator.push(
                                                     context,
-                                                    listen: false);
-                                            provider.changeSelectedCategory(
-                                                provider.categories[index]
-                                                    ['topicsList'][i]);
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        WordRelatedPage(
-                                                            data: provider.categories[
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            WordRelatedPage(
+                                                                data: provider
+                                                                            .categories[
                                                                         index][
-                                                                    'topicsList']
-                                                                [i])));
+                                                                    'topicsList'][i])));
+                                              }
+                                            }
                                           },
+                                          lock: provider.categories[index]
+                                              ['topicsList'][i]['status'],
                                           topicName: provider.categories[index]
                                               ['topicsList'][i]['topicsname']);
                                     }),
@@ -143,10 +182,12 @@ class TopicButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.topicName,
+    required this.lock,
   });
 
   final VoidCallback onPressed;
   final String topicName;
+  final String lock;
 
   @override
   Widget build(BuildContext context) {
@@ -162,9 +203,18 @@ class TopicButton extends StatelessWidget {
             color: AllColors.liteDarkPurple,
             borderRadius: BorderRadius.circular(50)),
         child: Center(
-            child: Label(
-          text: topicName,
-          fontSize: FontSize.p2,
+            child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (lock == 'locked')
+              const Icon(CupertinoIcons.lock_fill,
+                  color: AllColors.liteGreen, size: 20),
+            if (lock == 'locked') horGap(10),
+            Label(
+              text: topicName,
+              fontSize: FontSize.p2,
+            ),
+          ],
         )),
       ),
     );

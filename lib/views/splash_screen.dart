@@ -107,7 +107,6 @@ class _SplashScreenState extends State<SplashScreen>
           Prefs.setPrefs('loginId', value['id'].toString());
           Prefs.setPrefs('userName', value['username']);
           getProfile();
-          gotoTab();
         });
       } else {
         getProfile();

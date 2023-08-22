@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mobile_app_word_search/api_services.dart';
@@ -13,10 +12,8 @@ import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
 import 'package:mobile_app_word_search/widget/widgets.dart';
 import 'package:provider/provider.dart';
-
 import '../components/custom_dialogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../components/suggestion/model/suggestion.dart';
 import '../providers/games_provider.dart';
 
@@ -36,8 +33,8 @@ class _CreateWordPageState extends State<CreateWordPage> {
   bool public = true;
   bool public1 = true;
 
-  String? selectedLanguage;
-  String? selectedWordCount;
+  String selectedLanguage = 'ENGLISH';
+  String selectedWordCount = '1';
 
   final TextEditingController _c1 = TextEditingController();
   final TextEditingController _c2 = TextEditingController();
@@ -173,7 +170,6 @@ class _CreateWordPageState extends State<CreateWordPage> {
                       CustomDialog.showPurchaseDialog(context: context);
                     } else {
                       setState(() {
-                        selectedWordCount = null;
                         public1 = !public1;
                       });
                     }
@@ -197,15 +193,18 @@ class _CreateWordPageState extends State<CreateWordPage> {
                   }),
                   if (!public1) const SizedBox(height: 20),
                   if (!public1)
-                    customDropdown(['6', '9', '12', '15', '18'], (value) {
+                    customDropdown(selectedWordCount, [
+                      for (int i = 0; i < _list.length; i++) (i + 1).toString()
+                    ], (value) {
                       setState(() {
-                        selectedWordCount = value;
+                        selectedWordCount = value!;
                       });
                     }, "Word Count"),
                   const SizedBox(height: 20),
-                  customDropdown(['ENGLISH', 'ESPAÑOL'], (value) {
+                  customDropdown(selectedLanguage, ['ENGLISH', 'ESPAÑOL'],
+                      (value) {
                     setState(() {
-                      selectedLanguage = value;
+                      selectedLanguage = value!;
                     });
                   }, "Language/Idioma"),
                   const SizedBox(height: 20),
@@ -221,7 +220,8 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     onPressed: () {
                       if (_c2.text.isNotEmpty) {
                         _list.add(
-                            Word(word: _c2.text.toUpperCase(), correct: false));
+                            Word(word: _c2.text.toUpperCase(), correct: true));
+                        selectedWordCount = _list.length.toString();
                         _c2.clear();
                       }
                       setState(() {});
@@ -373,9 +373,11 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                     //     : wordLimit
                                     ,
                                     "allWords": jsonEncode(allWords),
-                                    "correctWords": jsonEncode(correctWords),
-                                    "incorrectWords":
-                                        jsonEncode(incorrectWords),
+                                    if (widget.type == 'challenge')
+                                      "correctWords": jsonEncode(correctWords),
+                                    if (widget.type == 'challenge')
+                                      "incorrectWords":
+                                          jsonEncode(incorrectWords),
                                     if (widget.gameDetails != null)
                                       "gameId": widget.gameDetails['gameid']
                                           .toString(),
@@ -446,8 +448,8 @@ class _CreateWordPageState extends State<CreateWordPage> {
     );
   }
 
-  Widget customDropdown(
-      List<String> list, void Function(String?)? onChanged, String hint) {
+  Widget customDropdown(String value, List<String> list,
+      void Function(String?)? onChanged, String hint) {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(90),
@@ -465,7 +467,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     fontSize: FontSize.p4, color: Colors.white)),
             icon: const Icon(CupertinoIcons.arrowtriangle_down_fill,
                 color: AllColors.white, size: 20),
-            value: selectedLanguage,
+            value: value,
             items: list.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,

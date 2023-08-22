@@ -53,30 +53,30 @@ class _PlayPageState extends State<PlayPage> {
                         fontWeight: FontWeight.bold,
                         fontSize: FontSize.h5),
                     const SizedBox(height: 20),
-                    Container(
-                      height: 60,
-                      padding: const EdgeInsets.only(left: 30, right: 20),
-                      width: double.maxFinite,
-                      decoration: BoxDecoration(
-                          color: AllColors.liteDarkPurple,
-                          borderRadius: BorderRadius.circular(50)),
-                      child: Center(
-                        child: TextFormField(
-                            style: const TextStyle(
-                                fontSize: FontSize.p2, color: AllColors.white),
-                            decoration: InputDecoration(
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              hintText: AppLocalizations.of(context)!.search,
-                              hintStyle: const TextStyle(
-                                  fontSize: FontSize.p2,
-                                  color: AllColors.white),
-                              suffixIcon: const Icon(Icons.search_sharp,
-                                  color: AllColors.white),
-                            ),
-                            onSaved: (value) {}),
-                      ),
-                    ),
+                    // Container(
+                    //   height: 60,
+                    //   padding: const EdgeInsets.only(left: 30, right: 20),
+                    //   width: double.maxFinite,
+                    //   decoration: BoxDecoration(
+                    //       color: AllColors.liteDarkPurple,
+                    //       borderRadius: BorderRadius.circular(50)),
+                    //   child: Center(
+                    //     child: TextFormField(
+                    //         style: const TextStyle(
+                    //             fontSize: FontSize.p2, color: AllColors.white),
+                    //         decoration: InputDecoration(
+                    //           focusedBorder: InputBorder.none,
+                    //           enabledBorder: InputBorder.none,
+                    //           hintText: AppLocalizations.of(context)!.search,
+                    //           hintStyle: const TextStyle(
+                    //               fontSize: FontSize.p2,
+                    //               color: AllColors.white),
+                    //           suffixIcon: const Icon(Icons.search_sharp,
+                    //               color: AllColors.white),
+                    //         ),
+                    //         onSaved: (value) {}),
+                    //   ),
+                    // ),
                     SearchButton(
                         onPressed: () {
                           final gameScreenProvider =
@@ -91,7 +91,7 @@ class _PlayPageState extends State<PlayPage> {
                             AppLocalizations.of(context)!.random_word_search),
                     SearchButton(
                         onPressed: () {
-                          Nav.push(context, const CategoryPage());
+                          Nav.push(context, const CategoryPage(type: 'search'));
                         },
                         title: AppLocalizations.of(context)!
                             .word_search_categories),
@@ -109,7 +109,8 @@ class _PlayPageState extends State<PlayPage> {
                         title: AppLocalizations.of(context)!.random_challenge),
                     SearchButton(
                         onPressed: () {
-                          Nav.push(context, const CategoryPage());
+                          Nav.push(
+                              context, const CategoryPage(type: 'category'));
                         },
                         title: AppLocalizations.of(context)!
                             .challenge_by_category),
@@ -186,7 +187,7 @@ class _PlayPageState extends State<PlayPage> {
                     Provider.of<HomeProvider>(context, listen: false);
                 provider.changeSelectedIndex(4);
               } else {
-               Nav.push(context, WordRelatedPage(data: value));
+                Nav.push(context, WordRelatedPage(data: value));
               }
             } else {
               if (value['message'] != null) {

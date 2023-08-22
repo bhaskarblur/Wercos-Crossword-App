@@ -38,7 +38,7 @@ class WordRelatedPage extends StatelessWidget {
                     fontWeight: FontWeight.w500),
                 const SizedBox(height: 80),
                 Label(
-                    text: data['gameDetails']['gamename'],
+                    text: data['topicsname'].toString(),
                     align: TextAlign.center,
                     fontSize: FontSize.h4,
                     fontWeight: FontWeight.bold),
@@ -48,12 +48,12 @@ class WordRelatedPage extends StatelessWidget {
                       final gameScreenProvider =
                           Provider.of<GameScreenProvider>(context,
                               listen: false);
-                      if (gameScreenProvider.gameType == 'gamewithcode') {
-                        Nav.pop(context);
-                        final provider =
-                            Provider.of<HomeProvider>(context, listen: false);
-                        provider.changeSelectedIndex(4);
-                      } else {
+                      // if (gameScreenProvider.gameType == 'gamewithcode') {
+                      //   Nav.pop(context);
+                      //   final provider =
+                      //       Provider.of<HomeProvider>(context, listen: false);
+                      //   provider.changeSelectedIndex(4);
+                      // } else {
                         gameScreenProvider.changeGameType('category');
 
                         Nav.pop(context);
@@ -61,8 +61,7 @@ class WordRelatedPage extends StatelessWidget {
                         final provider =
                             Provider.of<HomeProvider>(context, listen: false);
                         provider.changeSelectedIndex(4);
-                        // Nav.pushAndRemoveAll(context, TabScreen());
-                      }
+                      // }
                     },
                     title: AppLocalizations.of(context)!.continuee,
                     fillColors: const [AllColors.liteOrange, AllColors.orange])
