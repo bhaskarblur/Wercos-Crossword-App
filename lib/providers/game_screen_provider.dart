@@ -36,14 +36,29 @@ class GameScreenProvider with ChangeNotifier {
 
     if (_gameData['correctWords'] != null) {
       for (int i = 0; i < _gameData['correctWords'].length; i++) {
-        _correctWordsFromAPI
-            .add(_gameData['correctWords'][i]['words'].toUpperCase());
+        print("correct words__");
+        print(_gameData['correctWords'][i]);
+
+        try {
+          _correctWordsFromAPI
+              .add(_gameData['correctWords'][i].toUpperCase());
+        }
+        catch(e) {
+          _correctWordsFromAPI
+              .add(_gameData['correctWords'][i]['words'].toUpperCase());
+        }
       }
     }
     if (_gameData['incorrectWords'] != null) {
       for (int i = 0; i < _gameData['incorrectWords'].length; i++) {
-        _incorrectWordsFromAPI
-            .add(_gameData['incorrectWords'][i]['words'].toUpperCase());
+        try {
+          _incorrectWordsFromAPI
+              .add(_gameData['incorrectWords'][i].toUpperCase());
+        }
+        catch(e) {
+          _incorrectWordsFromAPI
+              .add(_gameData['incorrectWords'][i]['words'].toUpperCase());
+        }
       }
     }
     notifyListeners();

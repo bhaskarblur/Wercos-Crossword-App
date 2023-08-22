@@ -32,11 +32,13 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
     super.initState();
     final provider = Provider.of<LeaderBoardProvider>(context, listen: false);
 
+    print('leaderboardshere');
+    print(widget.gameDetails);
     Prefs.getToken().then((token) {
       Prefs.getPrefs('loginId').then((loginId) {
         _apiServices.post(context: context, endpoint: 'getLeaderboards', body: {
           "accessToken": token,
-          "gameId": widget.gameDetails['id'].toString(),
+          "gameId": widget.gameDetails['gameid'].toString(),
           "userId": loginId,
         }).then((value) {
           provider.changeLeaderboard(value);

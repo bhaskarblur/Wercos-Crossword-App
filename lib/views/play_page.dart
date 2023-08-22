@@ -97,14 +97,50 @@ class _PlayPageState extends State<PlayPage> {
                             .word_search_categories),
                     SearchButton(
                         onPressed: () {
+                          print('Hellothere');
                           final gameScreenProvider =
                               Provider.of<GameScreenProvider>(context,
                                   listen: false);
-                          gameScreenProvider
-                              .changeGameType('randomwordchallenge');
-                          final provider =
-                              Provider.of<HomeProvider>(context, listen: false);
-                          provider.changeSelectedIndex(4);
+
+                          Prefs.getToken().then((token) {
+                            Prefs.getPrefs('loginId').then((loginId) {
+                              Prefs.getPrefs('wordLimit').then((wordLimit) {
+                                Prefs.getPrefs('gameLanguage').then((language) {
+                                _apiServices.post(context: context, endpoint: 'randomusergenerated_crossword', body: {
+                                  "accessToken": token,
+                                  "userId": loginId,
+                                  "type": 'challenge',
+                                  'language':language,
+                                }).then((value) {
+                                  if (value['gameDetails'] != null) {
+                                    gameScreenProvider.changeGameData(value);
+                                    gameScreenProvider.changeGameType('randomwordchallenge');
+                                    gameScreenProvider.addToCorrectWordsIncorrectWordsFromAPI();
+                                    if (value['gameDetails']['searchtype'] == 'search') {
+                                      final provider =
+                                      Provider.of<HomeProvider>(context, listen: false);
+                                      provider.changeSelectedIndex(4);
+                                    } else {
+                                      Nav.push(context, WordRelatedPage(data: value));
+                                    }
+                                  } else {
+                                    if (value['message'] != null) {
+                                      dialog(context, value['message'], () {
+                                        Nav.pop(context);
+                                      });
+                                    }
+                                  }
+                                });
+    });
+                              });
+                            });
+                          });
+
+                          // gameScreenProvider
+                          //     .changeGameType('randomwordchallenge');
+                          // final provider =
+                          //     Provider.of<HomeProvider>(context, listen: false);
+                          // provider.changeSelectedIndex(4);
                         },
                         title: AppLocalizations.of(context)!.random_challenge),
                     SearchButton(
@@ -181,6 +217,7 @@ class _PlayPageState extends State<PlayPage> {
           }).then((value) {
             if (value['gameDetails'] != null) {
               provider.changeGameData(value);
+              provider.changeGameType('gamewithcode');
               provider.addToCorrectWordsIncorrectWordsFromAPI();
               if (value['gameDetails']['searchtype'] == 'search') {
                 final provider =

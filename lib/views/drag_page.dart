@@ -121,7 +121,7 @@ class _DrugPageState extends State<DrugPage> {
                                                         ? TextAlign.start
                                                         : TextAlign.center,
                                                 style: TextStyle(
-                                                    fontSize: 16,
+                                                    fontSize: 15,
                                                     decoration: provider
                                                             .correctWords
                                                             .contains(provider
@@ -167,7 +167,7 @@ class _DrugPageState extends State<DrugPage> {
                                                       ? TextAlign.start
                                                       : TextAlign.center,
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 15,
                                                   decoration: provider
                                                           .correctWords
                                                           .contains(
@@ -289,7 +289,8 @@ class _DrugPageState extends State<DrugPage> {
       getRandomWordSearch();
     }
     if (provider.gameType == 'randomwordchallenge') {
-      getRandomWordSearch();
+      startTimer();
+      // getRandomWordSearch();
     }
     if (provider.gameType == 'category') {
       getCategorySearch();
@@ -388,6 +389,8 @@ class _DrugPageState extends State<DrugPage> {
                     : 'search'
               }).then((value) {
             if (value['gameDetails'] != null) {
+              print('testinggames');
+              print(value['gameDetails']);
               provider.changeGameData(value);
               provider.addToCorrectWordsIncorrectWordsFromAPI();
 

@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:mobile_app_word_search/admob/admob_service_details.dart';
 import 'package:mobile_app_word_search/api_services.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
@@ -14,7 +17,7 @@ import 'package:mobile_app_word_search/views/leaderboard_page.dart';
 import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
 import 'package:provider/provider.dart';
-
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../widget/widgets.dart';
 
 class LevelCompletionPage extends StatefulWidget {
@@ -62,6 +65,8 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
             },
             progressBar: false);
       });
+
+      playVideoAd();
     });
 
     super.initState();
@@ -199,6 +204,8 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                             context,
                             listen: false);
 
+                        print('gamedata');
+                        print(provider.gameData['gameDetails']);
                         Nav.push(
                             context,
                             LeaderBoardPage(
@@ -252,5 +259,34 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
         }, progressBar: false);
       });
     });
+  }
+
+  void playVideoAd() {
+    MobileAds.instance.updateRequestConfiguration(
+        RequestConfiguration(testDeviceIds:["BB4BB9E08099BB1C91E2FE93C8E2B6FB"]));
+    RewardedAd.load(adUnitId: AdmobService.videoAdUnitID!,
+        request: const AdRequest(), 
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+            onAdLoaded: (ad) => {
+              print('adLoaded'),
+              ad.fullScreenContentCallback = FullScreenContentCallback(
+                onAdDismissedFullScreenContent: (ad_) {
+                  ad_.dispose();
+                  playVideoAd();
+                },
+                onAdFailedToShowFullScreenContent: (ad_, error) {
+
+                  ad_.dispose();
+                  playVideoAd();
+                }
+              ),
+              ad.show(onUserEarnedReward: (ad,reward) => {
+                print(reward)
+              })
+            },
+            onAdFailedToLoad: (err)=> {
+            print('adFailed'),
+              print(err.message)
+            }));
   }
 }

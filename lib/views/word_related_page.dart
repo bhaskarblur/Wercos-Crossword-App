@@ -38,7 +38,7 @@ class WordRelatedPage extends StatelessWidget {
                     fontWeight: FontWeight.w500),
                 const SizedBox(height: 80),
                 Label(
-                    text: data['topicsname'].toString(),
+                    text: data['gameDetails']!=null ? data['gameDetails']['gamename'].toString() :  'Name',
                     align: TextAlign.center,
                     fontSize: FontSize.h4,
                     fontWeight: FontWeight.bold),
@@ -53,10 +53,13 @@ class WordRelatedPage extends StatelessWidget {
                       //   final provider =
                       //       Provider.of<HomeProvider>(context, listen: false);
                       //   provider.changeSelectedIndex(4);
-                      // } else {
-                        gameScreenProvider.changeGameType('category');
 
-                        Nav.pop(context);
+                      if(gameScreenProvider.gameType=='gamewithcode' || gameScreenProvider.gameType =='randomwordchallenge') {
+
+                      }
+                      else {
+                       gameScreenProvider.changeGameType('category');
+                      }
                         Nav.pop(context);
                         final provider =
                             Provider.of<HomeProvider>(context, listen: false);

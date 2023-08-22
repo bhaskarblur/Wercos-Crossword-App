@@ -13,7 +13,7 @@ import 'package:mobile_app_word_search/views/create_word_page.dart';
 import 'package:mobile_app_word_search/views/leaderboard_page.dart';
 import 'package:mobile_app_word_search/providers/games_provider.dart';
 import 'package:mobile_app_word_search/components/custom_dialogs.dart';
-
+import 'package:share_plus/share_plus.dart';
 import '../widget/widgets.dart';
 import '../widget/sahared_prefs.dart';
 import '../providers/profile_provider.dart';
@@ -196,7 +196,9 @@ class _MyGamesPageState extends State<MyGamesPage> {
                     fontSize: FontSize.p2),
               ),
               CupertinoButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Share.share('Hello there! Play my crossword game. Use this sharecode to play my crossword game: '+details['sharecode'].toString(), subject: 'Welcome Message');
+                  },
                   padding: EdgeInsets.zero,
                   minSize: 0,
                   child: const Icon(Icons.share, color: AllColors.white))
@@ -276,9 +278,11 @@ class _MyGamesPageState extends State<MyGamesPage> {
                   _apiServices
                       .post(context: context, endpoint: 'duplicateGame', body: {
                     "accessToken": token,
-                    "gameid": details['id'].toString(),
+                    "gameid": details['gameid'].toString(),
                     "userId": loginId,
                   }).then((value) {
+                    print('duplicate');
+                    print(details.toString());
                     dialog(context, value['message'], () {
                       Nav.pop(context);
                     });

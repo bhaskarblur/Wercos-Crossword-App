@@ -389,6 +389,8 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                 getData(false);
                                 dialog(context, value['message'], () {
                                   Nav.pop(context);
+                                  Nav.pop(context);
+
                                 });
                               });
                             });
