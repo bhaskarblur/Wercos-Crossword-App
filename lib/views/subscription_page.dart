@@ -181,36 +181,38 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Center( child: Platform.isIOS ? applePay : googlePay)),
-              gap(5),
+              gap(0),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Center( child: Platform.isIOS ? applePay2 : googlePay2)),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 8),
-              //   child: ShadowButton(
-              //       fillColors: const [
-              //         AllColors.semiLiteGreen,
-              //         AllColors.shineGreen
-              //       ],
-              //       onPressed: () {
-              //
-              //         subscribe('1month');
-              //       },
-              //       title: AppLocalizations.of(context)!.monthly),
-              // ),
-              // const SizedBox(height: 14),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 8),
-              //   child: ShadowButton(
-              //       fillColors: const [
-              //         AllColors.semiLiteGreen,
-              //         AllColors.shineGreen
-              //       ],
-              //       onPressed: () {
-              //         subscribe('1year');
-              //       },
-              //       title: AppLocalizations.of(context)!.annual),
-              // ),
+              gap(10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: ShadowButton(
+                    fillColors: const [
+                      AllColors.semiLiteGreen,
+                      AllColors.shineGreen
+                    ],
+                    onPressed: () {
+
+                      subscribe('1month');
+                    },
+                    title: AppLocalizations.of(context)!.monthly),
+              ),
+              const SizedBox(height: 14),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: ShadowButton(
+                    fillColors: const [
+                      AllColors.semiLiteGreen,
+                      AllColors.shineGreen
+                    ],
+                    onPressed: () {
+                      subscribe('1year');
+                    },
+                    title: AppLocalizations.of(context)!.annual),
+              ),
             ],
           ),
         ));

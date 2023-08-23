@@ -305,9 +305,19 @@ class _DrugPageState extends State<DrugPage> {
   void startTimer() {
     final provider = Provider.of<TimerProvider>(context, listen: false);
     provider.resetSeconds();
+    provider.setTicking(true);
+    print(provider.ticking);
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      provider.changeSeconds();
+      if(provider.ticking == true) {
+        provider.changeSeconds();
+      }
+      else {
+        provider.stopSeconds();
+      }
+
     });
+
+
   }
 
   // getGameWithCode() {

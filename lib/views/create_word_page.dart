@@ -341,11 +341,11 @@ class _CreateWordPageState extends State<CreateWordPage> {
                               List<String> incorrectWords = [];
 
                               for (var element in _list) {
-                                allWords.add(element.word!);
+                                allWords.add(element.word!.toString().trim());
                                 if (element.correct!) {
-                                  correctWords.add(element.word!);
+                                  correctWords.add(element.word!.toString().trim());
                                 } else {
-                                  incorrectWords.add(element.word!);
+                                  incorrectWords.add(element.word!.toString().trim());
                                 }
                               }
 

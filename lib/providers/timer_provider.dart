@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class TimerProvider with ChangeNotifier {
   int _seconds = 0;
+  bool ticking = true;
   int get seconds => _seconds;
 
   // Timer? timer;
@@ -22,10 +23,20 @@ class TimerProvider with ChangeNotifier {
 
   changeSeconds() {
     _seconds++;
+    ticking =true;
     notifyListeners();
   }
 
   resetSeconds() {
     _seconds = 0;
+  }
+
+  setTicking(bool tick) {
+    ticking = tick;
+  }
+
+  stopSeconds() {
+    // _seconds = _sec;
+    ticking = false;
   }
 }

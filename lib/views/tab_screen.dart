@@ -217,6 +217,8 @@ class TabScreenState extends State<TabScreen> {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
     final p = Provider.of<TimerProvider>(context, listen: false);
     List<String> rest = [];
+
+    p.stopSeconds();
     provider.allWordsFromAPI.forEach((element) {
       if (!provider.correctWords.contains(element)) {
         rest.add(element);

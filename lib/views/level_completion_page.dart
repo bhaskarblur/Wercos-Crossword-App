@@ -66,7 +66,14 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
             progressBar: false);
       });
 
-      playVideoAd();
+      final provider_ = Provider.of<ProfileProvider>(context,
+          listen: false);
+      if (provider_.profile['subscriptionstatus'] ==
+          '1year' || provider_.profile['subscriptionstatus'] ==
+          '1month' ) {}
+      else {
+        playVideoAd();
+      }
     });
 
     super.initState();
@@ -264,9 +271,9 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
   void playVideoAd() {
     MobileAds.instance.updateRequestConfiguration(
         RequestConfiguration(testDeviceIds:["BB4BB9E08099BB1C91E2FE93C8E2B6FB"]));
-    RewardedAd.load(adUnitId: AdmobService.videoAdUnitID!,
+    RewardedInterstitialAd.load(adUnitId: AdmobService.videoAdUnitID!,
         request: const AdRequest(), 
-        rewardedAdLoadCallback: RewardedAdLoadCallback(
+        rewardedInterstitialAdLoadCallback: RewardedInterstitialAdLoadCallback(
             onAdLoaded: (ad) => {
               print('adLoaded'),
               ad.fullScreenContentCallback = FullScreenContentCallback(
