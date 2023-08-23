@@ -146,14 +146,6 @@ class _CreateWordPageState extends State<CreateWordPage> {
                         context: context,
                         suggestions: [
                           Suggestion(
-                              AppLocalizations.of(context)!.maximum_word_length,
-                              AppLocalizations.of(context)!
-                                  .maximum_word_length_description),
-                          Suggestion(
-                              AppLocalizations.of(context)!.dynamic_word_search,
-                              AppLocalizations.of(context)!
-                                  .dynamic_word_search_description),
-                          Suggestion(
                               AppLocalizations.of(context)!.what_is_challenge,
                               AppLocalizations.of(context)!
                                   .what_is_challenge_description),
@@ -178,17 +170,9 @@ class _CreateWordPageState extends State<CreateWordPage> {
                         context: context,
                         suggestions: [
                           Suggestion(
-                              AppLocalizations.of(context)!.maximum_word_length,
-                              AppLocalizations.of(context)!
-                                  .maximum_word_length_description),
-                          Suggestion(
                               AppLocalizations.of(context)!.dynamic_word_search,
                               AppLocalizations.of(context)!
                                   .dynamic_word_search_description),
-                          Suggestion(
-                              AppLocalizations.of(context)!.what_is_challenge,
-                              AppLocalizations.of(context)!
-                                  .what_is_challenge_description),
                         ]);
                   }),
                   if (!public1) const SizedBox(height: 20),

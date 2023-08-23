@@ -22,120 +22,163 @@ class SubscriptionPage extends StatefulWidget {
   State<SubscriptionPage> createState() => _SubscriptionPageState();
 }
 
-class _SubscriptionPageState extends State<SubscriptionPage> {
-  final ApiServices _apiServices = ApiServices();
-
-  List<String>? benefits;
-
-  var applePay = ApplePayButton(
+var applePay = ApplePayButton(
   paymentConfiguration: PaymentConfiguration.fromJsonString(
-  defaultApplePay),
+      defaultApplePay),
   paymentItems: const [
     PaymentItem(
       label: '1 Month subcription',
       amount: '99.99',
       status: PaymentItemStatus.final_price,
     ) ],
-    type: ApplePayButtonType.buy,
-    style: ApplePayButtonStyle.white,
-    height: 55,
-    width:
-    WidgetsBinding.instance.window.physicalSize.width - 10,
-    onPaymentResult: (Map<String, dynamic> result) {
-    print(result);
-    },
-    loadingIndicator: const Center(
-      child: CircularProgressIndicator(),
-    ),
-  );
-
-  var googlePay = GooglePayButton(
-  paymentConfiguration: PaymentConfiguration.fromJsonString(
-  defaultGooglePay),
-      paymentItems: const [
-        PaymentItem(
-          label: '1 Month subcription',
-          amount: '99.99',
-          status: PaymentItemStatus.final_price,
-        ) ],
-  type: GooglePayButtonType.pay,
-  margin: const EdgeInsets.only(top: 15.0),
-    height: 55,
-    width:
-    WidgetsBinding.instance.window.physicalSize.width - 10,
+  type: ApplePayButtonType.subscribe,
+  style: ApplePayButtonStyle.white,
+  height: 55,
+  width:
+  WidgetsBinding.instance.window.physicalSize.width - 10,
   onPaymentResult: (Map<String, dynamic> result) {
     print(result);
   },
   loadingIndicator: const Center(
-  child: CircularProgressIndicator(),
+    child: CircularProgressIndicator(),
   ),
-  );
+);
 
-  var applePay2 = ApplePayButton(
-    paymentConfiguration: PaymentConfiguration.fromJsonString(
-        defaultApplePay),
-    paymentItems: const [
-      PaymentItem(
-        label: '1 Year subscription',
-        amount: '1079.88',
-        status: PaymentItemStatus.final_price,
-      ) ],
-    type: ApplePayButtonType.buy,
-    style: ApplePayButtonStyle.white,
-    height: 55,
-    width:
-    WidgetsBinding.instance.window.physicalSize.width - 10,
-    onPaymentResult: (Map<String, dynamic> result) {
-      print(result);
-    },
-    loadingIndicator: const Center(
-      child: CircularProgressIndicator(),
+var googlePay = GooglePayButton(
+  paymentConfiguration: PaymentConfiguration.fromJsonString(
+      defaultGooglePay),
+  paymentItems: const [
+    PaymentItem(
+      label: '1 Month subcription',
+      amount: '99.99',
+      status: PaymentItemStatus.final_price,
+    ) ],
+  type: GooglePayButtonType.subscribe,
+  margin: const EdgeInsets.only(top: 15.0),
+  height: 55,
+  width:
+  WidgetsBinding.instance.window.physicalSize.width - 10,
+  onPaymentResult: (Map<String, dynamic> result) {
+    print(result);
+  },
+  loadingIndicator: const Center(
+    child: CircularProgressIndicator(),
+  ),
+);
+
+var applePay2 = ApplePayButton(
+  paymentConfiguration: PaymentConfiguration.fromJsonString(
+      defaultApplePay),
+  paymentItems: const [
+    PaymentItem(
+      label: '1 Year subscription',
+      amount: '1079.88',
+      status: PaymentItemStatus.final_price,
+    ) ],
+  type: ApplePayButtonType.subscribe,
+  style: ApplePayButtonStyle.white,
+  height: 55,
+  width:
+  WidgetsBinding.instance.window.physicalSize.width - 10,
+  onPaymentResult: (Map<String, dynamic> result) {
+    print(result);
+  },
+  loadingIndicator: const Center(
+    child: CircularProgressIndicator(),
+  ),
+);
+
+var googlePay2 = GooglePayButton(
+  paymentConfiguration: PaymentConfiguration.fromJsonString(
+      defaultGooglePay),
+  paymentItems: const [
+    PaymentItem(
+      label: '1 Year subscription',
+      amount: '1079.88',
+      status: PaymentItemStatus.final_price,
+    ) ],
+  type: GooglePayButtonType.subscribe,
+  margin: const EdgeInsets.only(top: 15.0),
+  height: 55,
+  width:
+  WidgetsBinding.instance.window.physicalSize.width - 10,
+  onPaymentResult: (Map<String, dynamic> result) {
+    print(result);
+  },
+  loadingIndicator: const Center(
+    child: CircularProgressIndicator(),
+  ),
+);
+
+class _SubscriptionPageState extends State<SubscriptionPage> {
+  final ApiServices _apiServices = ApiServices();
+
+  List<String>? benefits;
+
+
+  Dialog buyDialog1 = Dialog(
+    backgroundColor: AllColors.purple,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+    child: Container(
+      height: 230.0,
+      width: 340.0,
+
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Padding(padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0)
+          , child: Label(
+        text: 'Subcribe for montly \$99/ month',
+        fontWeight: FontWeight.bold,
+        fontSize: 19)),
+          Padding(padding: EdgeInsets.only(top: 10.0)),
+          Padding(padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 0.0),
+          child:  Label(
+            text: 'Pay via the given payment methods to continue.',
+            fontWeight: FontWeight.normal,
+            fontSize: 15,
+            color: Colors.white60))
+         ,
+          Padding(padding: EdgeInsets.only(top: 15.0)),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Center( child: Platform.isIOS ? applePay : googlePay))
+        ],
+      ),
     ),
   );
 
-  var googlePay2 = GooglePayButton(
-    paymentConfiguration: PaymentConfiguration.fromJsonString(
-        defaultGooglePay),
-    paymentItems: const [
-      PaymentItem(
-        label: '1 Year subscription',
-        amount: '1079.88',
-        status: PaymentItemStatus.final_price,
-      ) ],
-    type: GooglePayButtonType.pay,
-    margin: const EdgeInsets.only(top: 15.0),
-    height: 55,
-    width:
-    WidgetsBinding.instance.window.physicalSize.width - 10,
-    onPaymentResult: (Map<String, dynamic> result) {
-      print(result);
-    },
-    loadingIndicator: const Center(
-      child: CircularProgressIndicator(),
-    ),
+  Dialog buyDialog2 = Dialog(
+    backgroundColor: AllColors.purple,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+      child: Container(
+        height: 230.0,
+        width: 340.0,
+
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Padding(padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0)
+                , child: Label(
+                    text: 'Subcribe for annually \$89/ month',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 19)),
+            Padding(padding: EdgeInsets.only(top: 10.0)),
+            Padding(padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 0.0),
+                child:  Label(
+                    text: 'Pay via the given payment methods to continue.',
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15,
+                    color: Colors.white60))
+            ,
+            Padding(padding: EdgeInsets.only(top: 15.0)),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Center( child: Platform.isIOS ? applePay2 : googlePay2))
+          ],
+        ),
+      )
   );
-
-
-// When you are ready to load your configuration
-  Pay _payClient = Pay({
-  PayProvider.google_pay: PaymentConfiguration.fromJsonString(
-  defaultGooglePay),
-  PayProvider.apple_pay: PaymentConfiguration.fromJsonString(
-  defaultApplePay),
-});
-
-  void onGooglePayPressed() async {
-    final result = await _payClient.showPaymentSelector(
-      PayProvider.google_pay,
-        const [
-          PaymentItem(
-            label: 'Total',
-            amount: '99.99',
-            status: PaymentItemStatus.final_price,
-          ) ],
-    );
-    // Send the resulting Google Pay token to your server / PSP
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,13 +221,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   ],
                 ),
               ),
-        Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Center( child: Platform.isIOS ? applePay : googlePay)),
-              gap(0),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Center( child: Platform.isIOS ? applePay2 : googlePay2)),
               gap(10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -195,6 +231,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     ],
                     onPressed: () {
 
+      showDialog(context: context, builder: (BuildContext context) => buyDialog1);
                       subscribe('1month');
                     },
                     title: AppLocalizations.of(context)!.monthly),
@@ -209,6 +246,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                       AllColors.shineGreen
                     ],
                     onPressed: () {
+                      showDialog(context: context, builder: (BuildContext context) => buyDialog2);
                       subscribe('1year');
                     },
                     title: AppLocalizations.of(context)!.annual),

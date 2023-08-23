@@ -83,6 +83,12 @@ class GameScreenProvider with ChangeNotifier {
     Colors.cyan,
     Colors.lime,
     Colors.indigo,
+    Colors.pink,
+    Colors.redAccent,
+    Colors.black12,
+    Colors.amber,
+    Colors.redAccent,
+    Colors.deepOrangeAccent
   ];
 
   Color _selectedColor = Colors.cyan;

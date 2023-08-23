@@ -166,7 +166,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       const SizedBox(height: 10),
                       Label(
                           text:
-                              "${AppLocalizations.of(context)!.remaining_game_of_day}: ${provider.profile['gamesleft']}/50",
+                              "${AppLocalizations.of(context)!.remaining_game_of_day}: ${ provider.profile['subscriptionstatus'] ==
+                                  'none'? provider.profile['gamesleft'] : '∞'}/50",
                           fontSize: FontSize.p2),
                       const SizedBox(height: 50),
                     ],
