@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import "dart:math";
 class GameScreenProvider with ChangeNotifier {
   dynamic _gameData;
   dynamic get gameData => _gameData;
@@ -29,8 +29,8 @@ class GameScreenProvider with ChangeNotifier {
         _allWordsFromAPI.add(_gameData['limitedWords'][i].toUpperCase());
       }
     } else {
-      for (int i = 0; i < _gameData['allWords'].length; i++) {
-        _allWordsFromAPI.add(_gameData['allWords'][i]['words'].toUpperCase());
+      for (int i = 0; i < _gameData['limitedWords'].length; i++) {
+        _allWordsFromAPI.add(_gameData['limitedWords'][i].toUpperCase());
       }
     }
 
@@ -45,7 +45,7 @@ class GameScreenProvider with ChangeNotifier {
         }
         catch(e) {
           _correctWordsFromAPI
-              .add(_gameData['correctWords'][i]['words'].toUpperCase());
+              .add(_gameData['correctWords'][i].toUpperCase());
         }
       }
     }
@@ -57,7 +57,7 @@ class GameScreenProvider with ChangeNotifier {
         }
         catch(e) {
           _incorrectWordsFromAPI
-              .add(_gameData['incorrectWords'][i]['words'].toUpperCase());
+              .add(_gameData['incorrectWords'][i].toUpperCase());
         }
       }
     }
@@ -101,6 +101,8 @@ class GameScreenProvider with ChangeNotifier {
     } else {
       _selectedColor = randomColors[index + 1];
     }
+    final _random = new Random();
+    _selectedColor =  randomColors[_random.nextInt(randomColors.length)];
   }
 
   String? _gameType;
@@ -132,16 +134,28 @@ class GameScreenProvider with ChangeNotifier {
         _tiles[element].borderColor = Colors.transparent;
       }
     } else {
-      for (var element in _trackLastIndex) {
-        _allSelectedIndex.remove(element);
-        _tiles[element].backgroundColor = Colors.white;
-        _tiles[element].textColor = const Color(0xFF221962);
-        _tiles[element].borderColor = Colors.transparent;
+      String temp = _selectedWord.split('').reversed.join().toUpperCase();
+      correctIndex = _allWordsFromAPI.indexOf(temp);
+
+      if (correctIndex > -1) {
+        _correctWords.add(temp);
+        for (var element in _trackLastIndex) {
+          _tiles[element].backgroundColor = _selectedColor;
+          _tiles[element].textColor = Colors.white;
+          _tiles[element].borderColor = Colors.transparent;
+        }
+      } else {
+        for (var element in _trackLastIndex) {
+          _allSelectedIndex.remove(element);
+          _tiles[element].backgroundColor = Colors.white;
+          _tiles[element].textColor = const Color(0xFF221962);
+          _tiles[element].borderColor = Colors.transparent;
+        }
       }
     }
 
     int incorrectIndex =
-        _incorrectWordsFromAPI.indexOf(_selectedWord.toUpperCase());
+    _incorrectWordsFromAPI.indexOf(_selectedWord.toUpperCase());
 
     if (incorrectIndex > -1) {
       _incorrectWords.add(_selectedWord);

@@ -325,7 +325,9 @@ class _CreateWordPageState extends State<CreateWordPage> {
                               List<String> incorrectWords = [];
 
                               for (var element in _list) {
-                                allWords.add(element.word!.toString().trim());
+                                allWords.add(element.word!.toString().
+                                trim().replaceAll('.', '').replaceAll('-','').
+                                replaceAll('!','').replaceAll('_', '').replaceAll('@', '').replaceAll(',',''));
                                 if (element.correct!) {
                                   correctWords.add(element.word!.toString().trim());
                                 } else {

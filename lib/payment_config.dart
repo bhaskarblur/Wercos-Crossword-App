@@ -20,13 +20,13 @@ const String defaultGooglePay = '''{
     "environment": "TEST",
     "apiVersion": 2,
     "apiVersionMinor": 0,
-    "existingPaymentMethodRequired": true
     "allowedPaymentMethods": [
       {
         "type": "CARD",
         "parameters": {
           "allowedCardNetworks": ["VISA", "MASTERCARD"],
           "allowedAuthMethods": ["PAN_ONLY", "CRYPTOGRAM_3DS"],
+          "billingAddressRequired": true,
           "billingAddressParameters": {
             "format": "MIN",
             "phoneNumberRequired": true
@@ -38,11 +38,9 @@ const String defaultGooglePay = '''{
       "merchantId": "01234567890123456789",
       "merchantName": "Werkos Games"
     },
-    "transactionInfo": 
+    "transactionInfo": {
       "countryCode": "US",
       "currencyCode": "USD"
-       "totalPriceStatus": "FINAL",
-  "checkoutOption": "COMPLETE_IMMEDIATE_PURCHASE"
     }
   }
 }''';

@@ -279,10 +279,8 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
               ad.fullScreenContentCallback = FullScreenContentCallback(
                 onAdDismissedFullScreenContent: (ad_) {
                   ad_.dispose();
-                  playVideoAd();
                 },
                 onAdFailedToShowFullScreenContent: (ad_, error) {
-
                   ad_.dispose();
                   playVideoAd();
                 }

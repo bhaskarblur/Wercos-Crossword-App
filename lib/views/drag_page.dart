@@ -34,8 +34,33 @@ class _DrugPageState extends State<DrugPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: const BoxDecoration(gradient: AllColors.bg),
+    Future<bool> showExitPopup() async {
+      return await showDialog( //show confirm dialogue
+        //the return value will be from "Yes" or "No" options
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Exit App'),
+          content: Text('Do you want to exit the App?'),
+          actions:[
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              //return false when click on "NO"
+              child:Text('No'),
+            ),
+
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              //return true when click on "Yes"
+              child:Text('Yes'),
+            ),
+
+          ],
+        ),
+      )??false; //if showDialouge had returned null, then return false
+    }
+
+    return WillPopScope(
+        onWillPop: showExitPopup,
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Consumer<GameScreenProvider>(builder: (context, provider, _) {
@@ -222,8 +247,8 @@ class _DrugPageState extends State<DrugPage> {
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 11,
                                     childAspectRatio: 1,
-                                    // crossAxisSpacing: 3,
-                                    // mainAxisSpacing: 3
+                                    crossAxisSpacing: 3,
+                                    mainAxisSpacing: 3
                                   ),
                                   itemBuilder: (context, index) {
                                     return Container(
