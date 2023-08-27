@@ -1,9 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
 import 'package:mobile_app_word_search/providers/home_provider.dart';
@@ -101,11 +105,8 @@ class OptionPage extends StatelessWidget {
   ),
   OptionItem(
   optionName: AppLocalizations.of(context)!.play.toUpperCase(),
-  onPressed: () {
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => const DrugPage2()));
+  onPressed: () async {
+
   final provider =
   Provider.of<HomeProvider>(context, listen: false);
   provider.changeSelectedIndex(1);

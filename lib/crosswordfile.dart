@@ -1,14 +1,15 @@
 library crossword;
 
 import 'dart:math';
-
+import 'package:just_audio/just_audio.dart';
 import 'package:crossword/components/letter_offset.dart';
-import 'package:crossword/components/line_decoration.dart';
-import 'package:crossword/components/line_painter.dart';
 import 'package:crossword/components/word_line.dart';
 import 'package:crossword/helper/extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'line_painter.dart';
+import 'linedecoration.dart';
 
 class Crossword extends StatefulWidget {
   final List<List<String>> letters;
@@ -20,6 +21,8 @@ class Crossword extends StatefulWidget {
   final bool? drawVerticalLine;
   final Function(List<String> words) onLineDrawn;
   final List<String> allWords;
+  final List<String> incorrWords;
+  final List<String> correctWords;
   final TextStyle? textStyle;
   final bool? acceptReversedDirection;
 
@@ -32,9 +35,11 @@ class Crossword extends StatefulWidget {
         this.drawHorizontalLine,
         this.drawVerticalLine,
         required this.allWords,
+        required this.incorrWords,
+        required this.correctWords,
         this.lineDecoration = const LineDecoration(),
         this.textStyle,
-        this.acceptReversedDirection = false,
+        this.acceptReversedDirection = true,
         this.transposeMatrix = false})
       : assert(
   (drawCrossLine ?? true) ||
@@ -56,13 +61,14 @@ class CrosswordState extends State<Crossword> {
   LetterOffset? startPoint;
   LetterOffset? endPoint;
   List<List<String>> letters = [];
-
+  late final player;
   @override
   void initState() {
     // TODO: implement initState
     letters =
     widget.transposeMatrix! ?widget.letters: widget.letters.transpose();
     super.initState();
+    player = AudioPlayer();
   }
 
   //check whether user interaction on the panel within the letter positions limit or outside the area
@@ -148,7 +154,18 @@ class CrosswordState extends State<Crossword> {
     Center(
             child: GestureDetector(
               onPanStart: (DragStartDetails details) {
+
                 color = generateRandomColor();
+                if(!player.playing) {
+                  // Create a player
+                  player.setAudioSource(AudioSource.uri(Uri.parse(
+                      "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693170533/select_ujtlvr.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+                  player.play();
+                  print(player.playing);
+                }
+                else {
+                  player.stop();
+                }
                 setState(() {
                   startPoint = LetterOffset(
                       offset: details.localPosition, spacing: widget.spacing);
@@ -163,7 +180,9 @@ class CrosswordState extends State<Crossword> {
                 });
               },
               onPanUpdate: (DragUpdateDetails details) {
+
                 setState(() {
+
                   //get initial positions based on user interaction on the panel
                   final dx = details.localPosition.dx - startPoint!.offset.dx;
                   final dy = details.localPosition.dy - startPoint!.offset.dy;
@@ -194,14 +213,24 @@ class CrosswordState extends State<Crossword> {
                         letters: letters,
                         acceptReversedDirection:
                         widget.acceptReversedDirection!);
+
                   }
                 });
               },
-              onPanEnd: (DragEndDetails details) async {
+              onPanEnd: (DragEndDetails details)  {
                 //get the last line drawn from the list
                 List<Offset> usedOffsets = lineList.last.getTotalOffsets;
-
-                setState(() {
+                if(!player.playing) {
+                  // Create a player
+                  player.setAudioSource(AudioSource.uri(Uri.parse(
+                      "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693170533/select_ujtlvr.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+                  player.play();
+                  print(player.playing);
+                }
+                else {
+                  player.stop();
+                }
+                setState(()  {
                   //Check if the line can be drawn on specific angles
                   if (selectedOffsets
                       .toSet()
@@ -222,33 +251,60 @@ class CrosswordState extends State<Crossword> {
                               ? isCrossLine(lineList.last.offsets)
                               : false))) {
                  //   selectedOffsets.addAll(usedOffsets);
-                    print('word');
+                    print('word:');
                     print(lineList.last.word);
-                    if (widget.allWords.contains(lineList.last.word)) {
 
-                      if (widget.lineDecoration!.correctColor != null) {
+                    print('incorrect words:');
+                    print(widget.incorrWords);
+
+                    if (widget.allWords.contains(lineList.last.word)) {
+                      if (widget.correctWords.contains(lineList.last.word)) {
                         //set a line color when the selected word is correct
-                        lineList.last.color =
-                        widget.lineDecoration!.correctColor!;
+                        // lineList.last.color =
+                        // widget.lineDecoration!.correctColor!;
+                        print('correct');
+
                       }
-                      print('this is correct');
-                      widget.onLineDrawn(lineList.map((e) => e.word).toList());
-                    } else {
-                      if (widget.lineDecoration!.incorrectColor != null) {
+                      else if (widget.incorrWords.contains(lineList.last.word)) {
                         //set a line color when the selected word is incorrect
                         lineList.last.color =
                         widget.lineDecoration!.incorrectColor!;
+                        print('incorrect');
                       }
-                      else {
-                        startPoint = null;
-                        endPoint = null;
-                        lineList.removeLast();
+
+                      widget.onLineDrawn(lineList.map((e) => e.word).toList());
+
+
+                    } else {
+
+                      Future.delayed(const Duration(milliseconds: 250), () {
+                        if (!player.playing) {
+                          // Create a player
+                          player.setAudioSource(AudioSource.uri(Uri.parse(
+                              "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/notmatched_vbbjtb.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+                          player.play();
+                          print(player.playing);
+                        }
+                        else {
+                          player.stop();
+                        }
+                      });
+                      startPoint = null;
+                      endPoint = null;
+                      lineList.removeLast();
+
+                      // if (widget.lineDecoration!.incorrectColor != null) {
+                      //   set a line color when the selected word is incorrect
+                        // lineList.last.color =
+                        // widget.lineDecoration!.incorrectColor!;
+                      // }
+                      // else {
+
                        // selectedOffsets.remove(usedOffsets);
-                      }
+                      // }
                     }
 
                     //return a list of word
-
 
                   } else {
                     print('already used');
@@ -267,7 +323,7 @@ class CrosswordState extends State<Crossword> {
                     textStyle: widget.textStyle,
                     spacing: widget.spacing,
                     hints: widget.allWords),
-                size: Size(letters.length * widget.spacing.dx,
+                size: Size(letters.length * widget.spacing.dx ,
                     letters.first.length * widget.spacing.dy),
               ),
             ),

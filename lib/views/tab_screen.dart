@@ -119,7 +119,13 @@ class TabScreenState extends State<TabScreen> {
                     onTap: (index) {
                       final p =
                           Provider.of<TimerProvider>(context, listen: false);
-                      p.resetSeconds();
+                      final p__ =
+                      Provider.of<GameScreenProvider>(context, listen: false);
+                      p__.reset();
+                      p.stopSeconds();
+                      p.stopSeconds();
+                      p.setTicking(false);
+
                       provider.changeSelectedIndex(index);
                     },
                     itemCount: 4,
@@ -230,6 +236,11 @@ class TabScreenState extends State<TabScreen> {
                           print(8);
 
                           gameProvider.changeGameType('random');
+                          final p__ =
+                          Provider.of<GameScreenProvider>(context, listen: false);
+                          p__.reset();
+                          p.stopSeconds();
+                          p.resetSeconds();
                           provider.changeSelectedIndex(4);
                         }
                       },
@@ -245,9 +256,12 @@ class TabScreenState extends State<TabScreen> {
     final p = Provider.of<TimerProvider>(context, listen: false);
     List<String> rest = [];
 
+    provider.setGameEnded(true);
     p.stopSeconds();
+    p.setTicking(false);
     provider.allWordsFromAPI.forEach((element) {
-      if (!provider.correctWords.contains(element)) {
+      if (!provider.correctWords.contains(element) &&
+          !provider.incorrectWordsFromAPI.contains(element)) {
         rest.add(element);
       }
     });

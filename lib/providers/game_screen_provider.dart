@@ -4,6 +4,8 @@ class GameScreenProvider with ChangeNotifier {
   dynamic _gameData;
   dynamic get gameData => _gameData;
 
+  dynamic _gameEnded = false;
+  dynamic get gameEnded => _gameEnded;
 
   changeGameData(dynamic value) {
     print('add data');
@@ -21,6 +23,10 @@ class GameScreenProvider with ChangeNotifier {
   final List<String> _incorrectWordsFromAPI = [];
   List<String> get incorrectWordsFromAPI => _incorrectWordsFromAPI;
 
+  setGameEnded(status) {
+    _gameEnded= status;
+    notifyListeners();
+  }
 
   addToCorrectWordsIncorrectWordsFromAPI() {
     _allWordsFromAPI.clear();
@@ -73,6 +79,11 @@ class GameScreenProvider with ChangeNotifier {
 
   addToCorrectWords(var correctWord) {
     correctWords.add(correctWord);
+    notifyListeners();
+  }
+
+  addToInCorrectWords(var correctWord) {
+    incorrectWords.add(correctWord);
     notifyListeners();
   }
   resetIncorrectWordsFromAPI() {
@@ -274,6 +285,7 @@ class GameScreenProvider with ChangeNotifier {
     _trackLastIndex.clear();
     _tiles.clear();
     grid_.clear();
+    _gameEnded = false;
   }
 }
 

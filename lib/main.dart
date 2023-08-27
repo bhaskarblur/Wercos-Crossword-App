@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobile_app_word_search/providers/category_provider.dart';
 import 'package:mobile_app_word_search/providers/home_provider.dart';
@@ -65,6 +66,7 @@ class MyApp extends StatelessWidget {
             child: child!);
       },
       theme: ThemeData(
+          fontFamily: 'Inter',
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true),
       locale: provider.locale,

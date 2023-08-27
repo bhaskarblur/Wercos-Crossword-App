@@ -112,9 +112,9 @@ class _DrugPageState extends State<DrugPage2> {
 
           },
           textStyle: const TextStyle(color: Colors.white, fontSize: 20),
-          lineDecoration:
-          LineDecoration(lineColors: lineColors, strokeWidth: 23),
           allWords: const ["FLUTTER", "GAMES", "UI", "COLORS"],
+          incorrWords: [],
+          correctWords: [],
         ));
   }
 

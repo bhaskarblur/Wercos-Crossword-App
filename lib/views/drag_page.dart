@@ -1,18 +1,19 @@
 import 'dart:async';
 import 'dart:math';
-
-import 'package:crossword/components/line_decoration.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_app_word_search/providers/category_provider.dart';
 import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:mobile_app_word_search/widget/widgets.dart';
 import 'package:provider/provider.dart';
-
 import '../api_services.dart';
 import '../crosswordfile.dart';
+import '../linedecoration.dart';
 import '../providers/timer_provider.dart';
 import '../widget/sahared_prefs.dart';
 import 'level_completion_page.dart';
@@ -26,7 +27,7 @@ class DrugPage extends StatefulWidget {
 
 class _DrugPageState extends State<DrugPage> {
   final ApiServices _apiServices = ApiServices();
-
+  late final player;
   List<Color> lineColors = [];
   Color generateRandomColor() {
     Random random = Random();
@@ -38,12 +39,15 @@ class _DrugPageState extends State<DrugPage> {
     return Color.fromARGB(255, r, g, b);
   }
 
+
   @override
   void initState() {
     getData();
     super.initState();
     lineColors = List.generate(100, (index) => generateRandomColor()).toList();
+    player = AudioPlayer();
   }
+
 
   Timer? timer;
 
@@ -88,7 +92,7 @@ class _DrugPageState extends State<DrugPage> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
-                              fontSize: 18)),
+                              fontSize: 18, fontFamily: 'Inter')),
                       Expanded(
                         flex: 1,
                         child: Container(
@@ -118,7 +122,7 @@ class _DrugPageState extends State<DrugPage> {
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
-                                      fontSize: 18));
+                                      fontSize: 18, fontFamily: 'Inter'));
                             }),
                             gap(5),
                             Expanded(
@@ -134,9 +138,9 @@ class _DrugPageState extends State<DrugPage> {
                                         provider.gameData['gameDetails']
                                             ['gamename'],
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                            fontWeight: FontWeight.w600,
                                             color: Colors.white,
-                                            fontSize: 18)),
+                                            fontSize: 18, fontFamily: 'Inter')),
                                     if (provider.gameData['gameDetails']
                                             ['searchtype'] ==
                                         'search')
@@ -162,6 +166,7 @@ class _DrugPageState extends State<DrugPage> {
                                                         : TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 15,
+                                                    fontFamily: 'Inter',
                                                     decoration: provider
                                                             .correctWords
                                                             .contains(provider
@@ -208,6 +213,7 @@ class _DrugPageState extends State<DrugPage> {
                                                       : TextAlign.center,
                                               style: TextStyle(
                                                   fontSize: 15,
+                                                  fontFamily: 'Inter',
                                                   decoration: provider
                                                           .correctWords
                                                           .contains(
@@ -241,30 +247,139 @@ class _DrugPageState extends State<DrugPage> {
                             gap(10),
                           ]),
                         ),
+
+                        if(provider.gameEnded==false)
                         Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: Colors.white),
-                          child:   Crossword(
+                          child:  Crossword(
 
                             letters: provider.grid_,
                             acceptReversedDirection: true,
                             drawVerticalLine:true,
                             drawHorizontalLine:true,
-                            spacing: const Offset(32, 31),
+                            spacing: const Offset(32, 33),
                             drawCrossLine:true,
-                            onLineDrawn: (List<String> words) {
+                            onLineDrawn: (List<String> words) async {
                               print(words.last.toString());
-                              provider.addToCorrectWords(words.last.toString());
+
+
+                              if (provider.gameData['gameDetails']['searchtype'] == 'search')
+                              {
+                                if (provider.allWordsFromAPI.contains(
+                                    words.last.toString())) {
+                                  provider.addToCorrectWords(
+                                      words.last.toString());
+                                  player.setAudioSource(AudioSource.uri(Uri.parse(
+                                      "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/correctanswer_szreyi.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+                                  player.play();
+                                  print(player.playing);
+                                }
+                                else {
+                                  }
+                                }
+                              else {
+                                if (provider.correctWordsFromAPI.contains(
+                                    words.last.toString())) {
+                                  provider.addToCorrectWords(
+                                      words.last.toString());
+                                  player.setAudioSource(AudioSource.uri(Uri.parse(
+                                      "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/correctanswer_szreyi.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+                                  player.play();
+                                  print(player.playing);
+                                }
+                                else
+                                if (provider.incorrectWordsFromAPI.contains(
+                                    words.last.toString())) {
+                                  provider.addToInCorrectWords(
+                                      words.last.toString());
+                                  player.setAudioSource(AudioSource.uri(Uri.parse(
+                                      "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/wronganswer_oyvx87.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+                                  player.play();
+                                  print(player.playing);
+                                }
+                              }
+
+                              if (provider.gameData['gameDetails']['searchtype'] == 'search') {
+                                if (provider.allWordsFromAPI.length == provider.correctWords.length) {
+                                  navigate();
+                                }
+                              } else {
+                                if (provider.correctWordsFromAPI.length == provider.correctWords.length) {
+                                  navigate();
+                                }
+                              }
                             },
-                            textStyle: TextStyle(fontSize: 23, color: Colors.black
-                                , fontWeight: FontWeight.w900),
+                            textStyle: TextStyle(fontSize: 23, color: const Color(0xFF221962)
+                                , fontWeight: FontWeight.w900, fontFamily: 'Inter'),
                             lineDecoration:
-                            LineDecoration(lineColors: lineColors, strokeWidth: 25),
+                            LineDecoration(lineColors: lineColors, incorrectColor: Colors.red, strokeWidth: 28, borderColor: Colors.red ),
                             allWords: provider.allWordsFromAPI,
+                            correctWords : provider.gameData['gameDetails']
+                            ['searchtype'] ==
+                                'challenge' ? provider.correctWordsFromAPI : provider.allWordsFromAPI,
+                            incorrWords: provider.incorrectWordsFromAPI,
                           ),
-                        )
-                      ,
+                        ),
+                        if(provider.gameEnded==true)
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Listener(
+                                  onPointerDown: null,
+                                  onPointerMove: null,
+                                  onPointerUp: _clearSelection,
+                                  child: GridView.builder(
+                                    key: key,
+                                    shrinkWrap: true,
+                                    padding: EdgeInsets.zero,
+                                    itemCount: provider.tiles.length,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 11,
+                                        childAspectRatio: 1,
+                                        crossAxisSpacing: 3,
+                                        mainAxisSpacing: 3
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: provider
+                                                    .tiles[index].borderColor!),
+                                            borderRadius:
+                                            BorderRadius.circular(0),
+                                            color: provider
+                                                .tiles[index].backgroundColor),
+                                        child: Center(
+                                          child: Foo(
+                                            index: index,
+                                            child: Text(
+                                              provider.tiles[index].alphabet!,
+                                              style: TextStyle(
+                                                  color: provider
+                                                      .tiles[index].textColor,
+                                                  fontWeight: FontWeight.w900,
+                                                  fontSize: 22),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                )
+                                ,
+                              ),
+                            ),
+                          )
+
+
                       ],
                     ),
             );
@@ -277,13 +392,15 @@ class _DrugPageState extends State<DrugPage> {
     super.dispose();
     timer!.cancel();
     // final provider = Provider.of<TimerProvider>(context, listen: false);
-    // // provider.cancelTimer();
+    // provider.cancelTimer();
   }
 
   getData() {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
     final timerProvider = Provider.of<TimerProvider>(context, listen: false);
     // provider.reset();
+    timerProvider.stopSeconds();
+    timerProvider.setTicking(false);
     timerProvider.resetSeconds();
     // provider.changeSelectedColor();
 
@@ -313,16 +430,27 @@ class _DrugPageState extends State<DrugPage> {
   }
 
   void startTimer() {
+    final provider_game = Provider.of<GameScreenProvider>(context, listen: false);
     final provider = Provider.of<TimerProvider>(context, listen: false);
     provider.resetSeconds();
     provider.setTicking(true);
     print(provider.ticking);
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if(provider.ticking == true) {
-        provider.changeSeconds();
+       provider.changeSeconds();
+        // print(provider_game.gameEnded);
       }
       else {
         provider.stopSeconds();
+        print('timer stopped');
+        timer.cancel();
+        if(!player.playing) {
+          // Create a player
+          player.setAudioSource(AudioSource.uri(Uri.parse(
+              "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693173512/gameended_zfar4v.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+          player.play();
+          print(player.playing);
+        }
       }
 
     });
@@ -576,6 +704,18 @@ class _DrugPageState extends State<DrugPage> {
   }
 
   navigate() {
+
+    final player = AudioPlayer();
+    if(!player.playing) {
+      // Create a player
+      player.setAudioSource(AudioSource.uri(Uri.parse(
+          "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172346/gamecompleted_dktied.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+      player.play();
+      print(player.playing);
+    }
+    else {
+      player.stop();
+    }
     final gameProvider =
         Provider.of<GameScreenProvider>(context, listen: false);
     final p = Provider.of<TimerProvider>(context, listen: false);
