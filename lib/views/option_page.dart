@@ -17,6 +17,8 @@ import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'drag_page_2temp.dart';
+
 
 class OptionPage extends StatelessWidget {
  const OptionPage({Key? key}) : super(key: key);
@@ -100,6 +102,10 @@ class OptionPage extends StatelessWidget {
   OptionItem(
   optionName: AppLocalizations.of(context)!.play.toUpperCase(),
   onPressed: () {
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => const DrugPage2()));
   final provider =
   Provider.of<HomeProvider>(context, listen: false);
   provider.changeSelectedIndex(1);

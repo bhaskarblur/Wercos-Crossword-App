@@ -4,6 +4,7 @@ class GameScreenProvider with ChangeNotifier {
   dynamic _gameData;
   dynamic get gameData => _gameData;
 
+
   changeGameData(dynamic value) {
     print('add data');
     _gameData = value;
@@ -19,6 +20,7 @@ class GameScreenProvider with ChangeNotifier {
 
   final List<String> _incorrectWordsFromAPI = [];
   List<String> get incorrectWordsFromAPI => _incorrectWordsFromAPI;
+
 
   addToCorrectWordsIncorrectWordsFromAPI() {
     _allWordsFromAPI.clear();
@@ -69,6 +71,10 @@ class GameScreenProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  addToCorrectWords(var correctWord) {
+    correctWords.add(correctWord);
+    notifyListeners();
+  }
   resetIncorrectWordsFromAPI() {
     _incorrectWordsFromAPI.clear();
     notifyListeners();
@@ -205,20 +211,27 @@ class GameScreenProvider with ChangeNotifier {
   }
 
   final List<SingleTileModel> _tiles = [];
+  late List<List<String>> grid_ = [];
   List<SingleTileModel> get tiles => _tiles;
 
   addToTiles() {
     print('add tiles');
     _tiles.clear();
+    grid_.clear();
     for (int i = 0; i < _gameData['crossword_grid'].length; i++) {
+      List<String> list__= [];
       for (int j = 0; j < _gameData['crossword_grid'][i].length; j++) {
         _tiles.add(SingleTileModel(
             alphabet: _gameData['crossword_grid'][i][j].toUpperCase(),
             backgroundColor: Colors.white,
             textColor: const Color(0xFF221962),
             borderColor: Colors.transparent));
+
+        list__.add(_gameData['crossword_grid'][i][j].toUpperCase());
       }
+      grid_.add(list__);
     }
+
     notifyListeners();
   }
 
@@ -260,6 +273,7 @@ class GameScreenProvider with ChangeNotifier {
     _incorrectWords.clear();
     _trackLastIndex.clear();
     _tiles.clear();
+    grid_.clear();
   }
 }
 

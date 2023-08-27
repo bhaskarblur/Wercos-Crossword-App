@@ -28,6 +28,7 @@ class TimerProvider with ChangeNotifier {
   }
 
   resetSeconds() {
+
     _seconds = 0;
   }
 

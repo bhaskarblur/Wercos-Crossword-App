@@ -12,22 +12,35 @@ import 'package:mobile_app_word_search/widget/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../api_services.dart';
-import '../crosswordfile.dart';
 import '../providers/timer_provider.dart';
 import '../widget/sahared_prefs.dart';
 import 'level_completion_page.dart';
+import 'package:mobile_app_word_search/crosswordfile.dart';
 
-class DrugPage extends StatefulWidget {
-  const DrugPage({Key? key}) : super(key: key);
+class DrugPage2 extends StatefulWidget {
+  const DrugPage2({Key? key}) : super(key: key);
 
   @override
-  State<DrugPage> createState() => _DrugPageState();
+  State<DrugPage2> createState() => _DrugPageState();
 }
 
-class _DrugPageState extends State<DrugPage> {
+class _DrugPageState extends State<DrugPage2> {
   final ApiServices _apiServices = ApiServices();
-
   List<Color> lineColors = [];
+
+  List<int> letterGrid = [11, 14];
+
+  List<List<String>> generateRandomLetters() {
+    final random = Random();
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    List<List<String>> array = List.generate(
+        letterGrid.first,
+            (_) => List.generate(
+            letterGrid.last, (_) => letters[random.nextInt(letters.length)]));
+
+    return array;
+  }
+
   Color generateRandomColor() {
     Random random = Random();
 
@@ -37,10 +50,9 @@ class _DrugPageState extends State<DrugPage> {
 
     return Color.fromARGB(255, r, g, b);
   }
-
   @override
   void initState() {
-    getData();
+    // getData();
     super.initState();
     lineColors = List.generate(100, (index) => generateRandomColor()).toList();
   }
@@ -74,201 +86,35 @@ class _DrugPageState extends State<DrugPage> {
       )??false; //if showDialouge had returned null, then return false
     }
 
-    return WillPopScope(
-        onWillPop: showExitPopup,
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Consumer<GameScreenProvider>(builder: (context, provider, _) {
-            return Padding(
-              padding: const EdgeInsets.all(10),
-              child: provider.gameData == null
-                  ? Column(children: [
-                      statusBar(context),
-                      const Text('00.00',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 18)),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              gradient: AllColors.bg,
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
-                      ),
-                      gap(10),
-                      Expanded(
-                          flex: 3,
-                          child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white)))
-                    ])
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(children: [
-                            statusBar(context),
-                            Consumer<TimerProvider>(
-                                builder: (context, timer, _) {
-                              return Text(formatTime(timer.seconds),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 18));
-                            }),
-                            gap(5),
-                            Expanded(
-                              child: Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                    gradient: AllColors.bg,
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Column(
-                                  children: [
-                                    gap(5),
-                                    Text(
-                                        provider.gameData['gameDetails']
-                                            ['gamename'],
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            fontSize: 18)),
-                                    if (provider.gameData['gameDetails']
-                                            ['searchtype'] ==
-                                        'search')
-                                      Expanded(
-                                        child: GridView.builder(
-                                          shrinkWrap: true,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 17, vertical: 14),
-                                          itemCount:
-                                              provider.allWordsFromAPI.length,
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                                  childAspectRatio: 5,
-                                                  crossAxisCount: 3),
-                                          itemBuilder: (context, index) {
-                                            return Text(
-                                                provider.allWordsFromAPI[index]
-                                                    .toUpperCase(),
-                                                textAlign: (index + 1) % 3 == 0
-                                                    ? TextAlign.end
-                                                    : (index) % 3 == 0
-                                                        ? TextAlign.start
-                                                        : TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    decoration: provider
-                                                            .correctWords
-                                                            .contains(provider
-                                                                .allWordsFromAPI[
-                                                                    index]
-                                                                .toUpperCase())
-                                                        ? TextDecoration
-                                                            .lineThrough
-                                                        : TextDecoration.none,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: provider.correctWords
-                                                            .contains(provider
-                                                                .allWordsFromAPI[
-                                                                    index]
-                                                                .toUpperCase())
-                                                        ? Colors.green
-                                                        : Colors.white));
-                                          },
-                                        ),
-                                      ),
-                                    if (provider.gameData['gameDetails']
-                                            ['searchtype'] ==
-                                        'challenge')
-                                      GridView.builder(
-                                        shrinkWrap: true,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 10),
-                                        itemCount:
-                                            provider.allWordsFromAPI.length,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        gridDelegate:
-                                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                                childAspectRatio: 5,
-                                                crossAxisCount: 3),
-                                        itemBuilder: (context, index) {
-                                          return Text(
-                                              provider.allWordsFromAPI[index]
-                                                  .toUpperCase(),
-                                              textAlign: (index + 1) % 3 == 0
-                                                  ? TextAlign.end
-                                                  : (index) % 3 == 0
-                                                      ? TextAlign.start
-                                                      : TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  decoration: provider
-                                                          .correctWords
-                                                          .contains(
-                                                              provider.allWordsFromAPI[index]
-                                                                  .toUpperCase())
-                                                      ? TextDecoration
-                                                          .lineThrough
-                                                      : provider.incorrectWords
-                                                              .contains(provider
-                                                                  .allWordsFromAPI[
-                                                                      index]
-                                                                  .toUpperCase())
-                                                          ? TextDecoration
-                                                              .lineThrough
-                                                          : TextDecoration.none,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: provider.correctWords
-                                                          .contains(provider
-                                                              .allWordsFromAPI[index]
-                                                              .toUpperCase())
-                                                      ? Colors.green
-                                                      : provider.incorrectWords.contains(provider.allWordsFromAPI[index].toUpperCase())
-                                                          ? Colors.red
-                                                          : Colors.white));
-                                        },
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            gap(10),
-                          ]),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white),
-                          child:   Crossword(
+    return Scaffold(
+        backgroundColor: Colors.black,
+        body: Crossword(
 
-                            letters: provider.grid_,
-                            acceptReversedDirection: true,
-                            drawVerticalLine:true,
-                            drawHorizontalLine:true,
-                            spacing: const Offset(32, 31),
-                            drawCrossLine:true,
-                            onLineDrawn: (List<String> words) {
-                              print(words.last.toString());
-                              provider.addToCorrectWords(words.last.toString());
-                            },
-                            textStyle: TextStyle(fontSize: 23, color: Colors.black
-                                , fontWeight: FontWeight.w900),
-                            lineDecoration:
-                            LineDecoration(lineColors: lineColors, strokeWidth: 25),
-                            allWords: provider.allWordsFromAPI,
-                          ),
-                        )
-                      ,
-                      ],
-                    ),
-            );
-          }),
+          letters: const [
+            ["F", "L", "U", "T", "T", "E", "R", "W", "U", "D", "B", "C"],
+            ["R", "M", "I", "O", "P", "U", "I", "Q", "R", "L", "E", "G"],
+            ["T", "V", "D", "I", "R", "I", "M", "U", "A", "H", "E", "A"],
+            ["D", "A", "R", "T", "N", "S", "T", "O", "Y", "J", "R", "M"],
+            ["O", "G", "A", "M", "E", "S", "C", "O", "L", "O", "R", "S"],
+            ["S", "R", "T", "I", "I", "I", "F", "X", "S", "P", "E", "D"],
+            ["Y", "S", "N", "E", "T", "M", "M", "C", "E", "A", "T", "S"],
+            ["W", "E", "T", "P", "A", "T", "D", "Y", "L", "M", "N", "U"],
+            ["O", "T", "E", "H", "R", "O", "G", "P", "T", "U", "O", "E"],
+            ["K", "R", "R", "C", "G", "A", "M", "E", "S", "S", "T", "S"],
+            ["S", "E", "S", "T", "L", "A", "O", "P", "U", "P", "E", "S"]
+          ],
+          acceptReversedDirection: true,
+          drawVerticalLine:true,
+          drawHorizontalLine:true,
+          spacing: const Offset(30, 30),
+          drawCrossLine:true,
+          onLineDrawn: (List<String> words) {
+
+          },
+          textStyle: const TextStyle(color: Colors.white, fontSize: 20),
+          lineDecoration:
+          LineDecoration(lineColors: lineColors, strokeWidth: 23),
+          allWords: const ["FLUTTER", "GAMES", "UI", "COLORS"],
         ));
   }
 
