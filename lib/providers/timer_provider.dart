@@ -39,6 +39,5 @@ class TimerProvider with ChangeNotifier {
   stopSeconds() {
     // _seconds = _sec;
     ticking = false;
-    notifyListeners();
   }
 }

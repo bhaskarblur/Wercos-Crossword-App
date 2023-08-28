@@ -7,6 +7,8 @@ import 'package:crossword/components/word_line.dart';
 import 'package:crossword/helper/extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'line_painter.dart';
 import 'linedecoration.dart';
@@ -57,6 +59,7 @@ class CrosswordState extends State<Crossword> {
   List<Offset> selectedOffsets = [];
   Color? color;
 
+  List<String> wordsMarked = [];
   List<WordLine> updatedLineList = [];
   LetterOffset? startPoint;
   LetterOffset? endPoint;
@@ -65,8 +68,9 @@ class CrosswordState extends State<Crossword> {
   @override
   void initState() {
     // TODO: implement initState
-    letters =
-    widget.transposeMatrix! ?widget.letters: widget.letters.transpose();
+      letters =
+      widget.transposeMatrix! ?widget.letters: widget.letters.transpose();
+
     super.initState();
     player = AudioPlayer();
   }
@@ -147,7 +151,7 @@ class CrosswordState extends State<Crossword> {
     return Column(
       children: [
         const SizedBox(
-          height: 18,
+          height: 15,
         ),
     Padding(padding: EdgeInsets.only(bottom: 14),
     child:
@@ -257,53 +261,66 @@ class CrosswordState extends State<Crossword> {
                     print('incorrect words:');
                     print(widget.incorrWords);
 
-                    if (widget.allWords.contains(lineList.last.word)) {
-                      if (widget.correctWords.contains(lineList.last.word)) {
-                        //set a line color when the selected word is correct
+                    final provider = Provider.of<GameScreenProvider>(context, listen: false);
+
+                    if(!wordsMarked.contains(lineList.last.word)) {
+
+                      if (widget.allWords.contains(lineList.last.word)) {
+                        if (widget.correctWords.contains(lineList.last.word)) {
+                          //set a line color when the selected word is correct
+                          // lineList.last.color =
+                          // widget.lineDecoration!.correctColor!;
+                          print('correct');
+                          // selectedOffsets.addAll(usedOffsets);
+                          wordsMarked.add(lineList.last.word);
+
+                        }
+                        else if (widget.incorrWords.contains(lineList.last
+                            .word)) {
+                          //set a line color when the selected word is incorrect
+                          lineList.last.color =
+                          widget.lineDecoration!.incorrectColor!;
+                          print('incorrect');
+                          // selectedOffsets.addAll(usedOffsets);
+                          wordsMarked.add(lineList.last.word);
+                        }
+
+                        widget.onLineDrawn(lineList.map((e) => e.word)
+                            .toList());
+                      }
+                      else {
+                        Future.delayed(const Duration(milliseconds: 250), () {
+                          if (!player.playing) {
+                            // Create a player
+                            player.setAudioSource(AudioSource.uri(Uri.parse(
+                                "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/notmatched_vbbjtb.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+                            player.play();
+                            print(player.playing);
+                          }
+                          else {
+                            player.stop();
+                          }
+                        });
+                        startPoint = null;
+                        endPoint = null;
+                        lineList.removeLast();
+
+                        // if (widget.lineDecoration!.incorrectColor != null) {
+                        //   set a line color when the selected word is incorrect
                         // lineList.last.color =
-                        // widget.lineDecoration!.correctColor!;
-                        print('correct');
+                        // widget.lineDecoration!.incorrectColor!;
+                        // }
+                        // else {
 
+                        // selectedOffsets.remove(usedOffsets);
+                        // }
                       }
-                      else if (widget.incorrWords.contains(lineList.last.word)) {
-                        //set a line color when the selected word is incorrect
-                        lineList.last.color =
-                        widget.lineDecoration!.incorrectColor!;
-                        print('incorrect');
-                      }
-
-                      widget.onLineDrawn(lineList.map((e) => e.word).toList());
-
-
-                    } else {
-
-                      Future.delayed(const Duration(milliseconds: 250), () {
-                        if (!player.playing) {
-                          // Create a player
-                          player.setAudioSource(AudioSource.uri(Uri.parse(
-                              "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/notmatched_vbbjtb.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
-                          player.play();
-                          print(player.playing);
-                        }
-                        else {
-                          player.stop();
-                        }
-                      });
+                    }
+                    else {
                       startPoint = null;
                       endPoint = null;
                       lineList.removeLast();
-
-                      // if (widget.lineDecoration!.incorrectColor != null) {
-                      //   set a line color when the selected word is incorrect
-                        // lineList.last.color =
-                        // widget.lineDecoration!.incorrectColor!;
-                      // }
-                      // else {
-
-                       // selectedOffsets.remove(usedOffsets);
-                      // }
                     }
-
                     //return a list of word
 
                   } else {
@@ -321,6 +338,8 @@ class CrosswordState extends State<Crossword> {
                     letters: letters,
                     lineList: lineList,
                     textStyle: widget.textStyle,
+                    context_: context,
+                    borderColor: Colors.red,
                     spacing: widget.spacing,
                     hints: widget.allWords),
                 size: Size(letters.length * widget.spacing.dx ,

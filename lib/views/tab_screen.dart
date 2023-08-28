@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:mobile_app_word_search/api_services.dart';
 import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
 import 'package:mobile_app_word_search/views/level_completion_page.dart';
@@ -42,6 +43,11 @@ class TabScreenState extends State<TabScreen> {
 
   List<BottomNavigationItem>? iconList;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   void didChangeDependencies() {
     iconList = [
@@ -256,6 +262,14 @@ class TabScreenState extends State<TabScreen> {
     final p = Provider.of<TimerProvider>(context, listen: false);
     List<String> rest = [];
 
+    final player = AudioPlayer();
+    if(!player.playing) {
+      // Create a player
+      player.setAudioSource(AudioSource.uri(Uri.parse(
+          "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693173512/gameended_zfar4v.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+      player.play();
+      print(player.playing);
+    }
     provider.setGameEnded(true);
     p.stopSeconds();
     p.setTicking(false);

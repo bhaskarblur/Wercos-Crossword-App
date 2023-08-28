@@ -31,6 +31,7 @@ class _DrugPageState extends State<DrugPage> {
   List<Color> lineColors = [];
   Color generateRandomColor() {
     Random random = Random();
+    // var generatedColor = Random().nextInt(Colors.primaries.length)
 
     int r = random.nextInt(200) - 128; // Red component between 128 and 255
     int g = random.nextInt(200) - 128; // Green component between 128 and 255
@@ -88,11 +89,10 @@ class _DrugPageState extends State<DrugPage> {
               child: provider.gameData == null
                   ? Column(children: [
                       statusBar(context),
-                      const Text('00.00',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 18, fontFamily: 'Inter')),
+                Text('00.00',
+                          style: GoogleFonts.inter(textStyle:
+                          Theme.of(context).textTheme.headlineLarge,fontSize: 23, color: const Color(0xFF221962)
+                              , fontWeight: FontWeight.w800)),
                       Expanded(
                         flex: 1,
                         child: Container(
@@ -119,10 +119,9 @@ class _DrugPageState extends State<DrugPage> {
                             Consumer<TimerProvider>(
                                 builder: (context, timer, _) {
                               return Text(formatTime(timer.seconds),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 18, fontFamily: 'Inter'));
+                                  style: GoogleFonts.inter(textStyle:
+                                  Theme.of(context).textTheme.headlineLarge,fontSize: 18, color: Colors.white
+                                      , fontWeight: FontWeight.w700));
                             }),
                             gap(5),
                             Expanded(
@@ -137,10 +136,9 @@ class _DrugPageState extends State<DrugPage> {
                                     Text(
                                         provider.gameData['gameDetails']
                                             ['gamename'],
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                            fontSize: 18, fontFamily: 'Inter')),
+                                        style: GoogleFonts.inter(textStyle:
+                                        Theme.of(context).textTheme.headlineLarge,fontSize: 18, color: Colors.white
+                                            , fontWeight: FontWeight.w700)),
                                     if (provider.gameData['gameDetails']
                                             ['searchtype'] ==
                                         'search')
@@ -166,7 +164,6 @@ class _DrugPageState extends State<DrugPage> {
                                                         : TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 15,
-                                                    fontFamily: 'Inter',
                                                     decoration: provider
                                                             .correctWords
                                                             .contains(provider
@@ -213,7 +210,6 @@ class _DrugPageState extends State<DrugPage> {
                                                       : TextAlign.center,
                                               style: TextStyle(
                                                   fontSize: 15,
-                                                  fontFamily: 'Inter',
                                                   decoration: provider
                                                           .correctWords
                                                           .contains(
@@ -249,11 +245,12 @@ class _DrugPageState extends State<DrugPage> {
                         ),
 
                         if(provider.gameEnded==false)
+                          if(provider.grid_.isNotEmpty)
                         Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: Colors.white),
-                          child:  Crossword(
+                          child: Crossword(
 
                             letters: provider.grid_,
                             acceptReversedDirection: true,
@@ -312,10 +309,12 @@ class _DrugPageState extends State<DrugPage> {
                               }
                             },
                             textStyle: TextStyle(fontSize: 23, color: const Color(0xFF221962)
-                                , fontWeight: FontWeight.w900, fontFamily: 'Inter'),
+                                  , fontWeight: FontWeight.w900),
                             lineDecoration:
-                            LineDecoration(lineColors: lineColors, incorrectColor: Colors.red, strokeWidth: 28, borderColor: Colors.red ),
-                            allWords: provider.allWordsFromAPI,
+                            LineDecoration(lineColors: lineColors,
+                                incorrectColor: Colors.red,
+                                strokeWidth: 28, borderColor: Colors.red ),
+                            allWords: provider.allWordsFromAPI.isNotEmpty ? provider.allWordsFromAPI : [],
                             correctWords : provider.gameData['gameDetails']
                             ['searchtype'] ==
                                 'challenge' ? provider.correctWordsFromAPI : provider.allWordsFromAPI,
@@ -354,7 +353,7 @@ class _DrugPageState extends State<DrugPage> {
                                                 color: provider
                                                     .tiles[index].borderColor!),
                                             borderRadius:
-                                            BorderRadius.circular(0),
+                                            BorderRadius.circular(5),
                                             color: provider
                                                 .tiles[index].backgroundColor),
                                         child: Center(
@@ -362,11 +361,9 @@ class _DrugPageState extends State<DrugPage> {
                                             index: index,
                                             child: Text(
                                               provider.tiles[index].alphabet!,
-                                              style: TextStyle(
-                                                  color: provider
-                                                      .tiles[index].textColor,
-                                                  fontWeight: FontWeight.w900,
-                                                  fontSize: 22),
+                                              style: GoogleFonts.inter(textStyle:
+                                              Theme.of(context).textTheme.headlineLarge,fontSize: 23, color: const Color(0xFF221962)
+                                                  , fontWeight: FontWeight.w800),
                                             ),
                                           ),
                                         ),
@@ -402,7 +399,6 @@ class _DrugPageState extends State<DrugPage> {
     timerProvider.stopSeconds();
     timerProvider.setTicking(false);
     timerProvider.resetSeconds();
-    // provider.changeSelectedColor();
 
     print(provider.gameType);
     if (provider.gameType == 'random') {
@@ -427,6 +423,7 @@ class _DrugPageState extends State<DrugPage> {
         provider.gameType == 'searchbycategory') {
           categorySearch();
         }
+
   }
 
   void startTimer() {
@@ -438,19 +435,13 @@ class _DrugPageState extends State<DrugPage> {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if(provider.ticking == true) {
        provider.changeSeconds();
-        // print(provider_game.gameEnded);
+        print(provider.seconds);
       }
       else {
         provider.stopSeconds();
         print('timer stopped');
         timer.cancel();
-        if(!player.playing) {
-          // Create a player
-          player.setAudioSource(AudioSource.uri(Uri.parse(
-              "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693173512/gameended_zfar4v.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
-          player.play();
-          print(player.playing);
-        }
+
       }
 
     });

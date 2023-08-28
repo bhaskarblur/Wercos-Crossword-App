@@ -66,7 +66,9 @@ class MyApp extends StatelessWidget {
             child: child!);
       },
       theme: ThemeData(
-          fontFamily: 'Inter',
+          textTheme: GoogleFonts.interTextTheme(
+            Theme.of(context).textTheme,
+          ),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true),
       locale: provider.locale,
