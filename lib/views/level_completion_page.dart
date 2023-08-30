@@ -196,6 +196,9 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                             listen: false);
                         pProvider.reset();
                         Nav.pop(context);
+                        final provider_ =
+                        Provider.of<HomeProvider>(context, listen: false);
+                        provider_.changeSelectedIndex(1);
                       },
                       title: AppLocalizations.of(context)!.back),
                   const SizedBox(height: 16),
@@ -243,6 +246,9 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                             p.resetSeconds();
                             p.resetSeconds();
                             Nav.pop(context);
+                            final provider =
+                            Provider.of<HomeProvider>(context, listen: false);
+                            provider.changeSelectedIndex(1);
                           },
                           title: AppLocalizations.of(context)!.startNew_game),
                 ],
@@ -255,17 +261,20 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
   }
 
   rate() {
-    final provider = Provider.of<GameScreenProvider>(context, listen: false);
-    Prefs.getToken().then((token) {
-      Prefs.getPrefs('loginId').then((loginId) {
-        _apiServices.post(context: context, endpoint: 'addGameRating', body: {
-          "accessToken": token,
-          "gameid": provider.gameData['gameDetails']['gameid'].toString(),
-          "userId": loginId,
-          "rating": rating.toString(),
-        }, progressBar: false);
+    if(rating > 0) {
+      final provider = Provider.of<GameScreenProvider>(context, listen: false);
+      Prefs.getToken().then((token) {
+        print('gameRated Successfully!');
+        Prefs.getPrefs('loginId').then((loginId) {
+          _apiServices.post(context: context, endpoint: 'addGameRating', body: {
+            "accessToken": token,
+            "gameid": provider.gameData['gameDetails']['gameid'].toString(),
+            "userId": loginId,
+            "rating": rating.toString(),
+          }, progressBar: false);
+        });
       });
-    });
+    }
   }
 
   void playVideoAd() {

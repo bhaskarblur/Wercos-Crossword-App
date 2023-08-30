@@ -146,7 +146,7 @@ class _DrugPageState extends State<DrugPage> {
                                         child: GridView.builder(
                                           shrinkWrap: true,
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 17, vertical: 14),
+                                              horizontal: 16, vertical: 16),
                                           itemCount:
                                               provider.allWordsFromAPI.length,
                                           gridDelegate:
@@ -173,7 +173,7 @@ class _DrugPageState extends State<DrugPage> {
                                                         ? TextDecoration
                                                             .lineThrough
                                                         : TextDecoration.none,
-                                                    fontWeight: FontWeight.bold,
+                                                    fontWeight: FontWeight.w600,
                                                     color: provider.correctWords
                                                             .contains(provider
                                                                 .allWordsFromAPI[
@@ -190,7 +190,7 @@ class _DrugPageState extends State<DrugPage> {
                                       GridView.builder(
                                         shrinkWrap: true,
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 10),
+                                            horizontal: 14, vertical: 14),
                                         itemCount:
                                             provider.allWordsFromAPI.length,
                                         physics:
@@ -225,7 +225,7 @@ class _DrugPageState extends State<DrugPage> {
                                                           ? TextDecoration
                                                               .lineThrough
                                                           : TextDecoration.none,
-                                                  fontWeight: FontWeight.bold,
+                                                  fontWeight: FontWeight.w600,
                                                   color: provider.correctWords
                                                           .contains(provider
                                                               .allWordsFromAPI[index]
@@ -353,7 +353,7 @@ class _DrugPageState extends State<DrugPage> {
                                                 color: provider
                                                     .tiles[index].borderColor!),
                                             borderRadius:
-                                            BorderRadius.circular(5),
+                                            BorderRadius.circular(10),
                                             color: provider
                                                 .tiles[index].backgroundColor),
                                         child: Center(

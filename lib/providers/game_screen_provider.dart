@@ -188,13 +188,24 @@ class GameScreenProvider with ChangeNotifier {
 
     notifyListeners();
   }
+  Color generateRandomColor() {
+    Random random = Random();
+    // var generatedColor = Random().nextInt(Colors.primaries.length)
+
+    int r = random.nextInt(200) - 128; // Red component between 128 and 255
+    int g = random.nextInt(200) - 128; // Green component between 128 and 255
+    int b = random.nextInt(200) - 128; // Blue component between 128 and 255
+
+    return Color.fromARGB(255, r, g, b);
+  }
 
   changeTile(dynamic value) {
     for (int i = 0; i < value['wordsFound'].length; i++) {
+      var color = generateRandomColor();
       for (int j = 0; j < value['wordsFound'][i].length; j++) {
         _tiles[value['wordsFound'][i][j]].backgroundColor = Colors.white;
         _tiles[value['wordsFound'][i][j]].textColor = const Color(0xFF221962);
-        _tiles[value['wordsFound'][i][j]].borderColor = Colors.red;
+        _tiles[value['wordsFound'][i][j]].borderColor = color;
       }
     }
     notifyListeners();

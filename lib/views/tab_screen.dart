@@ -304,7 +304,8 @@ class TabScreenState extends State<TabScreen> {
                     seconds: p.seconds,
                   ));
             });
-          } else {
+          }
+          else {
             Future.delayed(const Duration(seconds: 5), () {
               Nav.push(
                   context,
