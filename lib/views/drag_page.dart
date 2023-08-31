@@ -37,7 +37,7 @@ class _DrugPageState extends State<DrugPage> {
     int g = random.nextInt(200) - 128; // Green component between 128 and 255
     int b = random.nextInt(200) - 128; // Blue component between 128 and 255
 
-    return Color.fromARGB(255, r, g, b);
+    return Color.fromARGB(155, r, g, b);
   }
 
 
@@ -399,6 +399,7 @@ class _DrugPageState extends State<DrugPage> {
     timerProvider.stopSeconds();
     timerProvider.setTicking(false);
     timerProvider.resetSeconds();
+
 
     print(provider.gameType);
     if (provider.gameType == 'random') {

@@ -211,7 +211,17 @@ class TabScreenState extends State<TabScreen> {
                                   ));
                             } else {
                               print(4);
-                              borderRest();
+                              final p__ =
+                              Provider.of<GameScreenProvider>(context, listen: false);
+                              print('gameEnded');
+                              print(p__.gameEnded);
+
+                              if(p__.gameEnded != true) {
+                                borderRest();
+                              }
+                              else {
+                                provider.changeSelectedIndex(1);
+                              }
                             }
                           } else {
                             print(5);
@@ -232,10 +242,19 @@ class TabScreenState extends State<TabScreen> {
                                         gameProvider.correctWords.length,
                                     seconds: p.seconds,
                                   ));
-                            } else {
-                              print(7);
+                            }
+                            else {
+                              final p__ =
+                              Provider.of<GameScreenProvider>(context, listen: false);
+                              print('gameEnded');
+                              print(p__.gameEnded);
 
-                              borderRest();
+                              if(p__.gameEnded != true) {
+                                borderRest();
+                              }
+                              else {
+                                provider.changeSelectedIndex(1);
+                              }
                             }
                           }
                         } else {
@@ -248,6 +267,7 @@ class TabScreenState extends State<TabScreen> {
                           p.stopSeconds();
                           p.resetSeconds();
                           provider.changeSelectedIndex(4);
+                          p__.setGameEnded(false);
                         }
                       },
                     ),

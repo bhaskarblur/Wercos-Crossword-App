@@ -22,6 +22,10 @@ class SubscriptionPage extends StatefulWidget {
   State<SubscriptionPage> createState() => _SubscriptionPageState();
 }
 
+subscribe(String status){
+  _SubscriptionPageState().subscribe(status);
+}
+
 var applePay = ApplePayButton(
   paymentConfiguration: PaymentConfiguration.fromJsonString(
       defaultApplePay),
@@ -60,6 +64,14 @@ var googlePay = GooglePayButton(
   WidgetsBinding.instance.window.physicalSize.width - 10,
   onPaymentResult: (Map<String, dynamic> result) {
     print(result);
+    if(result.containsValue('success')) {
+      subscribe('1month');
+    }
+    else {
+      dialog(_SubscriptionPageState().context, 'Puchase Failed. Please try again', () {
+        Nav.pop(_SubscriptionPageState().context);
+      });
+    }
   },
   loadingIndicator: const Center(
     child: CircularProgressIndicator(),
@@ -104,6 +116,14 @@ var googlePay2 = GooglePayButton(
   WidgetsBinding.instance.window.physicalSize.width - 10,
   onPaymentResult: (Map<String, dynamic> result) {
     print(result);
+    if(result.containsValue('success')) {
+      subscribe('1year');
+    }
+    else {
+      dialog(_SubscriptionPageState().context, 'Puchase Failed. Please try again', () {
+        Nav.pop(_SubscriptionPageState().context);
+      });
+    }
   },
   loadingIndicator: const Center(
     child: CircularProgressIndicator(),

@@ -194,11 +194,11 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                         final pProvider = Provider.of<GameScreenProvider>(
                             context,
                             listen: false);
-                        pProvider.reset();
+                        //pProvider.reset();
                         Nav.pop(context);
                         final provider_ =
                         Provider.of<HomeProvider>(context, listen: false);
-                        provider_.changeSelectedIndex(1);
+                        provider_.changeSelectedIndex(4);
                       },
                       title: AppLocalizations.of(context)!.back),
                   const SizedBox(height: 16),
