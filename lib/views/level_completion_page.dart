@@ -278,8 +278,9 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
   }
 
   void playVideoAd() {
-    MobileAds.instance.updateRequestConfiguration(
-        RequestConfiguration(testDeviceIds:["BB4BB9E08099BB1C91E2FE93C8E2B6FB"]));
+    // MobileAds.instance.updateRequestConfiguration(
+    //     RequestConfiguration(testDeviceIds:["BB4BB9E08099BB1C91E2FE93C8E2B6FB"]));
+
     RewardedInterstitialAd.load(adUnitId: AdmobService.videoAdUnitID!,
         request: const AdRequest(), 
         rewardedInterstitialAdLoadCallback: RewardedInterstitialAdLoadCallback(
