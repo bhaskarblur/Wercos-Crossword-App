@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
+import 'package:mobile_app_word_search/providers/home_provider.dart';
 import 'package:mobile_app_word_search/providers/language_provider.dart';
 import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
 import 'package:mobile_app_word_search/utils/font_size.dart';
@@ -99,11 +100,14 @@ class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
             provider.setLocale(const Locale('es'));
           }
         } else {
+          final provider = Provider.of<HomeProvider>(context, listen: false);
           if (langName == 'ENGLISH') {
             Prefs.setPrefs('gameLanguage', 'en');
+            provider.changeFlag("assets/images/us_flag.png");
           }
           if (langName == 'ESPAÑOL') {
             Prefs.setPrefs('gameLanguage', 'es');
+            provider.changeFlag("assets/images/spanish_flag.png");
           }
         }
         setState(() {});

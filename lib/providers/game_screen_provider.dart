@@ -17,6 +17,8 @@ class GameScreenProvider with ChangeNotifier {
   final List<String> _allWordsFromAPI = [];
   List<String> get allWordsFromAPI => _allWordsFromAPI;
 
+  final List<String> _filteredWordsFromAPI = [];
+  List<String> get filteredWordsFromAPI => _filteredWordsFromAPI;
   final List<String> _correctWordsFromAPI = [];
   List<String> get correctWordsFromAPI => _correctWordsFromAPI;
 
@@ -30,15 +32,18 @@ class GameScreenProvider with ChangeNotifier {
 
   addToCorrectWordsIncorrectWordsFromAPI() {
     _allWordsFromAPI.clear();
+    _filteredWordsFromAPI.cast();
     _correctWordsFromAPI.clear();
     _incorrectWordsFromAPI.clear();
     if (gameData['gameDetails']['searchtype'] == 'search') {
       for (int i = 0; i < _gameData['limitedWords'].length; i++) {
         _allWordsFromAPI.add(_gameData['limitedWords'][i].toUpperCase());
+        filteredWordsFromAPI.add(_gameData['filteredWords'][0][i].toUpperCase());
       }
     } else {
       for (int i = 0; i < _gameData['limitedWords'].length; i++) {
         _allWordsFromAPI.add(_gameData['limitedWords'][i].toUpperCase());
+        filteredWordsFromAPI.add(_gameData['filteredWords'][0][i].toUpperCase());
       }
     }
 
@@ -288,6 +293,7 @@ class GameScreenProvider with ChangeNotifier {
 
   reset() {
     _allWordsFromAPI.clear();
+    _filteredWordsFromAPI.clear();
     _correctWordsFromAPI.clear();
     _incorrectWordsFromAPI.clear();
     _allSelectedIndex.clear();

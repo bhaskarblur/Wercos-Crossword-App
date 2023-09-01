@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_app_word_search/providers/category_provider.dart';
 import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
+import 'package:mobile_app_word_search/providers/home_provider.dart';
 import 'package:mobile_app_word_search/utils/all_colors.dart';
 import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:mobile_app_word_search/widget/widgets.dart';
@@ -261,13 +262,14 @@ class _DrugPageState extends State<DrugPage> {
                             onLineDrawn: (List<String> words) async {
                               print(words.last.toString());
 
-
+                              var index = provider.filteredWordsFromAPI.indexOf(words.last.toString());
+                              var word_ = provider.allWordsFromAPI[index];
                               if (provider.gameData['gameDetails']['searchtype'] == 'search')
                               {
                                 if (provider.allWordsFromAPI.contains(
-                                    words.last.toString())) {
+                                    word_)) {
                                   provider.addToCorrectWords(
-                                      words.last.toString());
+                                      word_);
                                   player.setAudioSource(AudioSource.uri(Uri.parse(
                                       "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/correctanswer_szreyi.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
                                   player.play();
@@ -280,7 +282,7 @@ class _DrugPageState extends State<DrugPage> {
                                 if (provider.correctWordsFromAPI.contains(
                                     words.last.toString())) {
                                   provider.addToCorrectWords(
-                                      words.last.toString());
+                                     word_);
                                   player.setAudioSource(AudioSource.uri(Uri.parse(
                                       "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/correctanswer_szreyi.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
                                   player.play();
@@ -290,7 +292,7 @@ class _DrugPageState extends State<DrugPage> {
                                 if (provider.incorrectWordsFromAPI.contains(
                                     words.last.toString())) {
                                   provider.addToInCorrectWords(
-                                      words.last.toString());
+                                      word_);
                                   player.setAudioSource(AudioSource.uri(Uri.parse(
                                       "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/wronganswer_oyvx87.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
                                   player.play();
@@ -314,7 +316,7 @@ class _DrugPageState extends State<DrugPage> {
                             LineDecoration(lineColors: lineColors,
                                 incorrectColor: Colors.red,
                                 strokeWidth: 28, borderColor: Colors.red ),
-                            allWords: provider.allWordsFromAPI.isNotEmpty ? provider.allWordsFromAPI : [],
+                            allWords: provider.filteredWordsFromAPI.isNotEmpty ? provider.filteredWordsFromAPI : [],
                             correctWords : provider.gameData['gameDetails']
                             ['searchtype'] ==
                                 'challenge' ? provider.correctWordsFromAPI : provider.allWordsFromAPI,
@@ -502,6 +504,10 @@ class _DrugPageState extends State<DrugPage> {
                 if (value['message'] != null) {
                   dialog(context, 'No Game Available', () {
                     Nav.pop(context);
+                    final provider =
+                    Provider.of<HomeProvider>(context, listen: false);
+                    provider.changeSelectedIndex(1);
+
                   });
                 }
               }
@@ -538,6 +544,9 @@ class _DrugPageState extends State<DrugPage> {
             } else {
                 dialog(context, 'No Game Available', () {
                   Nav.pop(context);
+                  final provider =
+                  Provider.of<HomeProvider>(context, listen: false);
+                  provider.changeSelectedIndex(1);
                 });
               
             }
@@ -588,6 +597,9 @@ class _DrugPageState extends State<DrugPage> {
               } else {
                 dialog(context, 'No Game Available', () {
                   Nav.pop(context);
+                  final provider =
+                  Provider.of<HomeProvider>(context, listen: false);
+                  provider.changeSelectedIndex(1);
                 });
               }
             });
@@ -624,6 +636,9 @@ class _DrugPageState extends State<DrugPage> {
                 if (value['message'] != null) {
                   dialog(context, 'No Game Available', () {
                     Nav.pop(context);
+                    final provider =
+                    Provider.of<HomeProvider>(context, listen: false);
+                    provider.changeSelectedIndex(1);
                   });
                 }
               }
