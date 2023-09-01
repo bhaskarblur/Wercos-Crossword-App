@@ -7,10 +7,19 @@ class GameScreenProvider with ChangeNotifier {
   dynamic _gameEnded = false;
   dynamic get gameEnded => _gameEnded;
 
+
+  dynamic _allowMark = true;
+  dynamic get allowMark => _allowMark;
+
   changeGameData(dynamic value) {
     print('add data');
     _gameData = value;
     addToTiles();
+    notifyListeners();
+  }
+
+  setAllowMark(status) {
+    _allowMark=status;
     notifyListeners();
   }
 

@@ -158,178 +158,186 @@ class CrosswordState extends State<Crossword> {
     Center(
             child: GestureDetector(
               onPanStart: (DragStartDetails details) {
+                final provider = Provider.of<GameScreenProvider>(context, listen: false);
 
-                color = generateRandomColor();
-                if(!player.playing) {
-                  // Create a player
-                  player.setAudioSource(AudioSource.uri(Uri.parse(
-                      "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693170533/select_ujtlvr.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
-                  player.play();
-                  print(player.playing);
-                }
-                else {
-                  player.stop();
-                }
-                setState(() {
-                  startPoint = LetterOffset(
-                      offset: details.localPosition, spacing: widget.spacing);
-                  endPoint = LetterOffset(
-                      offset: details.localPosition, spacing: widget.spacing);
-                  lineList.add(WordLine(
-                      offsets: [startPoint!, endPoint!],
-                      color: color!,
-                      letters: letters,
-                      acceptReversedDirection:
-                      widget.acceptReversedDirection!));
-                });
-              },
-              onPanUpdate: (DragUpdateDetails details) {
-
-                setState(() {
-
-                  //get initial positions based on user interaction on the panel
-                  final dx = details.localPosition.dx - startPoint!.offset.dx;
-                  final dy = details.localPosition.dy - startPoint!.offset.dy;
-
-                  double angle = atan2(dy, dx);
-
-                  // Round the angle to the nearest multiple of 45 degrees
-                  angle = (angle / (pi / 4)).round() * (pi / 4);
-
-                  final length = sqrt(dx * dx + dy * dy);
-
-                  //get the restricted coordinates using the angle
-                  final restrictedDx = cos(angle) * length;
-                  final restrictedDy = sin(angle) * length;
-
-                  //Use a custom class to get suitable conversions
-                  LetterOffset c = LetterOffset(
-                      offset: Offset(startPoint!.offset.dx + restrictedDx,
-                          startPoint!.offset.dy + restrictedDy),
-                      spacing: widget.spacing);
-
-                  //line can only be drawn by touching inside the panel
-                  if (isWithinLimit(c)) {
-                    endPoint = c;
-                    lineList.last = WordLine(
+                if(provider.allowMark) {
+                  color = generateRandomColor();
+                  if (!player.playing) {
+                    // Create a player
+                    player.setAudioSource(AudioSource.uri(Uri.parse(
+                        "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693170533/select_ujtlvr.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+                    player.play();
+                    print(player.playing);
+                  }
+                  else {
+                    player.stop();
+                  }
+                  setState(() {
+                    startPoint = LetterOffset(
+                        offset: details.localPosition, spacing: widget.spacing);
+                    endPoint = LetterOffset(
+                        offset: details.localPosition, spacing: widget.spacing);
+                    lineList.add(WordLine(
                         offsets: [startPoint!, endPoint!],
                         color: color!,
                         letters: letters,
                         acceptReversedDirection:
-                        widget.acceptReversedDirection!);
+                        widget.acceptReversedDirection!));
+                  });
+                }
+              },
+              onPanUpdate: (DragUpdateDetails details) {
 
-                  }
-                });
+    final provider = Provider.of<GameScreenProvider>(context, listen: false);
+
+    if(provider.allowMark) {
+      setState(() {
+        //get initial positions based on user interaction on the panel
+        final dx = details.localPosition.dx - startPoint!.offset.dx;
+        final dy = details.localPosition.dy - startPoint!.offset.dy;
+
+        double angle = atan2(dy, dx);
+
+        // Round the angle to the nearest multiple of 45 degrees
+        angle = (angle / (pi / 4)).round() * (pi / 4);
+
+        final length = sqrt(dx * dx + dy * dy);
+
+        //get the restricted coordinates using the angle
+        final restrictedDx = cos(angle) * length;
+        final restrictedDy = sin(angle) * length;
+
+        //Use a custom class to get suitable conversions
+        LetterOffset c = LetterOffset(
+            offset: Offset(startPoint!.offset.dx + restrictedDx,
+                startPoint!.offset.dy + restrictedDy),
+            spacing: widget.spacing);
+
+        //line can only be drawn by touching inside the panel
+        if (isWithinLimit(c)) {
+          endPoint = c;
+          lineList.last = WordLine(
+              offsets: [startPoint!, endPoint!],
+              color: color!,
+              letters: letters,
+              acceptReversedDirection:
+              widget.acceptReversedDirection!);
+        }
+      });
+    }
               },
               onPanEnd: (DragEndDetails details)  {
-                //get the last line drawn from the list
-                List<Offset> usedOffsets = lineList.last.getTotalOffsets;
-                if(!player.playing) {
+    final provider = Provider.of<GameScreenProvider>(context, listen: false);
+
+    if(provider.allowMark) {
+      //get the last line drawn from the list
+      List<Offset> usedOffsets = lineList.last.getTotalOffsets;
+      if (!player.playing) {
+        // Create a player
+        player.setAudioSource(AudioSource.uri(Uri.parse(
+            "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693170533/select_ujtlvr.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+        player.play();
+        print(player.playing);
+      }
+      else {
+        player.stop();
+      }
+      setState(() {
+        //Check if the line can be drawn on specific angles
+        if (selectedOffsets
+            .toSet()
+            .intersection(usedOffsets.toSet())
+            .isEmpty &&
+            lineList.last.offsets
+                .map((e) => e.getSmallerOffset)
+                .toSet()
+                .length >
+                1 &&
+            (((widget.drawHorizontalLine ?? true)
+                ? isHorizontalLine(lineList.last.offsets)
+                : false) ||
+                ((widget.drawVerticalLine ?? true)
+                    ? isVerticalLine(lineList.last.offsets)
+                    : false) ||
+                ((widget.drawCrossLine ?? true)
+                    ? isCrossLine(lineList.last.offsets)
+                    : false))) {
+          //   selectedOffsets.addAll(usedOffsets);
+          print('word:');
+          print(lineList.last.word);
+
+          print('incorrect words:');
+          print(widget.incorrWords);
+
+          final provider = Provider.of<GameScreenProvider>(
+              context, listen: false);
+
+          if (!wordsMarked.contains(lineList.last.word)) {
+            if (widget.allWords.contains(lineList.last.word)) {
+              if (widget.correctWords.contains(lineList.last.word)) {
+                //set a line color when the selected word is correct
+                // lineList.last.color =
+                // widget.lineDecoration!.correctColor!;
+                print('correct');
+                // selectedOffsets.addAll(usedOffsets);
+                wordsMarked.add(lineList.last.word);
+              }
+              else if (widget.incorrWords.contains(lineList.last
+                  .word)) {
+                //set a line color when the selected word is incorrect
+                lineList.last.color =
+                widget.lineDecoration!.incorrectColor!;
+                print('incorrect');
+                // selectedOffsets.addAll(usedOffsets);
+                wordsMarked.add(lineList.last.word);
+              }
+
+              widget.onLineDrawn(lineList.map((e) => e.word)
+                  .toList());
+            }
+            else {
+              Future.delayed(const Duration(milliseconds: 250), () {
+                if (!player.playing) {
                   // Create a player
                   player.setAudioSource(AudioSource.uri(Uri.parse(
-                      "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693170533/select_ujtlvr.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+                      "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/notmatched_vbbjtb.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
                   player.play();
                   print(player.playing);
                 }
                 else {
                   player.stop();
                 }
-                setState(()  {
-                  //Check if the line can be drawn on specific angles
-                  if (selectedOffsets
-                      .toSet()
-                      .intersection(usedOffsets.toSet())
-                      .isEmpty &&
-                      lineList.last.offsets
-                          .map((e) => e.getSmallerOffset)
-                          .toSet()
-                          .length >
-                          1 &&
-                      (((widget.drawHorizontalLine ?? true)
-                          ? isHorizontalLine(lineList.last.offsets)
-                          : false) ||
-                          ((widget.drawVerticalLine ?? true)
-                              ? isVerticalLine(lineList.last.offsets)
-                              : false) ||
-                          ((widget.drawCrossLine ?? true)
-                              ? isCrossLine(lineList.last.offsets)
-                              : false))) {
-                 //   selectedOffsets.addAll(usedOffsets);
-                    print('word:');
-                    print(lineList.last.word);
+              });
+              startPoint = null;
+              endPoint = null;
+              lineList.removeLast();
 
-                    print('incorrect words:');
-                    print(widget.incorrWords);
+              // if (widget.lineDecoration!.incorrectColor != null) {
+              //   set a line color when the selected word is incorrect
+              // lineList.last.color =
+              // widget.lineDecoration!.incorrectColor!;
+              // }
+              // else {
 
-                    final provider = Provider.of<GameScreenProvider>(context, listen: false);
+              // selectedOffsets.remove(usedOffsets);
+              // }
+            }
+          }
+          else {
+            startPoint = null;
+            endPoint = null;
+            lineList.removeLast();
+          }
+          //return a list of word
 
-                    if(!wordsMarked.contains(lineList.last.word)) {
-
-                      if (widget.allWords.contains(lineList.last.word)) {
-                        if (widget.correctWords.contains(lineList.last.word)) {
-                          //set a line color when the selected word is correct
-                          // lineList.last.color =
-                          // widget.lineDecoration!.correctColor!;
-                          print('correct');
-                          // selectedOffsets.addAll(usedOffsets);
-                          wordsMarked.add(lineList.last.word);
-
-                        }
-                        else if (widget.incorrWords.contains(lineList.last
-                            .word)) {
-                          //set a line color when the selected word is incorrect
-                          lineList.last.color =
-                          widget.lineDecoration!.incorrectColor!;
-                          print('incorrect');
-                          // selectedOffsets.addAll(usedOffsets);
-                          wordsMarked.add(lineList.last.word);
-                        }
-
-                        widget.onLineDrawn(lineList.map((e) => e.word)
-                            .toList());
-                      }
-                      else {
-                        Future.delayed(const Duration(milliseconds: 250), () {
-                          if (!player.playing) {
-                            // Create a player
-                            player.setAudioSource(AudioSource.uri(Uri.parse(
-                                "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/notmatched_vbbjtb.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
-                            player.play();
-                            print(player.playing);
-                          }
-                          else {
-                            player.stop();
-                          }
-                        });
-                        startPoint = null;
-                        endPoint = null;
-                        lineList.removeLast();
-
-                        // if (widget.lineDecoration!.incorrectColor != null) {
-                        //   set a line color when the selected word is incorrect
-                        // lineList.last.color =
-                        // widget.lineDecoration!.incorrectColor!;
-                        // }
-                        // else {
-
-                        // selectedOffsets.remove(usedOffsets);
-                        // }
-                      }
-                    }
-                    else {
-                      startPoint = null;
-                      endPoint = null;
-                      lineList.removeLast();
-                    }
-                    //return a list of word
-
-                  } else {
-                    print('already used');
-                    startPoint = null;
-                    endPoint = null;
-                    lineList.removeLast();
-                  }
-                });
+        } else {
+          print('already used');
+          startPoint = null;
+          endPoint = null;
+          lineList.removeLast();
+        }
+      });
+    }
               },
               child: CustomPaint(
                 //paints lines on the screen

@@ -5,7 +5,7 @@ class HomeProvider with ChangeNotifier {
   int _selectedIndex = 4;
   int get selectedIndex => _selectedIndex;
 
-  String _flag_selected = "assets/images/spanish_flag.png";
+  String _flag_selected = "assets/images/us_flag.png";
   String get flag_selected => _flag_selected;
   changeSelectedIndex(int value) {
     _selectedIndex = value;
@@ -16,11 +16,11 @@ class HomeProvider with ChangeNotifier {
     Prefs.getPrefs('gameLanguage')
     .then((value) => {
       debugPrint(value),
-      if(value.toString().contains("en")) {
-        _flag_selected = "assets/images/us_flag.png"
+      if(value.toString().contains("es")) {
+        _flag_selected = "assets/images/spanish_flag.png"
       }
       else {
-        _flag_selected = "assets/images/spanish_flag.png"
+        _flag_selected = "assets/images/us_flag.png"
       }
     });
     return _flag_selected;

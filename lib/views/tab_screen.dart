@@ -291,6 +291,7 @@ class TabScreenState extends State<TabScreen> {
       print(player.playing);
     }
     provider.setGameEnded(true);
+
     p.stopSeconds();
     p.setTicking(false);
     provider.allWordsFromAPI.forEach((element) {

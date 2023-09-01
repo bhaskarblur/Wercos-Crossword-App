@@ -727,6 +727,9 @@ class _DrugPageState extends State<DrugPage> {
         Provider.of<GameScreenProvider>(context, listen: false);
     final p = Provider.of<TimerProvider>(context, listen: false);
 
+    p.stopSeconds();
+    p.setTicking(false);
+    gameProvider.setAllowMark(false);
     Future.delayed(const Duration(milliseconds: 500), () {
       if (gameProvider.gameData['gameDetails']['searchtype'] == 'search') {
         Nav.push(
