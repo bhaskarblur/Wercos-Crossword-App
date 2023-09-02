@@ -222,7 +222,7 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                                 pageName: 'levelComplete',
                                 gameDetails: provider.gameData['gameDetails']));
 
-                        provider.reset();
+                      //  provider.reset();
                       },
                       title: AppLocalizations.of(context)!.see_leaderboard),
                   const SizedBox(height: 16),

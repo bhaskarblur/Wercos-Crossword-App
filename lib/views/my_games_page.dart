@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app_word_search/api_services.dart';
@@ -178,13 +179,21 @@ class _MyGamesPageState extends State<MyGamesPage> {
       child: Column(
         children: [
           Center(
-              child: Label(
+              child: new GestureDetector(
+              onTap: () async {
+                await Clipboard.setData(ClipboardData(text: details['sharecode'].toString()));
+                var snackBar = SnackBar(content: Text('Share code Copied')
+                , backgroundColor: AllColors.liteDarkPurple );
+
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+            }, child: Label(
             text:
                 '${AppLocalizations.of(context)!.code_to_share.toUpperCase()}: ${details['sharecode'].toString()}',
             fontSize: FontSize.p2,
             align: TextAlign.center,
             maxLine: 2,
-          )),
+          ))),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

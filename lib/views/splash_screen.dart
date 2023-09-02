@@ -126,6 +126,7 @@ class _SplashScreenState extends State<SplashScreen>
             .then((value) {
           final provider = Provider.of<ProfileProvider>(context, listen: false);
           provider.chnageProfile(value);
+          Prefs.setPrefs('subStatus', value['subscriptionstatus']);
           gotoTab();
         });
       });

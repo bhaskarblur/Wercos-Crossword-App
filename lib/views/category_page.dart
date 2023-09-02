@@ -36,14 +36,19 @@ class _CategoryPageState extends State<CategoryPage> {
     super.initState();
   }
 
+  late final String subStatus;
   getData() {
     final provider = Provider.of<CategoryProvider>(context, listen: false);
 
-    Prefs.getPrefs('language').then((language) {
+    Prefs.getPrefs('subStatus').then((value) => {
+      subStatus = value!
+    });
+    Prefs.getPrefs('gameLanguage').then((language) {
       _apiServices.post(
           context: context,
           endpoint: 'getcatstopics',
-          body: {"language": language}).then((value) {
+          body: {"language": language, "searchtype": widget.type=='search' ? 'search': 'challenge'}).then((value) {
+            print(widget.type);
         provider.changeCategories(value['categoriesTopics']);
       });
     });
@@ -113,7 +118,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                             if (provider.categories[index]
                                                         ['topicsList'][i]
                                                     ['status'] ==
-                                                'locked') {
+                                                'locked' && subStatus.isEmpty || subStatus.toString().contains('none')) {
                                               CustomDialog.showPurchaseDialog(
                                                   context: context);
                                             } else {
@@ -159,6 +164,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                           },
                                           lock: provider.categories[index]
                                               ['topicsList'][i]['status'],
+                                          subStatus: subStatus,
                                           topicName: provider.categories[index]
                                               ['topicsList'][i]['topicsname']);
                                     }),
@@ -183,11 +189,13 @@ class TopicButton extends StatelessWidget {
     required this.onPressed,
     required this.topicName,
     required this.lock,
+    required this.subStatus
   });
 
   final VoidCallback onPressed;
   final String topicName;
   final String lock;
+  final String subStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -206,10 +214,10 @@ class TopicButton extends StatelessWidget {
             child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (lock == 'locked')
+            if (lock == 'locked' && subStatus.isEmpty || subStatus.toString().contains('none'))
               const Icon(CupertinoIcons.lock_fill,
                   color: AllColors.liteGreen, size: 20),
-            if (lock == 'locked') horGap(10),
+            if (lock == 'locked' && subStatus.isEmpty || subStatus.toString().contains('none')) horGap(10),
             Label(
               text: topicName,
               fontSize: FontSize.p2,

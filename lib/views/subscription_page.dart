@@ -277,6 +277,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   }
 
   subscribe(String subStatus) {
+
+
     Prefs.getToken().then((token) {
       Prefs.getPrefs('loginId').then((loginId) {
         _apiServices.post(
@@ -290,6 +292,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
           dialog(context, value['message'], () {
             Nav.pop(context);
           });
+          Prefs.setPrefs('subStatus', subStatus);
           _apiServices
               .post(
                   context: context,

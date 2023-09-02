@@ -75,14 +75,15 @@ class _CreateWordPageState extends State<CreateWordPage> {
               _c1.text = value['gameDetails']['gamename'];
               if (value['gameDetails']['searchtype'] == 'search') {
                 value['allWords'].forEach((e) {
-                  _list.add(Word(word: e['words'], correct: true));
+                  print(e);
+                  _list.add(Word(word: e, correct: true));
                 });
               } else {
                 value['correctWords'].forEach((e) {
-                  _list.add(Word(word: e['words'], correct: true));
+                  _list.add(Word(word: e, correct: true));
                 });
                 value['incorrectWords'].forEach((e) {
-                  _list.add(Word(word: e['words'], correct: false));
+                  _list.add(Word(word: e, correct: false));
                 });
               }
               setState(() {});
@@ -325,9 +326,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                               List<String> incorrectWords = [];
 
                               for (var element in _list) {
-                                allWords.add(element.word!.toString().
-                                trim().replaceAll('.', '').replaceAll('-','').
-                                replaceAll('!','').replaceAll('_', '').replaceAll('@', '').replaceAll(',',''));
+                                allWords.add(element.word!.toString());
                                 if (element.correct!) {
                                   correctWords.add(element.word!.toString().trim());
                                 } else {
@@ -367,7 +366,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                     if (widget.gameDetails != null)
                                       "gameId": widget.gameDetails['gameid']
                                           .toString(),
-                                    "gameType": public ? 'public' : 'privet',
+                                    "gameType": public ? 'public' : 'private',
                                     "searchType": widget.type == 'challenge'
                                         ? 'challenge'
                                         : "search",

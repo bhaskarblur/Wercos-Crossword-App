@@ -166,8 +166,9 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
                                   Navigator.pop(context);
                                 }
                                 if (widget.pageName == 'levelComplete') {
-                                  Nav.pushAndRemoveAll(
-                                      context, const TabScreen());
+                                  // Nav.pushAndRemoveAll(
+                                  //     context, const TabScreen());
+                                  Navigator.pop(context);
                                 }
                               },
                               title: AppLocalizations.of(context)!.back,

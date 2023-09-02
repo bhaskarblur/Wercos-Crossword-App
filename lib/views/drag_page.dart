@@ -147,7 +147,7 @@ class _DrugPageState extends State<DrugPage> {
                                         child: GridView.builder(
                                           shrinkWrap: true,
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 16, vertical: 16),
+                                              horizontal: 10, vertical: 16),
                                           itemCount:
                                               provider.allWordsFromAPI.length,
                                           gridDelegate:
@@ -155,7 +155,7 @@ class _DrugPageState extends State<DrugPage> {
                                                   childAspectRatio: 5,
                                                   crossAxisCount: 3),
                                           itemBuilder: (context, index) {
-                                            return Text(
+                                            return ClipRect( child: Text(
                                                 provider.allWordsFromAPI[index]
                                                     .toUpperCase(),
                                                 textAlign: (index + 1) % 3 == 0
@@ -181,7 +181,7 @@ class _DrugPageState extends State<DrugPage> {
                                                                     index]
                                                                 .toUpperCase())
                                                         ? Colors.green
-                                                        : Colors.white));
+                                                        : Colors.white)));
                                           },
                                         ),
                                       ),
