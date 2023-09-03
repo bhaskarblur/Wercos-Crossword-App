@@ -118,7 +118,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                             if (provider.categories[index]
                                                         ['topicsList'][i]
                                                     ['status'] ==
-                                                'locked' && subStatus.isEmpty || subStatus.toString().contains('none')) {
+                                                'locked' && subStatus.toString().contains('none')) {
                                               CustomDialog.showPurchaseDialog(
                                                   context: context);
                                             } else {
@@ -163,7 +163,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                             }
                                           },
                                           lock: provider.categories[index]
-                                              ['topicsList'][i]['status'],
+                                          ['topicsList'][i]['status'],
                                           subStatus: subStatus,
                                           topicName: provider.categories[index]
                                               ['topicsList'][i]['topicsname']);
@@ -214,10 +214,10 @@ class TopicButton extends StatelessWidget {
             child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (lock == 'locked' && subStatus.isEmpty || subStatus.toString().contains('none'))
+            if (lock == "locked" && subStatus.toString().contains('none'))
               const Icon(CupertinoIcons.lock_fill,
                   color: AllColors.liteGreen, size: 20),
-            if (lock == 'locked' && subStatus.isEmpty || subStatus.toString().contains('none')) horGap(10),
+            if (lock == 'locked' && subStatus.toString().contains('none')) horGap(10),
             Label(
               text: topicName,
               fontSize: FontSize.p2,

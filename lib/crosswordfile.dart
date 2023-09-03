@@ -347,6 +347,7 @@ class CrosswordState extends State<Crossword> {
                     lineList: lineList,
                     textStyle: widget.textStyle,
                     context_: context,
+                    incorrWords: widget.incorrWords,
                     borderColor: Colors.red,
                     spacing: widget.spacing,
                     hints: widget.allWords),

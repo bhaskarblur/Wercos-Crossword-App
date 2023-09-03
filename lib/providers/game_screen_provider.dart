@@ -20,7 +20,7 @@ class GameScreenProvider with ChangeNotifier {
 
   setAllowMark(status) {
     _allowMark=status;
-    notifyListeners();
+    // notifyListeners();
   }
 
   final List<String> _allWordsFromAPI = [];
@@ -41,7 +41,7 @@ class GameScreenProvider with ChangeNotifier {
 
   addToCorrectWordsIncorrectWordsFromAPI() {
     _allWordsFromAPI.clear();
-    _filteredWordsFromAPI.cast();
+    _filteredWordsFromAPI.clear();
     _correctWordsFromAPI.clear();
     _incorrectWordsFromAPI.clear();
     if (gameData['gameDetails']['searchtype'] == 'search') {
@@ -100,6 +100,16 @@ class GameScreenProvider with ChangeNotifier {
     incorrectWords.add(correctWord);
     notifyListeners();
   }
+
+  addToFilteredCorrectWords(var correctWord) {
+    filteredcorrectWords.add(correctWord);
+    notifyListeners();
+  }
+
+  addToFilteredInCorrectWords(var correctWord) {
+    filteredincorrectWords.add(correctWord);
+    notifyListeners();
+  }
   resetIncorrectWordsFromAPI() {
     _incorrectWordsFromAPI.clear();
     notifyListeners();
@@ -148,6 +158,12 @@ class GameScreenProvider with ChangeNotifier {
 
   final List<String> _incorrectWords = [];
   List<String> get incorrectWords => _incorrectWords;
+
+  final List<String> _filteredcorrectWords = [];
+  List<String> get filteredcorrectWords => _filteredcorrectWords;
+
+  final List<String> _filteredincorrectWords = [];
+  List<String> get filteredincorrectWords => _filteredincorrectWords;
 
   addToCorrectOrIncorrectWords() {
     int correctIndex = 0;

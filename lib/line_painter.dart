@@ -14,6 +14,7 @@ class LinePainter extends CustomPainter {
   final List<String> hints;
   final Color? correctColor;
   final TextStyle? textStyle;
+  final List<String> incorrWords;
   var context_;
   final Color? borderColor;
 
@@ -26,6 +27,7 @@ class LinePainter extends CustomPainter {
     required this.lineList,
     required this.spacing,
     required this.hints,
+    required this.incorrWords,
     this.context_,
     this.correctColor = Colors.green,
     this.borderColor
@@ -39,33 +41,49 @@ class LinePainter extends CustomPainter {
     final paint = Paint()
       ..strokeWidth = lineDecoration!.strokeWidth!
       ..isAntiAlias = true
+      ..style = PaintingStyle.stroke
       ..strokeCap = lineDecoration!.strokeCap!;
 
     Paint paintBorder = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 3
+      ..strokeWidth = 10
       ..color = borderColor!
-    ..strokeCap = lineDecoration!.strokeCap!;
+    ..strokeCap = StrokeCap.round;
 
     //paint lines on the grid
     for (var points in lineList) {
       //set the line color
       paint.color = points.color;
+
       for (int i = 0; i < points.offsets.length - 1; i++) {
-        canvas.drawLine( points.offsets[i].getBiggerOffset ,
-            points.offsets[i+1].getBiggerOffset, paint);
+
+        // Path path= Path();
+        // path.moveTo(points.offsets[i].getBiggerOffset.dx-2,
+        //     points.offsets[i].getBiggerOffset.dy-4);
+        // path.lineTo(points.offsets[i+1].getBiggerOffset.dx+4,
+        //     points.offsets[i+1].getBiggerOffset.dy+4);
+        //
+        // canvas.drawPath(path, paint);
 
 
+        // if(incorrWords.contains(points.word)) {
+        //   canvas.drawRRect(RRect.fromRectAndRadius(
+        //       Rect.fromLTRB(points.offsets[i].getBiggerOffset.dx -14,
+        //           points.offsets[i].getBiggerOffset.dy -14 ,
+        //           points.offsets[i+1].getBiggerOffset.dx +14,
+        //           points.offsets[i+1].getBiggerOffset.dy+14),Radius.circular(15.0)),paintBorder);
+        //
+        // }
+        // else {
 
-        // canvas.drawRRect(RRect.fromRectAndRadius(
-        //   Rect.fromLTRB(points.offsets[i].getBiggerOffset.dx -14,
-        //       points.offsets[i].getBiggerOffset.dy -14 ,
-        //       points.offsets[i+1].getBiggerOffset.dx +14,
-        //       points.offsets[i+1].getBiggerOffset.dy+14),Radius.circular(15.0)),paintBorder);
+
+          canvas.drawLine(points.offsets[i].getBiggerOffset,
+              points.offsets[i + 1].getBiggerOffset, paint);
 
 
-      }
+        }
     }
+
 
     //paint texts on the grid
     for (int i = 0; i < letters.length; i++) {
@@ -74,6 +92,7 @@ class LinePainter extends CustomPainter {
         double y = j.toDouble() * spacing.dy + spacing.dy / 2;
 
         // Draw letters
+
         TextPainter painter = TextPainter(
           text: TextSpan(
             text: letters[i][j],
@@ -82,7 +101,7 @@ class LinePainter extends CustomPainter {
                 , fontWeight: FontWeight.w800),
           ),
           textDirection: TextDirection.ltr,
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.center
         );
         painter.layout();
         painter.paint(

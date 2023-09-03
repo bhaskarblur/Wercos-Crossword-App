@@ -294,9 +294,9 @@ class TabScreenState extends State<TabScreen> {
 
     p.stopSeconds();
     p.setTicking(false);
-    provider.allWordsFromAPI.forEach((element) {
-      if (!provider.correctWords.contains(element) &&
-          !provider.incorrectWordsFromAPI.contains(element)) {
+    provider.filteredWordsFromAPI.forEach((element) {
+      if (!provider.filteredcorrectWords.contains(element) &&
+          !provider.filteredincorrectWords.contains(element)) {
         rest.add(element);
       }
     });

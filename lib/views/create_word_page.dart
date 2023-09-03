@@ -203,11 +203,21 @@ class _CreateWordPageState extends State<CreateWordPage> {
                   const SizedBox(height: 14),
                   CupertinoButton(
                     onPressed: () {
-                      if (_c2.text.isNotEmpty) {
-                        _list.add(
-                            Word(word: _c2.text.toUpperCase(), correct: true));
-                        selectedWordCount = _list.length.toString();
-                        _c2.clear();
+                      if(_c2.text.length>14) {
+                        var snackBar = SnackBar(content: Text('Word should be of 14 or less than 14 characters.')
+                            , backgroundColor: AllColors.liteDarkPurple );
+
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                      }
+                      else {
+                        if (_c2.text.isNotEmpty) {
+                          _list.add(
+                              Word(word: _c2.text.toUpperCase(),
+                                  correct: true));
+                          selectedWordCount = _list.length.toString();
+                          _c2.clear();
+                        }
                       }
                       setState(() {});
                     },
@@ -358,6 +368,9 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                     //     : wordLimit
                                     ,
                                     "allWords": jsonEncode(allWords),
+
+
+
                                     if (widget.type == 'challenge')
                                       "correctWords": jsonEncode(correctWords),
                                     if (widget.type == 'challenge')
@@ -425,6 +438,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: TextField(
                 controller: controller,
+
                 style: const TextStyle(color: Colors.white, fontSize: 16),
                 decoration: InputDecoration(
                     hintText: hint,

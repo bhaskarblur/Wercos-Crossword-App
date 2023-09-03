@@ -168,7 +168,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                           text:
                               "${AppLocalizations.of(context)!.remaining_game_of_day}: "
                                   "${ provider.profile['subscriptionstatus'] ==
-                                  'none'? provider.profile['gamesleft']+'/50' : '∞'}",
+                                  'none'? provider.profile['gamesleft'].toString() +'/50' : '∞'}",
                           fontSize: FontSize.p2),
                       const SizedBox(height: 50),
                     ],

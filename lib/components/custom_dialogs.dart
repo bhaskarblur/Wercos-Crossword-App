@@ -75,6 +75,70 @@ class CustomDialog {
         });
   }
 
+  static showGamesFinishedDialog({required BuildContext context}) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    height: 250,
+                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: AllColors.alertGradient),
+                    child: Scaffold(
+                      backgroundColor: Colors.transparent,
+                      body: Stack(children: [
+                        Positioned(
+                            top: 10,
+                            right: 10,
+                            child: CupertinoButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                padding: EdgeInsets.zero,
+                                minSize: 0,
+                                child: const Icon(
+                                    CupertinoIcons.multiply_circle,
+                                    color: AllColors.white,
+                                    size: 30))),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 50),
+                            child: Column(children: [
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  child: Label(
+                                      align: TextAlign.center,
+                                      text: "You have reached the limit of 50 games."
+                                          ,
+                                      fontSize: FontSize.p2)),
+                              const Spacer(),
+                              ShadowButton(
+                                  fillColors: const [
+                                    AllColors.semiLiteGreen,
+                                    AllColors.shineGreen
+                                  ],
+                                  onPressed: () {
+                                    Nav.pop(context);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                            const SubscriptionPage()));
+                                  },
+                                  title: AppLocalizations.of(context)!.upgrade)
+                            ]))
+                      ]),
+                    ))
+              ]);
+        });
+  }
   static showSuggestionDialog(
       {required BuildContext context,
       required List<Suggestion> suggestions}) async {

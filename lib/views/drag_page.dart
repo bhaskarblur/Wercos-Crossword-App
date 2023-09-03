@@ -13,6 +13,7 @@ import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:mobile_app_word_search/widget/widgets.dart';
 import 'package:provider/provider.dart';
 import '../api_services.dart';
+import '../components/custom_dialogs.dart';
 import '../crosswordfile.dart';
 import '../linedecoration.dart';
 import '../providers/timer_provider.dart';
@@ -152,10 +153,12 @@ class _DrugPageState extends State<DrugPage> {
                                               provider.allWordsFromAPI.length,
                                           gridDelegate:
                                               const SliverGridDelegateWithFixedCrossAxisCount(
-                                                  childAspectRatio: 5,
+                                                  childAspectRatio: 3.1,
                                                   crossAxisCount: 3),
                                           itemBuilder: (context, index) {
-                                            return ClipRect( child: Text(
+                                            return Container(
+
+                                                child: Text(
                                                 provider.allWordsFromAPI[index]
                                                     .toUpperCase(),
                                                 textAlign: (index + 1) % 3 == 0
@@ -165,6 +168,7 @@ class _DrugPageState extends State<DrugPage> {
                                                         : TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 15,
+                                                    height: 1.2,
                                                     decoration: provider
                                                             .correctWords
                                                             .contains(provider
@@ -191,7 +195,7 @@ class _DrugPageState extends State<DrugPage> {
                                       GridView.builder(
                                         shrinkWrap: true,
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 14, vertical: 14),
+                                            horizontal: 14, vertical: 16),
                                         itemCount:
                                             provider.allWordsFromAPI.length,
                                         physics:
@@ -211,6 +215,7 @@ class _DrugPageState extends State<DrugPage> {
                                                       : TextAlign.center,
                                               style: TextStyle(
                                                   fontSize: 15,
+                                                  height: 1.2,
                                                   decoration: provider
                                                           .correctWords
                                                           .contains(
@@ -270,6 +275,7 @@ class _DrugPageState extends State<DrugPage> {
                                     word_)) {
                                   provider.addToCorrectWords(
                                       word_);
+                                  provider.addToFilteredCorrectWords(words.last.toString());
                                   player.setAudioSource(AudioSource.uri(Uri.parse(
                                       "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/correctanswer_szreyi.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
                                   player.play();
@@ -283,6 +289,7 @@ class _DrugPageState extends State<DrugPage> {
                                     words.last.toString())) {
                                   provider.addToCorrectWords(
                                      word_);
+                                  provider.addToFilteredCorrectWords(words.last.toString());
                                   player.setAudioSource(AudioSource.uri(Uri.parse(
                                       "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/correctanswer_szreyi.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
                                   player.play();
@@ -293,6 +300,7 @@ class _DrugPageState extends State<DrugPage> {
                                     words.last.toString())) {
                                   provider.addToInCorrectWords(
                                       word_);
+                                  provider.addToFilteredInCorrectWords(words.last.toString());
                                   player.setAudioSource(AudioSource.uri(Uri.parse(
                                       "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/wronganswer_oyvx87.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
                                   player.play();
@@ -389,7 +397,9 @@ class _DrugPageState extends State<DrugPage> {
   @override
   void dispose() {
     super.dispose();
-    timer!.cancel();
+    if(timer !=null) {
+      timer!.cancel();
+    }
     // final provider = Provider.of<TimerProvider>(context, listen: false);
     // provider.cancelTimer();
   }
@@ -401,6 +411,7 @@ class _DrugPageState extends State<DrugPage> {
     timerProvider.stopSeconds();
     timerProvider.setTicking(false);
     timerProvider.resetSeconds();
+    provider.setAllowMark(true);
 
 
     print(provider.gameType);
@@ -496,19 +507,31 @@ class _DrugPageState extends State<DrugPage> {
                   "type": 'search',
                 }).then((value) {
               if (value['gameDetails'] != null) {
+
                 provider.changeGameData(value);
                 provider.addToCorrectWordsIncorrectWordsFromAPI();
 
                 startTimer();
               } else {
                 if (value['message'] != null) {
-                  dialog(context, 'No Game Available', () {
-                    Nav.pop(context);
-                    final provider =
-                    Provider.of<HomeProvider>(context, listen: false);
-                    provider.changeSelectedIndex(1);
-
-                  });
+                  if(value['message'].toString().contains('Cannot play more')) {
+                    // dialog(context, 'Your have reached daily limit of your games. Come back tomorrow or upgrade to continue.', () {
+                    //   Nav.pop(context);
+                    CustomDialog.showGamesFinishedDialog(
+                        context: context);
+                      // final provider =
+                      // Provider.of<HomeProvider>(context, listen: false);
+                      // provider.changeSelectedIndex(1);
+                    // });
+                  }
+                  else {
+                    dialog(context, 'No Game Available', () {
+                      Nav.pop(context);
+                      final provider =
+                      Provider.of<HomeProvider>(context, listen: false);
+                      provider.changeSelectedIndex(1);
+                    });
+                  }
                 }
               }
             });
@@ -542,12 +565,18 @@ class _DrugPageState extends State<DrugPage> {
 
               startTimer();
             } else {
+              if(value['message'].toString().contains('Cannot play more')) {
+                CustomDialog.showGamesFinishedDialog(
+                    context: context);
+              }
+              else {
                 dialog(context, 'No Game Available', () {
                   Nav.pop(context);
                   final provider =
                   Provider.of<HomeProvider>(context, listen: false);
                   provider.changeSelectedIndex(1);
                 });
+              }
               
             }
           });
@@ -595,12 +624,18 @@ class _DrugPageState extends State<DrugPage> {
 
                 startTimer();
               } else {
-                dialog(context, 'No Game Available', () {
-                  Nav.pop(context);
-                  final provider =
-                  Provider.of<HomeProvider>(context, listen: false);
-                  provider.changeSelectedIndex(1);
-                });
+                if(value['message'].toString().contains('Cannot play more')) {
+                  CustomDialog.showGamesFinishedDialog(
+                      context: context);
+                }
+                else {
+                  dialog(context, 'No Game Available', () {
+                    Nav.pop(context);
+                    final provider =
+                    Provider.of<HomeProvider>(context, listen: false);
+                    provider.changeSelectedIndex(1);
+                  });
+                }
               }
             });
           });
@@ -634,12 +669,18 @@ class _DrugPageState extends State<DrugPage> {
                 startTimer();
               } else {
                 if (value['message'] != null) {
-                  dialog(context, 'No Game Available', () {
-                    Nav.pop(context);
-                    final provider =
-                    Provider.of<HomeProvider>(context, listen: false);
-                    provider.changeSelectedIndex(1);
-                  });
+                  if(value['message'].toString().contains('Cannot play more')) {
+                    CustomDialog.showGamesFinishedDialog(
+                        context: context);
+                  }
+                  else {
+                    dialog(context, 'No Game Available', () {
+                      Nav.pop(context);
+                      final provider =
+                      Provider.of<HomeProvider>(context, listen: false);
+                      provider.changeSelectedIndex(1);
+                    });
+                  }
                 }
               }
             });
