@@ -46,7 +46,7 @@ class LinePainter extends CustomPainter {
 
     Paint paintBorder = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 10
+      ..strokeWidth = 3.5
       ..color = borderColor!
     ..strokeCap = StrokeCap.round;
 
@@ -58,12 +58,28 @@ class LinePainter extends CustomPainter {
       for (int i = 0; i < points.offsets.length - 1; i++) {
 
         // Path path= Path();
-        // path.moveTo(points.offsets[i].getBiggerOffset.dx-2,
-        //     points.offsets[i].getBiggerOffset.dy-4);
-        // path.lineTo(points.offsets[i+1].getBiggerOffset.dx+4,
-        //     points.offsets[i+1].getBiggerOffset.dy+4);
+        // path.moveTo(points.offsets[i].getBiggerOffset.dx-8,
+        //     points.offsets[i].getBiggerOffset.dy-10);
         //
-        // canvas.drawPath(path, paint);
+        // path.lineTo(points.offsets[i+1].getBiggerOffset.dx+8,
+        //     points.offsets[i+1].getBiggerOffset.dy+10);
+        //
+        // path.arcToPoint(Offset(points.offsets[i+1].getBiggerOffset.dx+8,
+        //     points.offsets[i+1].getBiggerOffset.dy+10), radius:
+        // Radius.circular(10));
+        //
+        // path.moveTo(points.offsets[i+1].getBiggerOffset.dx+8,
+        //     points.offsets[i+1].getBiggerOffset.dy+10);
+        //
+        // path.lineTo(points.offsets[i].getBiggerOffset.dx + 10,
+        //     points.offsets[i].getBiggerOffset.dy-12);
+        //
+        // path.arcToPoint(Offset(points.offsets[i].getBiggerOffset.dx-8,
+        //     points.offsets[i].getBiggerOffset.dy-10),
+        //     radius:
+        // Radius.circular(10));
+        //
+        // canvas.drawPath(path, paintBorder);
 
 
         // if(incorrWords.contains(points.word)) {

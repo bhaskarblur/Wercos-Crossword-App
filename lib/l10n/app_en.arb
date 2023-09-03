@@ -97,6 +97,11 @@
     "hits" : "HITS",
     "offf" : "of",
     "time" : "TIME",
+    "ok":"OK",
+    "wrongcode":"Invalid share code entered. Please try again!",
+    "nogame":"No game available to play!",
+    "words_limit":"You can't add more than 6 games in free plan.",
+    "game_limit": "You have reached the limit of 50 games.",
     "see_leaderboard" : "See leaderboard",
     "startNew_game" : "Start new game",
 

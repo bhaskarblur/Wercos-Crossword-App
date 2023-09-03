@@ -14,6 +14,7 @@ import 'package:mobile_app_word_search/widget/navigator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../components/custom_dialogs.dart';
 import '../widget/sahared_prefs.dart';
 import '../widget/widgets.dart';
 
@@ -112,6 +113,8 @@ class _PlayPageState extends State<PlayPage> {
                                   "type": 'challenge',
                                   'language':language,
                                 }).then((value) {
+                                  print('testgmae');
+                                  print(value);
                                   if (value['gameDetails'] != null) {
                                     gameScreenProvider.changeGameData(value);
                                     gameScreenProvider.changeGameType('randomwordchallenge');
@@ -128,6 +131,10 @@ class _PlayPageState extends State<PlayPage> {
                                       dialog(context, value['message'], () {
                                         Nav.pop(context);
                                       });
+                                    }
+                                    else {
+                                      CustomDialog.noGameAvailable(
+                                          context: context);
                                     }
                                   }
                                 });
@@ -228,9 +235,12 @@ class _PlayPageState extends State<PlayPage> {
               }
             } else {
               if (value['message'] != null) {
-                dialog(context, value['message'], () {
-                  Nav.pop(context);
-                });
+                CustomDialog.wrongCode(
+                    context: context);
+              }
+              else {
+                CustomDialog.wrongCode(
+                    context: context);
               }
             }
           });

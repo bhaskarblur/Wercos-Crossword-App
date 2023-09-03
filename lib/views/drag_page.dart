@@ -46,6 +46,7 @@ class _DrugPageState extends State<DrugPage> {
   @override
   void initState() {
     getData();
+
     super.initState();
     lineColors = List.generate(100, (index) => generateRandomColor()).toList();
     player = AudioPlayer();
@@ -195,14 +196,14 @@ class _DrugPageState extends State<DrugPage> {
                                       GridView.builder(
                                         shrinkWrap: true,
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 14, vertical: 16),
+                                            horizontal: 10, vertical: 16),
                                         itemCount:
                                             provider.allWordsFromAPI.length,
                                         physics:
                                             const NeverScrollableScrollPhysics(),
                                         gridDelegate:
                                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                                childAspectRatio: 5,
+                                                childAspectRatio: 3.1,
                                                 crossAxisCount: 3),
                                         itemBuilder: (context, index) {
                                           return Text(
@@ -438,6 +439,7 @@ class _DrugPageState extends State<DrugPage> {
           categorySearch();
         }
 
+
   }
 
   void startTimer() {
@@ -525,12 +527,8 @@ class _DrugPageState extends State<DrugPage> {
                     // });
                   }
                   else {
-                    dialog(context, 'No Game Available', () {
-                      Nav.pop(context);
-                      final provider =
-                      Provider.of<HomeProvider>(context, listen: false);
-                      provider.changeSelectedIndex(1);
-                    });
+                    CustomDialog.noGameAvailable(
+                        context: context);
                   }
                 }
               }
@@ -570,12 +568,8 @@ class _DrugPageState extends State<DrugPage> {
                     context: context);
               }
               else {
-                dialog(context, 'No Game Available', () {
-                  Nav.pop(context);
-                  final provider =
-                  Provider.of<HomeProvider>(context, listen: false);
-                  provider.changeSelectedIndex(1);
-                });
+                CustomDialog.noGameAvailable(
+                    context: context);
               }
               
             }
@@ -629,12 +623,8 @@ class _DrugPageState extends State<DrugPage> {
                       context: context);
                 }
                 else {
-                  dialog(context, 'No Game Available', () {
-                    Nav.pop(context);
-                    final provider =
-                    Provider.of<HomeProvider>(context, listen: false);
-                    provider.changeSelectedIndex(1);
-                  });
+                  CustomDialog.noGameAvailable(
+                      context: context);
                 }
               }
             });
@@ -674,12 +664,14 @@ class _DrugPageState extends State<DrugPage> {
                         context: context);
                   }
                   else {
-                    dialog(context, 'No Game Available', () {
-                      Nav.pop(context);
-                      final provider =
-                      Provider.of<HomeProvider>(context, listen: false);
-                      provider.changeSelectedIndex(1);
-                    });
+                    // dialog(context, 'No Game Available', () {
+                    //   Nav.pop(context);
+                    //   final provider =
+                    //   Provider.of<HomeProvider>(context, listen: false);
+                    //   provider.changeSelectedIndex(1);
+                    // });
+                    CustomDialog.noGameAvailable(
+                        context: context);
                   }
                 }
               }

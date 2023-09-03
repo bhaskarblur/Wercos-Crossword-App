@@ -94,6 +94,11 @@
     "hits" : "ACIERTOS",
     "offf" : "de",
     "time" : "TIEMPO",
+     "ok":"OK",
+      "wrongcode":"Se ingresó un código compartido no válido. ¡Inténtalo de nuevo!",
+    "nogame":"¡No hay ningún juego disponible para jugar!",
+    "game_limit": "Has alcanzado el límite de 50 juegos.",
+    "words_limit":"No puedes agregar más de 6 juegos en el plan gratuito.",
     "see_leaderboard" : "Ver tabla de posiciones",
     "startNew_game" : "Empezar juego nuevo",
 

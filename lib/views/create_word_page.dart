@@ -211,13 +211,41 @@ class _CreateWordPageState extends State<CreateWordPage> {
 
                       }
                       else {
-                        if (_c2.text.isNotEmpty) {
+                        Prefs.getPrefs('subStatus').then((value) => {
+
+                          if(value.toString().contains('1month') ||
+                              value.toString().contains('1year')  ) {
+                            if (_c2.text.isNotEmpty) {
                           _list.add(
                               Word(word: _c2.text.toUpperCase(),
-                                  correct: true));
-                          selectedWordCount = _list.length.toString();
-                          _c2.clear();
+                                  correct: true)),
+                          selectedWordCount = _list.length.toString(),
+                          _c2.clear()
                         }
+                          }
+                          else {
+                        if(_list.length >= 6) {
+                          if (_c2.text.isNotEmpty) {
+                            FocusScope.of(context).unfocus(),
+                            Future.delayed(const Duration(milliseconds: 200), (){
+                              CustomDialog.showWordsLimit(
+                                  context: context);
+                            }),
+
+                          }
+                        }
+                        else {
+                          if (_c2.text.isNotEmpty) {
+                            _list.add(
+                                Word(word: _c2.text.toUpperCase(),
+                                    correct: true)),
+                            selectedWordCount = _list.length.toString(),
+                            _c2.clear()
+                          }
+                        },
+                          }
+                        });
+
                       }
                       setState(() {});
                     },
