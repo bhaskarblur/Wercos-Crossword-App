@@ -65,6 +65,8 @@ class CrosswordState extends State<Crossword> {
   LetterOffset? endPoint;
   List<List<String>> letters = [];
   late final player;
+  List<String> incorrectMarked = [];
+  bool isMarked=false;
   @override
   void initState() {
     // TODO: implement initState
@@ -173,6 +175,7 @@ class CrosswordState extends State<Crossword> {
                     player.stop();
                   }
                   setState(() {
+
                     startPoint = LetterOffset(
                         offset: details.localPosition, spacing: widget.spacing);
                     endPoint = LetterOffset(
@@ -183,6 +186,7 @@ class CrosswordState extends State<Crossword> {
                         letters: letters,
                         acceptReversedDirection:
                         widget.acceptReversedDirection!));
+
                   });
                 }
               },
@@ -192,6 +196,11 @@ class CrosswordState extends State<Crossword> {
 
     if(provider.allowMark) {
       setState(() {
+        if (widget.incorrWords.contains(lineList.last
+            .word)) {
+          isMarked=true;
+
+        }
         //get initial positions based on user interaction on the panel
         final dx = details.localPosition.dx - startPoint!.offset.dx;
         final dy = details.localPosition.dy - startPoint!.offset.dy;
@@ -222,7 +231,9 @@ class CrosswordState extends State<Crossword> {
               letters: letters,
               acceptReversedDirection:
               widget.acceptReversedDirection!);
+
         }
+
       });
     }
               },
@@ -263,6 +274,8 @@ class CrosswordState extends State<Crossword> {
                     ? isCrossLine(lineList.last.offsets)
                     : false))) {
           //   selectedOffsets.addAll(usedOffsets);
+
+
           print('word:');
           print(lineList.last.word);
 
@@ -271,7 +284,6 @@ class CrosswordState extends State<Crossword> {
 
           final provider = Provider.of<GameScreenProvider>(
               context, listen: false);
-
           if (!wordsMarked.contains(lineList.last.word)) {
             if (widget.allWords.contains(lineList.last.word)) {
               if (widget.correctWords.contains(lineList.last.word)) {
@@ -290,6 +302,8 @@ class CrosswordState extends State<Crossword> {
                 print('incorrect');
                 // selectedOffsets.addAll(usedOffsets);
                 wordsMarked.add(lineList.last.word);
+                incorrectMarked.add(lineList.last.word);
+
               }
 
               widget.onLineDrawn(lineList.map((e) => e.word)
@@ -349,6 +363,8 @@ class CrosswordState extends State<Crossword> {
                     context_: context,
                     incorrWords: widget.incorrWords,
                     borderColor: Colors.red,
+                    isMarked: isMarked,
+                    incorrectMarked: incorrectMarked,
                     spacing: widget.spacing,
                     hints: widget.allWords),
                 size: Size(letters.length * widget.spacing.dx ,

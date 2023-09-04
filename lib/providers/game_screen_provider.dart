@@ -8,6 +8,9 @@ class GameScreenProvider with ChangeNotifier {
   dynamic get gameEnded => _gameEnded;
 
 
+  dynamic _wordIsMarked = false;
+  dynamic get wordIsMarked => _wordIsMarked;
+
   dynamic _allowMark = true;
   dynamic get allowMark => _allowMark;
 
@@ -19,6 +22,10 @@ class GameScreenProvider with ChangeNotifier {
   }
 
   setAllowMark(status) {
+    _allowMark=status;
+    // notifyListeners();
+  }
+  setWordIsMarked(status) {
     _allowMark=status;
     // notifyListeners();
   }

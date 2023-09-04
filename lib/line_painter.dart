@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:crossword/components/word_line.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'linedecoration.dart';
 
@@ -16,8 +18,9 @@ class LinePainter extends CustomPainter {
   final TextStyle? textStyle;
   final List<String> incorrWords;
   var context_;
+  var incorrectMarked;
+  var isMarked=false;
   final Color? borderColor;
-
   final LineDecoration? lineDecoration;
 
   LinePainter({
@@ -29,9 +32,13 @@ class LinePainter extends CustomPainter {
     required this.hints,
     required this.incorrWords,
     this.context_,
+    this.incorrectMarked,
+    required this.isMarked,
     this.correctColor = Colors.green,
     this.borderColor
   });
+
+  var isMarked_ = false;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -56,7 +63,6 @@ class LinePainter extends CustomPainter {
       paint.color = points.color;
 
       for (int i = 0; i < points.offsets.length - 1; i++) {
-
         // Path path= Path();
         // path.moveTo(points.offsets[i].getBiggerOffset.dx-8,
         //     points.offsets[i].getBiggerOffset.dy-10);
@@ -81,25 +87,60 @@ class LinePainter extends CustomPainter {
         //
         // canvas.drawPath(path, paintBorder);
 
+       canvas.drawLine(points.offsets[i].getBiggerOffset,
+          points.offsets[i + 1].getBiggerOffset, paint);
 
-        // if(incorrWords.contains(points.word)) {
+        // if (incorrectMarked.contains(points.word) && !isMarked ) {
+        //   print('i touched');
         //   canvas.drawRRect(RRect.fromRectAndRadius(
-        //       Rect.fromLTRB(points.offsets[i].getBiggerOffset.dx -14,
-        //           points.offsets[i].getBiggerOffset.dy -14 ,
-        //           points.offsets[i+1].getBiggerOffset.dx +14,
-        //           points.offsets[i+1].getBiggerOffset.dy+14),Radius.circular(15.0)),paintBorder);
+        //       Rect.fromLTRB(points.offsets[i].getBiggerOffset.dx - 14,
+        //           points.offsets[i].getBiggerOffset.dy - 14,
+        //           points.offsets[i + 1].getBiggerOffset.dx + 14,
+        //           points.offsets[i + 1].getBiggerOffset.dy + 14),
+        //       Radius.circular(15.0)), paintBorder);
+        //
+        //
+        // }
+        // else if (!incorrectMarked.contains(points.word) && !isMarked ) {
+        //   isMarked=false;
+        //   if (!incorrWords.contains(points.word)
+        //       && !incorrectMarked.contains(lineList.last.word)) {
+        //
+        //       canvas.drawLine(points.offsets[i].getBiggerOffset,
+        //           points.offsets[i + 1].getBiggerOffset, paint);
+        //       print('this');
+        //
+        //   }
+        //
+        //   else {
+        //     if (!incorrWords.contains(lineList.last.word)
+        //         && !incorrectMarked.contains(lineList.last.word)) {
+        //       canvas.drawLine(points.offsets[i].getBiggerOffset,
+        //           points.offsets[i + 1].getBiggerOffset, paint);
+        //       // print('this');
+        //     }
+        //   }
+        //
+        //   // else {
+        //   //   if (!incorrWords.contains(lineList.last.word)
+        //   //       && !incorrectMarked.contains(lineList.last.word)) {
+        //   //
+        //   //
+        //   //       canvas.drawLine(points.offsets[i].getBiggerOffset,
+        //   //           points.offsets[i + 1].getBiggerOffset, paint);
+        //   //     print('that');
+        //   //   }
+        //   //
+        //   // }
         //
         // }
         // else {
-
-
-          canvas.drawLine(points.offsets[i].getBiggerOffset,
-              points.offsets[i + 1].getBiggerOffset, paint);
-
-
-        }
+        //   isMarked=false;
+        //   canvas.drawLine(points.offsets[i].getBiggerOffset,
+        //       points.offsets[i + 1].getBiggerOffset, paint);
+        // }
+      }
     }
-
 
     //paint texts on the grid
     for (int i = 0; i < letters.length; i++) {
@@ -125,6 +166,7 @@ class LinePainter extends CustomPainter {
       }
     }
   }
+
 
   @override
   bool shouldRepaint(LinePainter oldDelegate) => true;

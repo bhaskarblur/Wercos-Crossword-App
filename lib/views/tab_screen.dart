@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:mobile_app_word_search/api_services.dart';
 import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
@@ -20,6 +21,7 @@ import 'package:mobile_app_word_search/providers/home_provider.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:mobile_app_word_search/components/model/bottom_navigation_item.dart';
 
+import '../admob/admob_service_details.dart';
 import '../providers/timer_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -43,6 +45,33 @@ class TabScreenState extends State<TabScreen> {
 
   List<BottomNavigationItem>? iconList;
 
+  void playVideoAd() {
+    // MobileAds.instance.updateRequestConfiguration(
+    //     RequestConfiguration(testDeviceIds:["BB4BB9E08099BB1C91E2FE93C8E2B6FB"]));
+
+    RewardedInterstitialAd.load(adUnitId: AdmobService.videoAdUnitID!,
+        request: const AdRequest(),
+        rewardedInterstitialAdLoadCallback: RewardedInterstitialAdLoadCallback(
+            onAdLoaded: (ad) => {
+              print('adLoaded'),
+              ad.fullScreenContentCallback = FullScreenContentCallback(
+                  onAdDismissedFullScreenContent: (ad_) {
+                    ad_.dispose();
+                  },
+                  onAdFailedToShowFullScreenContent: (ad_, error) {
+                    ad_.dispose();
+                    playVideoAd();
+                  }
+              ),
+              ad.show(onUserEarnedReward: (ad,reward) => {
+                print(reward)
+              })
+            },
+            onAdFailedToLoad: (err)=> {
+              print('adFailed'),
+              print(err.message)
+            }));
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -133,6 +162,7 @@ class TabScreenState extends State<TabScreen> {
                       p.setTicking(false);
 
                       provider.changeSelectedIndex(index);
+                      playVideoAd();
                     },
                     itemCount: 4,
                     tabBuilder: (int index, bool isActive) {
@@ -230,18 +260,30 @@ class TabScreenState extends State<TabScreen> {
                                 gameProvider.correctWords.length) {
                               print(6);
 
-                              Nav.push(
-                                  context,
-                                  LevelCompletionPage(
-                                    isCompleted: gameProvider
-                                            .correctWordsFromAPI.length ==
-                                        gameProvider.correctWords.length,
-                                    totalWord:
-                                        gameProvider.correctWordsFromAPI.length,
-                                    correctWord:
-                                        gameProvider.correctWords.length,
-                                    seconds: p.seconds,
-                                  ));
+                              if(gameProvider.allowMark) {
+                                Nav.push(
+                                    context,
+                                    LevelCompletionPage(
+                                      isCompleted: gameProvider
+                                              .correctWordsFromAPI.length ==
+                                          gameProvider.correctWords.length,
+                                      totalWord:
+                                          gameProvider.correctWordsFromAPI.length,
+                                      correctWord:
+                                          gameProvider.correctWords.length,
+                                      seconds: p.seconds,
+                                    ));
+                              }
+                              else {
+                                provider.changeSelectedIndex(1);
+                                final p__ =
+                                Provider.of<GameScreenProvider>(context, listen: false);
+                                p__.reset();
+                                p.stopSeconds();
+                                p.resetSeconds();
+                                p__.setGameEnded(false);
+                              }
+
                             }
                             else {
                               final p__ =
