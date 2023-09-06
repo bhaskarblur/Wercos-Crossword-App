@@ -15,6 +15,7 @@ import 'package:mobile_app_word_search/views/leaderboard_page.dart';
 import 'package:mobile_app_word_search/providers/games_provider.dart';
 import 'package:mobile_app_word_search/components/custom_dialogs.dart';
 import 'package:share_plus/share_plus.dart';
+import '../components/suggestion/model/suggestion.dart';
 import '../widget/widgets.dart';
 import '../widget/sahared_prefs.dart';
 import '../providers/profile_provider.dart';
@@ -153,11 +154,18 @@ class _MyGamesPageState extends State<MyGamesPage> {
                     AllColors.shineGreen
                   ],
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return CreateWordPage(
-                          type: public ? 'search' : 'challenge');
-                    }));
+
+                    if(!public) {
+                      CustomDialog.showChallenge(
+                          context: context);
+                    }
+                    else {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return CreateWordPage(
+                                type: public ? 'search' : 'challenge');
+                          }));
+                    }
                   },
                   title: public
                       ? AppLocalizations.of(context)!.create_word_search

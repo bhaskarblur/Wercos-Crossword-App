@@ -131,7 +131,8 @@ class TabScreenState extends State<TabScreen> {
               color: provider.selectedIndex == 4
                   ? Colors.white
                   : const Color(0xFF1E155C)),
-          child: Scaffold(
+          child:Consumer<GameScreenProvider>(builder: (context, gprovider, _) {
+            return Scaffold(
             backgroundColor: Colors.transparent,
             body: pages[provider.selectedIndex],
             resizeToAvoidBottomInset: false,
@@ -162,7 +163,7 @@ class TabScreenState extends State<TabScreen> {
                       p.setTicking(false);
 
                       provider.changeSelectedIndex(index);
-                      playVideoAd();
+                      // playVideoAd();
                     },
                     itemCount: 4,
                     tabBuilder: (int index, bool isActive) {
@@ -193,15 +194,17 @@ class TabScreenState extends State<TabScreen> {
                     padding: const EdgeInsets.only(top: 20),
                     child: FloatingActionButton(
                       backgroundColor: provider.selectedIndex == 4
+                      && !gprovider.gameEnded
                           ? AllColors.liteRed
                           : AllColors.liteGreen,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50)),
                       child: Icon(
                         provider.selectedIndex == 4
+                            && !gprovider.gameEnded
                             ? CupertinoIcons.square_fill
                             : Icons.play_arrow,
-                        size: provider.selectedIndex == 4 ? 36 : 50,
+                        size: provider.selectedIndex == 4 && !gprovider.gameEnded? 36 : 50,
                         color: AllColors.white,
                         shadows: [
                           BoxShadow(
@@ -250,7 +253,16 @@ class TabScreenState extends State<TabScreen> {
                                 borderRest();
                               }
                               else {
-                                provider.changeSelectedIndex(1);
+                                print(8);
+                                provider.changeSelectedIndex(4);
+                                // gameProvider.changeGameType('random');
+                                // final p__ =
+                                // Provider.of<GameScreenProvider>(context, listen: false);
+                                // p__.reset();
+                                // p.stopSeconds();
+                                // p.resetSeconds();
+                                // provider.changeSelectedIndex(4);
+                                // p__.setGameEnded(false);
                               }
                             }
                           } else {
@@ -275,13 +287,25 @@ class TabScreenState extends State<TabScreen> {
                                     ));
                               }
                               else {
-                                provider.changeSelectedIndex(1);
-                                final p__ =
-                                Provider.of<GameScreenProvider>(context, listen: false);
-                                p__.reset();
-                                p.stopSeconds();
-                                p.resetSeconds();
-                                p__.setGameEnded(false);
+                                // provider.changeSelectedIndex(1);
+                                // final p__ =
+                                // Provider.of<GameScreenProvider>(context, listen: false);
+                                // p__.reset();
+                                // p.stopSeconds();
+                                // p.resetSeconds();
+                                // p__.setGameEnded(false);
+                                print(8);
+
+                                provider.changeSelectedIndex(4);
+                                // gameProvider.changeGameType('random');
+                                // final p__ =
+                                // Provider.of<GameScreenProvider>(context, listen: false);
+                                // p__.reset();
+                                // p.stopSeconds();
+                                // p.resetSeconds();
+                                // provider.changeSelectedIndex(4);
+                                // p__.setGameEnded(false);
+
                               }
 
                             }
@@ -295,7 +319,16 @@ class TabScreenState extends State<TabScreen> {
                                 borderRest();
                               }
                               else {
-                                provider.changeSelectedIndex(1);
+                                print(8);
+                                provider.changeSelectedIndex(4);
+                                // gameProvider.changeGameType('random');
+                                // final p__ =
+                                // Provider.of<GameScreenProvider>(context, listen: false);
+                                // p__.reset();
+                                // p.stopSeconds();
+                                // p.resetSeconds();
+                                // provider.changeSelectedIndex(4);
+                                // p__.setGameEnded(false);
                               }
                             }
                           }
@@ -314,7 +347,7 @@ class TabScreenState extends State<TabScreen> {
                       },
                     ),
                   ),
-          ));
+          );}));
     })
     );
   }
@@ -336,13 +369,27 @@ class TabScreenState extends State<TabScreen> {
 
     p.stopSeconds();
     p.setTicking(false);
-    provider.filteredWordsFromAPI.forEach((element) {
-      if (!provider.filteredcorrectWords.contains(element) &&
-          !provider.filteredincorrectWords.contains(element)) {
-        rest.add(element);
-      }
-    });
+    print('checkhere');
+    print(provider.gameType);
+    if(provider.gameType == 'randomwordchallenge') {
+      provider.filteredWordsFromAPI.forEach((element) {
+        print(!provider.allMarkedWords.contains(element));
+        print(provider.correctWordsFromAPI.contains(element));
+        if(!provider.allMarkedWords.contains(element)
+            && provider.correctWordsFromAPI.contains(element)) {
 
+         rest.add(element);
+        }
+      });
+    }
+    else {
+      provider.filteredWordsFromAPI.forEach((element) {
+        if (!provider.correctWordsFromAPI.contains(element) &&
+            !provider.filteredincorrectWords.contains(element)) {
+          rest.add(element);
+        }
+      });
+    }
     Prefs.getToken().then((token) {
       Prefs.getPrefs('loginId').then((loginId) {
         _apiServices.post(
@@ -353,6 +400,7 @@ class TabScreenState extends State<TabScreen> {
               "accessToken": token,
               "grid": jsonEncode(provider.gameData['crossword_grid']),
               "words": json.encode(rest),
+              "correctWords":json.encode(provider.correctWords),
             }).then((value) {
           provider.changeTile(value);
           if (provider.gameData['gameDetails']['searchtype'] == 'search') {

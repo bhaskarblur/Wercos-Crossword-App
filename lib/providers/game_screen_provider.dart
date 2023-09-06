@@ -1,3 +1,4 @@
+import 'package:crossword/components/word_line.dart';
 import 'package:flutter/material.dart';
 import "dart:math";
 class GameScreenProvider with ChangeNotifier {
@@ -10,6 +11,8 @@ class GameScreenProvider with ChangeNotifier {
 
   dynamic _wordIsMarked = false;
   dynamic get wordIsMarked => _wordIsMarked;
+
+
 
   dynamic _allowMark = true;
   dynamic get allowMark => _allowMark;
@@ -41,6 +44,15 @@ class GameScreenProvider with ChangeNotifier {
   final List<String> _incorrectWordsFromAPI = [];
   List<String> get incorrectWordsFromAPI => _incorrectWordsFromAPI;
 
+  final List<String> _allMarkedWords = [];
+  List<String> get allMarkedWords => _allMarkedWords;
+
+  final List<WordLine> _allWordlineMarkedWords = [];
+  List<WordLine> get allWordlineMarkedWords => _allWordlineMarkedWords;
+
+  final List<List<int>> _wordLineWordsIndex = [];
+  List<List<int>> get wordLineWordsIndex => _wordLineWordsIndex;
+
   setGameEnded(status) {
     _gameEnded= status;
     notifyListeners();
@@ -49,6 +61,9 @@ class GameScreenProvider with ChangeNotifier {
   addToCorrectWordsIncorrectWordsFromAPI() {
     _allWordsFromAPI.clear();
     _filteredWordsFromAPI.clear();
+    _allMarkedWords.clear();
+    _allWordlineMarkedWords.clear();
+    _wordLineWordsIndex.clear();
     _correctWordsFromAPI.clear();
     _incorrectWordsFromAPI.clear();
     if (gameData['gameDetails']['searchtype'] == 'search') {
@@ -68,6 +83,8 @@ class GameScreenProvider with ChangeNotifier {
         print("correct words__");
         print(_gameData['correctWords'][i]);
 
+
+
         try {
           _correctWordsFromAPI
               .add(_gameData['correctWords'][i].toUpperCase());
@@ -77,6 +94,8 @@ class GameScreenProvider with ChangeNotifier {
               .add(_gameData['correctWords'][i].toUpperCase());
         }
       }
+      print('correctWords length');
+      print(_correctWordsFromAPI.length.toString());
     }
     if (_gameData['incorrectWords'] != null) {
       for (int i = 0; i < _gameData['incorrectWords'].length; i++) {
@@ -100,6 +119,20 @@ class GameScreenProvider with ChangeNotifier {
 
   addToCorrectWords(var correctWord) {
     correctWords.add(correctWord);
+    notifyListeners();
+  }
+  addToMarkedWords(var correctWord) {
+    allMarkedWords.add(correctWord);
+    notifyListeners();
+  }
+
+  addToWordLineMarkedWords(var correctWord) {
+    allWordlineMarkedWords.add(correctWord);
+    notifyListeners();
+  }
+
+  addToWordLineIndex(var index) {
+    wordLineWordsIndex.add(index);
     notifyListeners();
   }
 
@@ -245,6 +278,22 @@ class GameScreenProvider with ChangeNotifier {
         _tiles[value['wordsFound'][i][j]].borderColor = color;
       }
     }
+
+    for (int i = 0; i < value['correctWordsFound'].length; i++) {
+      var color;
+      if(allWordlineMarkedWords.length == value['correctWordsFound'].length) {
+        color = allWordlineMarkedWords[i].color;
+      }
+      else {
+        color = generateRandomColor();
+      }
+      for (int j = 0; j < value['correctWordsFound'][i].length; j++) {
+        _tiles[value['correctWordsFound'][i][j]].backgroundColor = color;
+        _tiles[value['correctWordsFound'][i][j]].textColor = const Color(0xFF221962);
+        _tiles[value['correctWordsFound'][i][j]].borderColor = Colors.white;
+      }
+    }
+
     notifyListeners();
   }
 
@@ -332,6 +381,9 @@ class GameScreenProvider with ChangeNotifier {
     _correctWords.clear();
     _incorrectWords.clear();
     _trackLastIndex.clear();
+    _allMarkedWords.clear();
+    _allWordlineMarkedWords.clear();
+    _wordLineWordsIndex.clear();
     _tiles.clear();
     grid_.clear();
     _gameEnded = false;

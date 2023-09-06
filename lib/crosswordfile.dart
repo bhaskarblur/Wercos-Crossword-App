@@ -58,7 +58,7 @@ class CrosswordState extends State<Crossword> {
   List<WordLine> lineList = [];
   List<Offset> selectedOffsets = [];
   Color? color;
-
+  List<WordLine> wordsAreMarked = [];
   List<String> wordsMarked = [];
   List<WordLine> updatedLineList = [];
   LetterOffset? startPoint;
@@ -66,6 +66,7 @@ class CrosswordState extends State<Crossword> {
   List<List<String>> letters = [];
   late final player;
   List<String> incorrectMarked = [];
+
   bool isMarked=false;
   @override
   void initState() {
@@ -175,7 +176,6 @@ class CrosswordState extends State<Crossword> {
                     player.stop();
                   }
                   setState(() {
-
                     startPoint = LetterOffset(
                         offset: details.localPosition, spacing: widget.spacing);
                     endPoint = LetterOffset(
@@ -293,6 +293,8 @@ class CrosswordState extends State<Crossword> {
                 print('correct');
                 // selectedOffsets.addAll(usedOffsets);
                 wordsMarked.add(lineList.last.word);
+                wordsAreMarked.add(lineList.last);
+                provider.addToWordLineMarkedWords(lineList.last);
               }
               else if (widget.incorrWords.contains(lineList.last
                   .word)) {
@@ -303,12 +305,15 @@ class CrosswordState extends State<Crossword> {
                 // selectedOffsets.addAll(usedOffsets);
                 wordsMarked.add(lineList.last.word);
                 incorrectMarked.add(lineList.last.word);
+                wordsAreMarked.add(lineList.last);
 
               }
 
               widget.onLineDrawn(lineList.map((e) => e.word)
                   .toList());
             }
+
+
             else {
               Future.delayed(const Duration(milliseconds: 250), () {
                 if (!player.playing) {
@@ -362,6 +367,7 @@ class CrosswordState extends State<Crossword> {
                     textStyle: widget.textStyle,
                     context_: context,
                     incorrWords: widget.incorrWords,
+                    wordsMarked: wordsAreMarked,
                     borderColor: Colors.red,
                     isMarked: isMarked,
                     incorrectMarked: incorrectMarked,

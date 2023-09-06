@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_app_word_search/providers/category_provider.dart';
@@ -14,6 +15,7 @@ import 'package:mobile_app_word_search/widget/widgets.dart';
 import 'package:provider/provider.dart';
 import '../api_services.dart';
 import '../components/custom_dialogs.dart';
+import '../components/suggestion/model/suggestion.dart';
 import '../crosswordfile.dart';
 import '../linedecoration.dart';
 import '../providers/timer_provider.dart';
@@ -128,20 +130,45 @@ class _DrugPageState extends State<DrugPage> {
                             }),
                             gap(5),
                             Expanded(
+
                               child: Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                     gradient: AllColors.bg,
                                     borderRadius: BorderRadius.circular(20)),
                                 child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     gap(5),
-                                    Text(
-                                        provider.gameData['gameDetails']
+                                    Row(
+                                        mainAxisAlignment: MainAxisAlignment.center, //Center Row contents horizontally,
+
+                                      children: [
+                                        Text(
+                                            provider.gameData['gameDetails']
                                             ['gamename'],
-                                        style: GoogleFonts.inter(textStyle:
-                                        Theme.of(context).textTheme.headlineLarge,fontSize: 18, color: Colors.white
-                                            , fontWeight: FontWeight.w700)),
+                                            style: GoogleFonts.inter(textStyle:
+                                            Theme.of(context).textTheme.headlineLarge,fontSize: 18, color: Colors.white
+                                                , fontWeight: FontWeight.w700)),
+                                        if (provider.gameType == 'randomwordchallenge')
+                                          horGap(10),
+                                        if (provider.gameType == 'randomwordchallenge')
+                                          InkWell(
+                                              onTap: () {
+                                                CustomDialog.showSuggestionDialog(
+                                                    context: context,
+                                                    suggestions: [
+                                                      Suggestion(
+                                                          AppLocalizations.of(context)!.what_is_challenge,
+                                                          AppLocalizations.of(context)!
+                                                              .what_is_challenge_description),
+                                                    ]);
+                                              },
+                                              child: const Icon(Icons.info_outline,
+                                                  color: AllColors.white, size: 22)),
+                                      ],
+                                    )
+                                   ,
                                     if (provider.gameData['gameDetails']
                                             ['searchtype'] ==
                                         'search')
@@ -280,45 +307,77 @@ class _DrugPageState extends State<DrugPage> {
                                   player.setAudioSource(AudioSource.uri(Uri.parse(
                                       "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/correctanswer_szreyi.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
                                   player.play();
-                                  print(player.playing);
+                                  // print(player.playing);
                                 }
-                                else {
-                                  }
                                 }
                               else {
                                 if (provider.correctWordsFromAPI.contains(
                                     words.last.toString())) {
                                   provider.addToCorrectWords(
                                      word_);
+                                  provider.addToMarkedWords(word_);
                                   provider.addToFilteredCorrectWords(words.last.toString());
                                   player.setAudioSource(AudioSource.uri(Uri.parse(
                                       "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/correctanswer_szreyi.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
                                   player.play();
-                                  print(player.playing);
+                                  // print(player.playing);
                                 }
-                                else
-                                if (provider.incorrectWordsFromAPI.contains(
+                                else if (provider.incorrectWordsFromAPI.contains(
                                     words.last.toString())) {
                                   provider.addToInCorrectWords(
                                       word_);
+                                  provider.addToMarkedWords(word_);
                                   provider.addToFilteredInCorrectWords(words.last.toString());
                                   player.setAudioSource(AudioSource.uri(Uri.parse(
                                       "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/wronganswer_oyvx87.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
                                   player.play();
-                                  print(player.playing);
+                                  // print(player.playing);
                                 }
                               }
 
+                              print('size');
+                              print(provider.allMarkedWords.length.toString());
                               if (provider.gameData['gameDetails']['searchtype'] == 'search') {
                                 if (provider.allWordsFromAPI.length == provider.correctWords.length) {
                                   navigate();
                                 }
-                              } else {
+                              }
+                              else {
+                                List<String> correctWordsMarked = [];
+                                List<String> wordsToMark = [];
+
+                                for(var word in provider.correctWordsFromAPI) {
+                                  if(provider.allWordsFromAPI
+                                      .contains(word)) {
+                                    wordsToMark.add(word);
+                                  }
+                                  if(provider.allMarkedWords.contains(word)) {
+                                    correctWordsMarked.add(word);
+                                  }
+                                }
+                                print('allCorrect');
+                                print(correctWordsMarked.length.toString());
+                                print('wordsToMark');
+                                print(wordsToMark.length.toString());
+
                                 if (provider.correctWordsFromAPI.length == provider.correctWords.length) {
                                   navigate();
                                 }
+                                else if (provider.allWordsFromAPI.length == provider.allMarkedWords.length) {
+                                  navigate();
+                                }
+                                else {
+
+                                  if (provider.correctWords.length > 0) {
+                                    if (correctWordsMarked.length ==
+                                        wordsToMark.length) {
+                                      navigate();
+                                    }
+                                  }
+                                }
                               }
                             },
+
                             textStyle: TextStyle(fontSize: 23, color: const Color(0xFF221962)
                                   , fontWeight: FontWeight.w900),
                             lineDecoration:
@@ -430,7 +489,7 @@ class _DrugPageState extends State<DrugPage> {
       startTimer();
       // getRandomWordSearch();
     }
-    if (provider.gameType == 'category') {
+    if (provider.gameType == 'challenge') {
       getCategorySearch();
     }
 
@@ -589,17 +648,18 @@ class _DrugPageState extends State<DrugPage> {
         Prefs.getPrefs('wordLimit').then((wordLimit) {
           Prefs.getPrefs('gameLanguage').then((language) {
             print(cProvider.selectedCategory.toString());
-            print({
-              "language": language,
-              "userId": loginId,
-              "words_limit": wordLimit,
-              'type': provider.gameType == 'challengebycategory'
-                  ? 'challenge'
-                  : 'search',
-              "accessToken": token,
-              "category" : '',
-              "topic": cProvider.selectedCategory['topicsname'].toString(),
-            });
+            print('this is data');
+            // print({
+            //   "language": language,
+            //   "userId": loginId,
+            //   "words_limit": wordLimit,
+            //   'type': provider.gameType == 'challengebycategory'
+            //       ? 'challenge'
+            //       : 'search',
+            //   "accessToken": token,
+            //   "category" : '',
+            //   "topic": cProvider.selectedCategory['topicsname'].toString(),
+            // });
             _apiServices
                 .post(context: context, endpoint: 'topicwise_crossword', body: {
               "language": language,
@@ -612,10 +672,17 @@ class _DrugPageState extends State<DrugPage> {
               "category" : cProvider.selectedCategory['categoryname'],
               "topic": cProvider.selectedCategory['topicsname'],
             }).then((value) {
+              print('hello');
               if (value['gameDetails'] != null) {
                 provider.changeGameData(value);
                 provider.addToCorrectWordsIncorrectWordsFromAPI();
+                if(provider.gameType == 'challengebycategory') {
+                Nav.pop(context);
 
+                final provider_ =
+                Provider.of<HomeProvider>(context, listen: false);
+                provider_.changeSelectedIndex(4);
+              }
                 startTimer();
               } else {
                 if(value['message'].toString().contains('Cannot play more')) {
@@ -642,11 +709,13 @@ class _DrugPageState extends State<DrugPage> {
       Prefs.getPrefs('loginId').then((loginId) {
         Prefs.getPrefs('gameLanguage').then((language) {
           Prefs.getPrefs('wordLimit').then((wordLimit) {
+            print('here is data');
             _apiServices
                 .post(context: context, endpoint: 'topicwise_crossword', body: {
               "language": language,
               "words_limit": wordLimit,
               'type': 'search',
+              'userId':loginId,
               "category": categoryProvider.selectedCategory['categoryname']
                   .toLowerCase(),
               "topic":
@@ -716,16 +785,16 @@ class _DrugPageState extends State<DrugPage> {
     provider.makeWord();
     provider.addToCorrectOrIncorrectWords();
 
-    print('all');
-    print(provider.allWordsFromAPI);
-    print('correct');
-    print(provider.correctWordsFromAPI);
-    print('incorrect');
-    print(provider.incorrectWordsFromAPI);
-    print('correct selected');
-    print(provider.correctWords);
-    print('incorrect selected');
-    print(provider.incorrectWords);
+    // print('all');
+    // print(provider.allWordsFromAPI);
+    // print('correct');
+    // print(provider.correctWordsFromAPI);
+    // print('incorrect');
+    // print(provider.incorrectWordsFromAPI);
+    // print('correct selected');
+    // print(provider.correctWords);
+    // print('incorrect selected');
+    // print(provider.incorrectWords);
 
     // to automatically travel to result screen after selecting all screens
 
@@ -745,17 +814,6 @@ class _DrugPageState extends State<DrugPage> {
 
   navigate() {
 
-    final player = AudioPlayer();
-    if(!player.playing) {
-      // Create a player
-      player.setAudioSource(AudioSource.uri(Uri.parse(
-          "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172346/gamecompleted_dktied.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
-      player.play();
-      print(player.playing);
-    }
-    else {
-      player.stop();
-    }
     final gameProvider =
         Provider.of<GameScreenProvider>(context, listen: false);
     final p = Provider.of<TimerProvider>(context, listen: false);
@@ -765,6 +823,18 @@ class _DrugPageState extends State<DrugPage> {
     gameProvider.setAllowMark(false);
     Future.delayed(const Duration(milliseconds: 500), () {
       if (gameProvider.gameData['gameDetails']['searchtype'] == 'search') {
+        final player = AudioPlayer();
+        if(!player.playing) {
+          // Create a player
+          player.setAudioSource(AudioSource.uri(Uri.parse(
+              "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172346/gamecompleted_dktied.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+          player.play();
+          print(player.playing);
+        }
+        else {
+          player.stop();
+        }
+
         Nav.push(
             context,
             LevelCompletionPage(
@@ -775,15 +845,92 @@ class _DrugPageState extends State<DrugPage> {
               seconds: p.seconds,
             ));
       } else {
-        Nav.push(
-            context,
-            LevelCompletionPage(
-              isCompleted: gameProvider.correctWordsFromAPI.length ==
-                  gameProvider.correctWords.length,
-              totalWord: gameProvider.correctWordsFromAPI.length,
-              correctWord: gameProvider.correctWords.length,
-              seconds: p.seconds,
-            ));
+
+        final provider =
+        Provider.of<GameScreenProvider>(context, listen: false);
+       // if (provider.allWordsFromAPI.length == provider.allMarkedWords.length) {
+
+       // }
+        List<String> correctWordsMarked = [];
+        List<String> wordsToMark = [];
+
+        for(var word in provider.correctWordsFromAPI) {
+          if(provider.allWordsFromAPI
+              .contains(word)) {
+            wordsToMark.add(word);
+          }
+          if(provider.allMarkedWords.contains(word)) {
+            correctWordsMarked.add(word);
+          }
+        }
+        if (provider.correctWords.length > 0) {
+          if (correctWordsMarked.length ==
+              wordsToMark.length) {
+            final player = AudioPlayer();
+            if(!player.playing) {
+              // Create a player
+              player.setAudioSource(AudioSource.uri(Uri.parse(
+                  "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172346/gamecompleted_dktied.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+              player.play();
+              print(player.playing);
+            }
+            else {
+              player.stop();
+            }
+
+            Nav.push(
+                context,
+                LevelCompletionPage(
+                  // isCompleted: gameProvider.correctWordsFromAPI.length ==
+                  //     gameProvider.correctWords.length,
+                  isCompleted: true,
+                  totalWord: provider.allMarkedWords.length,
+                  correctWord: gameProvider.correctWords.length,
+                  seconds: p.seconds,
+                ));
+          }
+        }
+
+        if(provider.allWordsFromAPI.length == provider.allMarkedWords.length) {
+
+          if(correctWordsMarked.length == wordsToMark.length) {
+            final player = AudioPlayer();
+            if(!player.playing) {
+              // Create a player
+              player.setAudioSource(AudioSource.uri(Uri.parse(
+                  "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172346/gamecompleted_dktied.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+              player.play();
+              print(player.playing);
+            }
+            else {
+              player.stop();
+            }
+          }
+          else {
+            final player = AudioPlayer();
+            if(!player.playing) {
+              // Create a player
+              player.setAudioSource(AudioSource.uri(Uri.parse(
+                  "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693173512/gameended_zfar4v.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+              player.play();
+              print(player.playing);
+            }
+            else {
+              player.stop();
+            }
+          }
+          Nav.push(
+              context,
+              LevelCompletionPage(
+                isCompleted: correctWordsMarked.length ==
+                    wordsToMark.length,
+                // isCompleted: true,
+                totalWord: provider.allMarkedWords.length,
+                correctWord: gameProvider.correctWords.length,
+                seconds: p.seconds,
+              ));
+        }
+
       }
     });
   }

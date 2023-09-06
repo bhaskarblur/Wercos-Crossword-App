@@ -226,9 +226,9 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                       },
                       title: AppLocalizations.of(context)!.see_leaderboard),
                   const SizedBox(height: 16),
-                  widget.isCompleted
-                      ? const SizedBox()
-                      : ShadowButton(
+                  // widget.isCompleted
+                  //     ? const SizedBox()
+                      ShadowButton(
                           fillColors: const [
                               AllColors.semiLiteGreen,
                               AllColors.shineGreen

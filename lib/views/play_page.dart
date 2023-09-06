@@ -89,13 +89,13 @@ class _PlayPageState extends State<PlayPage> {
                           provider.changeSelectedIndex(4);
                         },
                         title:
-                            AppLocalizations.of(context)!.random_word_search),
+                            AppLocalizations.of(context)!.random_word_search.toString().toUpperCase()),
                     SearchButton(
                         onPressed: () {
                           Nav.push(context, const CategoryPage(type: 'search'));
                         },
                         title: AppLocalizations.of(context)!
-                            .word_search_categories),
+                            .word_search_categories.toString().toUpperCase()),
                     SearchButton(
                         onPressed: () {
                           print('Hellothere');
@@ -149,18 +149,18 @@ class _PlayPageState extends State<PlayPage> {
                           //     Provider.of<HomeProvider>(context, listen: false);
                           // provider.changeSelectedIndex(4);
                         },
-                        title: AppLocalizations.of(context)!.random_challenge),
+                        title: AppLocalizations.of(context)!.random_challenge.toString().toUpperCase()),
                     SearchButton(
                         onPressed: () {
                           Nav.push(
                               context, const CategoryPage(type: 'category'));
                         },
                         title: AppLocalizations.of(context)!
-                            .challenge_by_category),
+                            .challenge_by_category.toString().toUpperCase()),
                     const SizedBox(height: 12),
                     Label(
                         text:
-                            AppLocalizations.of(context)!.play_by_entering_code,
+                            AppLocalizations.of(context)!.play_by_entering_code.toString().toUpperCase(),
                         fontWeight: FontWeight.bold,
                         fontSize: FontSize.h5),
                     const SizedBox(height: 20),
@@ -198,7 +198,7 @@ class _PlayPageState extends State<PlayPage> {
                           getGameWithCode();
                         },
                         title: AppLocalizations.of(context)!
-                            .play_with_entered_code,
+                            .play_with_entered_code.toString().toUpperCase(),
                         fillColors: const [
                           AllColors.liteOrange,
                           AllColors.orange

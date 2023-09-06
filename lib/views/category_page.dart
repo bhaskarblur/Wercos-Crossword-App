@@ -43,13 +43,18 @@ class _CategoryPageState extends State<CategoryPage> {
     Prefs.getPrefs('subStatus').then((value) => {
       subStatus = value!
     });
-    Prefs.getPrefs('gameLanguage').then((language) {
-      _apiServices.post(
-          context: context,
-          endpoint: 'getcatstopics',
-          body: {"language": language, "searchtype": widget.type=='search' ? 'search': 'challenge'}).then((value) {
-            print(widget.type);
-        provider.changeCategories(value['categoriesTopics']);
+    Prefs.getPrefs('loginId').then((loginId) {
+      Prefs.getPrefs('gameLanguage').then((language) {
+        _apiServices.post(
+            context: context,
+            endpoint: 'getcatstopics',
+            body: {"language": language, "userId": loginId,
+              "searchtype": widget.type == 'search' ? 'search' : 'challenge'})
+            .then((value) {
+          print(widget.type);
+          print(value);
+          provider.changeCategories(value['categoriesTopics']);
+        });
       });
     });
   }
@@ -145,21 +150,64 @@ class _CategoryPageState extends State<CategoryPage> {
                                                 hprovider
                                                     .changeSelectedIndex(4);
                                               } else {
-                                                gamePvider.changeGameType(
-                                                    'challengebycategory');
-                                                provider.changeSelectedCategory(
-                                                    provider.categories[index]
-                                                        ['topicsList'][i]);
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            WordRelatedPage(
-                                                                data: provider
-                                                                            .categories[
-                                                                        index][
-                                                                    'topicsList'][i])));
-                                              }
+
+                                                Prefs.getToken().then((token) {
+    Prefs.getPrefs('loginId').then((loginId) {
+    Prefs.getPrefs('wordLimit').then((wordLimit) {
+    Prefs.getPrefs('gameLanguage').then((language) {
+      print(provider.categories[index]['categoryName']);
+      print(provider.categories[index]
+      ['topicsList'][i]['topicsname']);
+    _apiServices
+        .post(context: context, endpoint: 'topicwise_crossword', body: {
+    "language": language,
+    "userId": loginId,
+    "words_limit": wordLimit,
+    'type':'challenge',
+    "accessToken": token,
+    "category" : provider.categories[index]['categoryName'],
+    "topic": provider.categories[index]
+    ['topicsList'][i]['topicsname'],
+    }).then((value) {
+
+      // print('here');
+      // print(value);
+    if (value['gameDetails'] != null) {
+      gamePvider.changeGameType(
+          'challengebycategory');
+      provider.changeSelectedCategory(
+          provider.categories[index]
+          ['topicsList'][i]);
+      print(provider
+          .categories[
+      index][
+      'topicsList'][i]);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  WordRelatedPage(
+                      data: value)));
+    }
+    else {
+    if(value['message'].toString().contains('Cannot play more')) {
+    CustomDialog.showGamesFinishedDialog(
+    context: context);
+    }
+    else {
+    CustomDialog.noGameAvailable(
+    context: context);
+    }
+    }
+    
+    });
+
+    });
+    });
+    });
+                                                });
+
+                                              };
                                             }
                                           },
                                           lock: provider.categories[index]

@@ -18,6 +18,7 @@ class LinePainter extends CustomPainter {
   final TextStyle? textStyle;
   final List<String> incorrWords;
   var context_;
+  List<WordLine> wordsMarked;
   var incorrectMarked;
   var isMarked=false;
   final Color? borderColor;
@@ -33,12 +34,13 @@ class LinePainter extends CustomPainter {
     required this.incorrWords,
     this.context_,
     this.incorrectMarked,
+    required this.wordsMarked,
     required this.isMarked,
     this.correctColor = Colors.green,
     this.borderColor
   });
 
-  var isMarked_ = false;
+
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -57,89 +59,58 @@ class LinePainter extends CustomPainter {
       ..color = borderColor!
     ..strokeCap = StrokeCap.round;
 
-    //paint lines on the grid
-    for (var points in lineList) {
+    // paint already marked word lines on the grid
+    for (var wordLine_ in wordsMarked) {
       //set the line color
-      paint.color = points.color;
+      paint.color = wordLine_.color;
 
-      for (int i = 0; i < points.offsets.length - 1; i++) {
-        // Path path= Path();
-        // path.moveTo(points.offsets[i].getBiggerOffset.dx-8,
-        //     points.offsets[i].getBiggerOffset.dy-10);
-        //
-        // path.lineTo(points.offsets[i+1].getBiggerOffset.dx+8,
-        //     points.offsets[i+1].getBiggerOffset.dy+10);
-        //
-        // path.arcToPoint(Offset(points.offsets[i+1].getBiggerOffset.dx+8,
-        //     points.offsets[i+1].getBiggerOffset.dy+10), radius:
-        // Radius.circular(10));
-        //
-        // path.moveTo(points.offsets[i+1].getBiggerOffset.dx+8,
-        //     points.offsets[i+1].getBiggerOffset.dy+10);
-        //
-        // path.lineTo(points.offsets[i].getBiggerOffset.dx + 10,
-        //     points.offsets[i].getBiggerOffset.dy-12);
-        //
-        // path.arcToPoint(Offset(points.offsets[i].getBiggerOffset.dx-8,
-        //     points.offsets[i].getBiggerOffset.dy-10),
-        //     radius:
-        // Radius.circular(10));
-        //
-        // canvas.drawPath(path, paintBorder);
+      // Paint each part of a word on the grid
+      for (int i = 0; i < wordLine_.offsets.length - 1; i++) {
 
-       canvas.drawLine(points.offsets[i].getBiggerOffset,
-          points.offsets[i + 1].getBiggerOffset, paint);
-
-        // if (incorrectMarked.contains(points.word) && !isMarked ) {
-        //   print('i touched');
-        //   canvas.drawRRect(RRect.fromRectAndRadius(
-        //       Rect.fromLTRB(points.offsets[i].getBiggerOffset.dx - 14,
-        //           points.offsets[i].getBiggerOffset.dy - 14,
-        //           points.offsets[i + 1].getBiggerOffset.dx + 14,
-        //           points.offsets[i + 1].getBiggerOffset.dy + 14),
-        //       Radius.circular(15.0)), paintBorder);
-        //
-        //
-        // }
-        // else if (!incorrectMarked.contains(points.word) && !isMarked ) {
-        //   isMarked=false;
-        //   if (!incorrWords.contains(points.word)
-        //       && !incorrectMarked.contains(lineList.last.word)) {
-        //
-        //       canvas.drawLine(points.offsets[i].getBiggerOffset,
-        //           points.offsets[i + 1].getBiggerOffset, paint);
-        //       print('this');
-        //
-        //   }
-        //
-        //   else {
-        //     if (!incorrWords.contains(lineList.last.word)
-        //         && !incorrectMarked.contains(lineList.last.word)) {
-        //       canvas.drawLine(points.offsets[i].getBiggerOffset,
-        //           points.offsets[i + 1].getBiggerOffset, paint);
-        //       // print('this');
-        //     }
-        //   }
-        //
-        //   // else {
-        //   //   if (!incorrWords.contains(lineList.last.word)
-        //   //       && !incorrectMarked.contains(lineList.last.word)) {
-        //   //
-        //   //
-        //   //       canvas.drawLine(points.offsets[i].getBiggerOffset,
-        //   //           points.offsets[i + 1].getBiggerOffset, paint);
-        //   //     print('that');
-        //   //   }
-        //   //
-        //   // }
-        //
-        // }
-        // else {
-        //   isMarked=false;
-        //   canvas.drawLine(points.offsets[i].getBiggerOffset,
-        //       points.offsets[i + 1].getBiggerOffset, paint);
-        // }
+        if(incorrWords.contains(wordLine_.word)) {
+             canvas.drawRRect(RRect.fromRectAndRadius(
+          Rect.fromLTRB(wordLine_.offsets[i].getBiggerOffset.dx - 14,
+              wordLine_.offsets[i].getBiggerOffset.dy - 14,
+              wordLine_.offsets[i + 1].getBiggerOffset.dx + 14,
+              wordLine_.offsets[i + 1].getBiggerOffset.dy + 14),
+          Radius.circular(15.0)), paintBorder);
+        }
+        else {
+          canvas.drawLine(wordLine_.offsets[i].getBiggerOffset,
+              wordLine_.offsets[i + 1].getBiggerOffset, paint);
+        }
       }
+    }
+
+    // paint each word lines on the grid
+    for (var wordLine in lineList) {
+      //set the line color
+      paint.color = wordLine.color;
+
+      if(wordsMarked.contains(wordLine)) {
+
+      }
+      else {
+        for (int i = 0; i < wordLine.offsets.length - 1; i++) {
+
+          if(incorrWords.contains(wordLine.word) && !isMarked) {
+            canvas.drawRRect(RRect.fromRectAndRadius(
+                Rect.fromLTRB(wordLine.offsets[i].getBiggerOffset.dx - 14,
+                    wordLine.offsets[i].getBiggerOffset.dy - 14,
+                    wordLine.offsets[i + 1].getBiggerOffset.dx + 14,
+                    wordLine.offsets[i + 1].getBiggerOffset.dy + 14),
+                Radius.circular(15.0)), paintBorder);
+          }
+          else {
+            // isMarked = false;
+            canvas.drawLine(wordLine.offsets[i].getBiggerOffset,
+                wordLine.offsets[i + 1].getBiggerOffset, paint);
+          }
+
+        }
+      }
+      // Paint each part of a word on the grid
+
     }
 
     //paint texts on the grid
@@ -171,3 +142,77 @@ class LinePainter extends CustomPainter {
   @override
   bool shouldRepaint(LinePainter oldDelegate) => true;
 }
+
+// Path path= Path();
+// path.moveTo(points.offsets[i].getBiggerOffset.dx-8,
+//     points.offsets[i].getBiggerOffset.dy-10);
+//
+// path.lineTo(points.offsets[i+1].getBiggerOffset.dx+8,
+//     points.offsets[i+1].getBiggerOffset.dy+10);
+//
+// path.arcToPoint(Offset(points.offsets[i+1].getBiggerOffset.dx+8,
+//     points.offsets[i+1].getBiggerOffset.dy+10), radius:
+// Radius.circular(10));
+//
+// path.moveTo(points.offsets[i+1].getBiggerOffset.dx+8,
+//     points.offsets[i+1].getBiggerOffset.dy+10);
+//
+// path.lineTo(points.offsets[i].getBiggerOffset.dx + 10,
+//     points.offsets[i].getBiggerOffset.dy-12);
+//
+// path.arcToPoint(Offset(points.offsets[i].getBiggerOffset.dx-8,
+//     points.offsets[i].getBiggerOffset.dy-10),
+//     radius:
+// Radius.circular(10));
+//
+// canvas.drawPath(path, paintBorder);
+
+// if (incorrectMarked.contains(points.word) && !isMarked ) {
+//   print('i touched');
+//   canvas.drawRRect(RRect.fromRectAndRadius(
+//       Rect.fromLTRB(points.offsets[i].getBiggerOffset.dx - 14,
+//           points.offsets[i].getBiggerOffset.dy - 14,
+//           points.offsets[i + 1].getBiggerOffset.dx + 14,
+//           points.offsets[i + 1].getBiggerOffset.dy + 14),
+//       Radius.circular(15.0)), paintBorder);
+//
+//
+// }
+// else if (!incorrectMarked.contains(points.word) && !isMarked ) {
+//   isMarked=false;
+//   if (!incorrWords.contains(points.word)
+//       && !incorrectMarked.contains(lineList.last.word)) {
+//
+//       canvas.drawLine(points.offsets[i].getBiggerOffset,
+//           points.offsets[i + 1].getBiggerOffset, paint);
+//       print('this');
+//
+//   }
+//
+//   else {
+//     if (!incorrWords.contains(lineList.last.word)
+//         && !incorrectMarked.contains(lineList.last.word)) {
+//       canvas.drawLine(points.offsets[i].getBiggerOffset,
+//           points.offsets[i + 1].getBiggerOffset, paint);
+//       // print('this');
+//     }
+//   }
+//
+//   // else {
+//   //   if (!incorrWords.contains(lineList.last.word)
+//   //       && !incorrectMarked.contains(lineList.last.word)) {
+//   //
+//   //
+//   //       canvas.drawLine(points.offsets[i].getBiggerOffset,
+//   //           points.offsets[i + 1].getBiggerOffset, paint);
+//   //     print('that');
+//   //   }
+//   //
+//   // }
+//
+// }
+// else {
+//   isMarked=false;
+//   canvas.drawLine(points.offsets[i].getBiggerOffset,
+//       points.offsets[i + 1].getBiggerOffset, paint);
+// }

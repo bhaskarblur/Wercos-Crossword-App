@@ -15,6 +15,7 @@
     "options" : "Options",
     "my_account" : "MY ACCOUNT",
     "select_language" : "SELECT LANGUAGE",
+     "select_language_game" : "Select Language for this game",
     "back" : "Back",
 
     "publication_mode" : "Publication mode",
@@ -46,7 +47,8 @@
     "play_by_entering_code" : "Play by code",
     "enter_code" : "Enter code",
     "play_with_entered_code" : "Play with the entered code",
-
+    "created_success":"Game Created Successfully",
+      "edited_success":"Game Edited Successfully",
     "categories" : "Categories",
     "word_search_name" : "Word Search Name",
     "select_level" : "Select Level",
@@ -62,7 +64,8 @@
     "free" : "Free",
     "premium" : "Premium",
     "current_plan" : "Current plan",
-    "remaining_game_of_day" : "Remaining game of day",
+    "addword": "Add some word",
+    "remaining_game_of_day" : "Games remaining for today",
     "upgrade" : "Upgrade",
 
     "only_mark_the_words_related_to" : "Only mark the words\nrelated to",
@@ -98,6 +101,8 @@
     "offf" : "of",
     "time" : "TIME",
     "ok":"OK",
+    "wordcount":"Word Count",
+    "wordlimit_":"Word should be of 14 or less than 14 characters.",
     "wrongcode":"Invalid share code entered. Please try again!",
     "nogame":"No game available to play!",
     "words_limit":"You can't add more than 6 games in free plan.",

@@ -168,12 +168,14 @@ class _MyAccountPageState extends State<MyAccountPage> {
                           text:
                               "${AppLocalizations.of(context)!.remaining_game_of_day}: "
                                   "${ provider.profile['subscriptionstatus'] ==
-                                  'none'? provider.profile['gamesleft'].toString() +'/50' : '∞'}",
+                                  'none'? provider.profile['gamesleft'].toString() +'/'
+                                  +provider.profile['systemGameLimit'].toString() : '∞'}",
                           fontSize: FontSize.p2),
                       const SizedBox(height: 50),
                     ],
                   ),
                 ),
+                if(provider.profile['subscriptionstatus'] == 'none')
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: ShadowButton(

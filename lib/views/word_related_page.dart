@@ -15,6 +15,7 @@ class WordRelatedPage extends StatelessWidget {
   final dynamic data;
   const WordRelatedPage({Key? key, this.data}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,7 +59,7 @@ class WordRelatedPage extends StatelessWidget {
 
                       }
                       else {
-                       gameScreenProvider.changeGameType('category');
+                       gameScreenProvider.changeGameType('challengebycategory');
                       }
                         Nav.pop(context);
                         final provider =

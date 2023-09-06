@@ -29,11 +29,10 @@ class CreateWordPage extends StatefulWidget {
 
 class _CreateWordPageState extends State<CreateWordPage> {
   final ApiServices _apiServices = ApiServices();
-
   bool public = true;
   bool public1 = true;
 
-  String selectedLanguage = 'ENGLISH';
+  late String selectedLanguage = '';
   String selectedWordCount = '1';
 
   final TextEditingController _c1 = TextEditingController();
@@ -46,10 +45,13 @@ class _CreateWordPageState extends State<CreateWordPage> {
     if (widget.gameDetails != null) {
       getGameWithCode();
     }
+
     super.initState();
+
   }
 
   getGameWithCode() {
+    selectedLanguage = AppLocalizations.of(context)!.select_language.toString().toUpperCase();
     Prefs.getToken().then((token) {
       Prefs.getPrefs('loginId').then((loginId) {
         Prefs.getPrefs('wordLimit').then((wordLimit) {
@@ -184,9 +186,10 @@ class _CreateWordPageState extends State<CreateWordPage> {
                       setState(() {
                         selectedWordCount = value!;
                       });
-                    }, "Word Count"),
+                    }, AppLocalizations.of(context)!.wordcount),
                   const SizedBox(height: 20),
-                  customDropdown(selectedLanguage, ['ENGLISH', 'ESPAÑOL'],
+                  customDropdown(selectedLanguage != ''? selectedLanguage : AppLocalizations.of(context)!.select_language.toString().toUpperCase(), [
+                    AppLocalizations.of(context)!.select_language.toString().toUpperCase(),'ENGLISH', 'ESPAÑOL'],
                       (value) {
                     setState(() {
                       selectedLanguage = value!;
@@ -204,7 +207,9 @@ class _CreateWordPageState extends State<CreateWordPage> {
                   CupertinoButton(
                     onPressed: () {
                       if(_c2.text.length>14) {
-                        var snackBar = SnackBar(content: Text('Word should be of 14 or less than 14 characters.')
+                        var snackBar = SnackBar(content: Text(
+                          AppLocalizations.of(context)!.wordlimit_
+                        )
                             , backgroundColor: AllColors.liteDarkPurple );
 
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -334,10 +339,11 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                             color: _list[index].correct!
                                                 ? Colors.transparent
                                                 : Colors.green)),
-                                    child: const Center(
+                                    child: _list[index].correct! ? const Center(
                                         child: Icon(Icons.done,
-                                            color: Colors.green, size: 40))),
-                              )
+                                            color: Colors.green, size: 40)):
+                        Icon(Icons.done,
+                        color: Colors.green, size: 0)) ),
                           ],
                         );
                       }),
@@ -384,7 +390,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                     "gameLanguage":
                                         selectedLanguage == "ENGLISH"
                                             ? 'en'
-                                            : 'es',
+                                            : (selectedLanguage == "SPANISH") ? 'es':'en',
                                     "totalWords": _list.length.toString(),
                                     "limitedWords":
                                         // widget.type == 'search'
@@ -413,17 +419,39 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                         : "search",
                                   }).then((value) {
                                 getData(false);
-                                dialog(context, value['message'], () {
-                                  Nav.pop(context);
-                                  Nav.pop(context);
+                                if(value['message'].toString().contains('created successfully'))
+                                {
+                                  dialog(context,
+                                      AppLocalizations.of(context)!.created_success, () {
+                                    Nav.pop(context);
+                                    Nav.pop(context);
 
-                                });
+                                  });
+                                }
+                                else if(value['message'].toString().contains('updated successfully'))
+                                {
+                                  dialog(context,
+                                      AppLocalizations.of(context)!.edited_success, () {
+                                        Nav.pop(context);
+                                        Nav.pop(context);
+
+                                      });
+                                }
+                                else {
+                                  dialog(context,
+                                      AppLocalizations.of(context)!.edited_success, () {
+                                        // Nav.pop(context);
+                                        Nav.pop(context);
+
+                                      });
+                                }
+
                               });
                             });
                           });
                         });
                       } else {
-                        dialog(context, 'Add some word.', () {
+                        dialog(context, AppLocalizations.of(context)!.addword, () {
                           Nav.pop(context);
                         });
                       }
@@ -493,7 +521,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
             hint: Text(hint,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                    fontSize: FontSize.p4, color: Colors.white)),
+                    fontSize: FontSize.p3, color: Colors.white)),
             icon: const Icon(CupertinoIcons.arrowtriangle_down_fill,
                 color: AllColors.white, size: 20),
             value: value,
