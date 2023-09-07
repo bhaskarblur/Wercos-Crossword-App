@@ -97,6 +97,7 @@
     "offf" : "de",
     "time" : "TIEMPO",
      "ok":"OK",
+     "users":"Usuarios",
     "wordcount":"Palabras a desplegar",
       "wordlimit_":"Las palabras deben ser menores a 14 caracteres.",
      "wrongcode":"Se ingresó un código compartido no válido. ¡Inténtalo de nuevo!",

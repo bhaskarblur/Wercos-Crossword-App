@@ -33,7 +33,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
   bool public1 = true;
 
   late String selectedLanguage = '';
-  String selectedWordCount = '1';
+  String selectedWordCount = '';
 
   final TextEditingController _c1 = TextEditingController();
   final TextEditingController _c2 = TextEditingController();
@@ -178,9 +178,9 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                   .dynamic_word_search_description),
                         ]);
                   }),
-                  if (!public1) const SizedBox(height: 20),
-                  if (!public1)
-                    customDropdown(selectedWordCount, [
+                  if (!public1 && widget.type == 'search') const SizedBox(height: 20),
+                  if (!public1 && widget.type == 'search')
+                    customDropdown(selectedWordCount!= ''? selectedWordCount : 'Word Count', [
                       for (int i = 0; i < _list.length; i++) (i + 1).toString()
                     ], (value) {
                       setState(() {
@@ -393,9 +393,9 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                             : (selectedLanguage == "SPANISH") ? 'es':'en',
                                     "totalWords": _list.length.toString(),
                                     "limitedWords":
-                                        // widget.type == 'search'
-                                        //     ?
-                                        _list.length.toString()
+                                        widget.type == 'search'
+                                            ? selectedWordCount != '' ? selectedWordCount : _list.length.toString()
+                                            : _list.length.toString()
                                     // : (!public1 &&
                                     //         selectedWordCount != null)
                                     //     ? selectedLanguage

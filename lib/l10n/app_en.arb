@@ -101,6 +101,7 @@
     "offf" : "of",
     "time" : "TIME",
     "ok":"OK",
+        "users":"Users",
     "wordcount":"Word Count",
     "wordlimit_":"Word should be of 14 or less than 14 characters.",
     "wrongcode":"Invalid share code entered. Please try again!",

@@ -290,7 +290,7 @@ class GameScreenProvider with ChangeNotifier {
       for (int j = 0; j < value['correctWordsFound'][i].length; j++) {
         _tiles[value['correctWordsFound'][i][j]].backgroundColor = color;
         _tiles[value['correctWordsFound'][i][j]].textColor = const Color(0xFF221962);
-        _tiles[value['correctWordsFound'][i][j]].borderColor = Colors.white;
+        _tiles[value['correctWordsFound'][i][j]].borderColor = color;
       }
     }
 

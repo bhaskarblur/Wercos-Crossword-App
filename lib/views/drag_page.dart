@@ -138,9 +138,11 @@ class _DrugPageState extends State<DrugPage> {
                                     borderRadius: BorderRadius.circular(20)),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     gap(5),
                                     Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                         mainAxisAlignment: MainAxisAlignment.center, //Center Row contents horizontally,
 
                                       children: [
@@ -820,6 +822,7 @@ class _DrugPageState extends State<DrugPage> {
 
     p.stopSeconds();
     p.setTicking(false);
+    gameProvider.setGameEnded(true);
     gameProvider.setAllowMark(false);
     Future.delayed(const Duration(milliseconds: 500), () {
       if (gameProvider.gameData['gameDetails']['searchtype'] == 'search') {

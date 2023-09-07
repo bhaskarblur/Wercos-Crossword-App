@@ -5,13 +5,28 @@ class HomeProvider with ChangeNotifier {
   int _selectedIndex = 4;
   int get selectedIndex => _selectedIndex;
 
+  dynamic _isSearching = false;
+  dynamic get isSearching => _isSearching;
+
   String _flag_selected = "assets/images/us_flag.png";
   String get flag_selected => _flag_selected;
+
+  dynamic  _searchResult;
+  dynamic get searchResult => _searchResult;
   changeSelectedIndex(int value) {
     _selectedIndex = value;
     notifyListeners();
   }
 
+  setSearching(var status) {
+    _isSearching = status;
+    notifyListeners();
+  }
+
+  updateSearchResult(var data){
+    _searchResult = data;
+    notifyListeners();
+  }
   getFlag() {
     Prefs.getPrefs('gameLanguage')
     .then((value) => {

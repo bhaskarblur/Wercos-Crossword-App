@@ -176,6 +176,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
   }
 
   gamesItem(var details) {
+    var provider = Provider.of<ProfileProvider>(context, listen: false);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       width: double.maxFinite,
@@ -250,7 +251,9 @@ class _MyGamesPageState extends State<MyGamesPage> {
             children: [
               Label(
                   text:
-                      '${AppLocalizations.of(context)!.ratings}: ${details["avgratings"] ?? '0'}/5',
+                      '${AppLocalizations.of(context)!.users}: '
+                          '${details["totalplayed"]}/' '${provider.profile['subscriptionstatus'] ==
+              'none'? '6' : '∞'}',
                   fontSize: FontSize.p2),
               RatingBarIndicator(
                   rating: details["avgratings"] == null
