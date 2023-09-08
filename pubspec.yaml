@@ -99,14 +99,14 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/audio/
-  fonts:
-      - family: Inter
-        fonts:
-          - asset: assets/fonts/Inter-Regular.otf
-          - asset: assets/fonts/Inter-Medium.otf
-          - asset: assets/fonts/Inter-Bold.otf
-          - asset: assets/fonts/Inter-SemiBold.otf
-            style: normal
+#  fonts:
+#      - family: Inter
+#        fonts:
+#          - asset: assets/fonts/Inter-Regular.otf
+#          - asset: assets/fonts/Inter-Medium.otf
+#          - asset: assets/fonts/Inter-Bold.otf
+#          - asset: assets/fonts/Inter-SemiBold.otf
+#            style: normal
 
 
 

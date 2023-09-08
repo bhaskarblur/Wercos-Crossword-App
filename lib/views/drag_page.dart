@@ -97,7 +97,7 @@ class _DrugPageState extends State<DrugPage> {
                 Text('00.00',
                           style: GoogleFonts.inter(textStyle:
                           Theme.of(context).textTheme.headlineLarge,fontSize: 23, color: const Color(0xFF221962)
-                              , fontWeight: FontWeight.w800)),
+                              , fontWeight: FontWeight.w700)),
                       Expanded(
                         flex: 1,
                         child: Container(

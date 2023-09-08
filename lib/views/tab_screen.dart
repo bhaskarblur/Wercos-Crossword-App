@@ -222,6 +222,7 @@ class TabScreenState extends State<TabScreen> {
                             listen: false);
 
                         if (provider.selectedIndex == 4) {
+
                           print(1);
                           if (gameProvider.gameData['gameDetails']
                                   ['searchtype'] ==
@@ -230,6 +231,7 @@ class TabScreenState extends State<TabScreen> {
                             if (gameProvider.allWordsFromAPI.length ==
                                 gameProvider.correctWords.length) {
                               print(3);
+                              print('here i am!');
                               Nav.push(
                                   context,
                                   LevelCompletionPage(
@@ -246,7 +248,7 @@ class TabScreenState extends State<TabScreen> {
                               print(4);
                               final p__ =
                               Provider.of<GameScreenProvider>(context, listen: false);
-                              print('gameEnded');
+                              print('gameEnded here');
                               print(p__.gameEnded);
 
                               if(p__.gameEnded != true) {
@@ -254,7 +256,7 @@ class TabScreenState extends State<TabScreen> {
                               }
                               else {
                                 print(8);
-                                provider.changeSelectedIndex(4);
+                                provider.changeSelectedIndex(1);
                                 // gameProvider.changeGameType('random');
                                 // final p__ =
                                 // Provider.of<GameScreenProvider>(context, listen: false);
@@ -272,6 +274,7 @@ class TabScreenState extends State<TabScreen> {
                                 gameProvider.correctWords.length) {
                               print(6);
 
+                              print('check Here');
                               if(gameProvider.allowMark) {
                                 Nav.push(
                                     context,
@@ -296,7 +299,7 @@ class TabScreenState extends State<TabScreen> {
                                 // p__.setGameEnded(false);
                                 print(8);
 
-                                provider.changeSelectedIndex(4);
+                                provider.changeSelectedIndex(1);
                                 // gameProvider.changeGameType('random');
                                 // final p__ =
                                 // Provider.of<GameScreenProvider>(context, listen: false);
@@ -320,7 +323,7 @@ class TabScreenState extends State<TabScreen> {
                               }
                               else {
                                 print(8);
-                                provider.changeSelectedIndex(4);
+                                provider.changeSelectedIndex(1);
                                 // gameProvider.changeGameType('random');
                                 // final p__ =
                                 // Provider.of<GameScreenProvider>(context, listen: false);

@@ -131,25 +131,40 @@ class ApiServices {
     return jsonDecode(response);
   }
 
+  // Future<bool> connectedOrNot(BuildContext context, {bool show = true}) async {
+  //   try {
+  //     final result = await InternetAddress.lookup('www.google.com');
+  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+  //       return true;
+  //     } else {
+  //       if (context.mounted) {
+  //         internetBanner(context, 'No Internet Connection!', () {
+  //           Nav.pop(context);
+  //         });
+  //       }
+  //       return false;
+  //     }
+  //   } on SocketException catch (_) {
+  //     if (show) {
+  //       internetBanner(context, 'No Internet Connection!', () {
+  //         Nav.pop(context);
+  //       });
+  //     }
+  //     return false;
+  //   }
+  // }
+
   Future<bool> connectedOrNot(BuildContext context, {bool show = true}) async {
     try {
-      final result = await InternetAddress.lookup('www.google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      final result = await http.get(Uri.parse('http://www.google.com'));
+      if(result.statusCode==200){
         return true;
-      } else {
-        if (context.mounted) {
-          internetBanner(context, 'No Internet Connection!', () {
-            Nav.pop(context);
-          });
-        }
+      }
+      else{
         return false;
       }
-    } on SocketException catch (_) {
-      if (show) {
-        internetBanner(context, 'No Internet Connection!', () {
-          Nav.pop(context);
-        });
-      }
+    }
+    on SocketException catch (_) {
       return false;
     }
   }
