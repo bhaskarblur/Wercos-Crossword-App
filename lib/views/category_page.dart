@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app_word_search/api_services.dart';
 import 'package:mobile_app_word_search/components/labels.dart';
@@ -61,7 +62,181 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return kIsWeb ?
+    Scaffold(
+      backgroundColor: AllColors.purple_2,
+      body:  Center(
+          child:
+          SizedBox(width: 400 ,child:
+          Container(
+            decoration: const BoxDecoration(gradient: AllColors.bg),
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: const PreferredSize(
+                  preferredSize: Size.fromHeight(70),
+                  child: CustomAppBar(isBack: true, isLang: true)),
+              body: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Consumer<CategoryProvider>(builder: (context, provider, _) {
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Label(
+                            text: AppLocalizations.of(context)!
+                                .categories
+                                .toUpperCase(),
+                            fontWeight: FontWeight.bold,
+                            fontSize: FontSize.h5),
+                        const SizedBox(height: 20),
+                        if (provider.categories != null)
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: provider.categories.length,
+                            separatorBuilder: (context, index) {
+                              return gap(20);
+                            },
+                            itemBuilder: (context, index) {
+                              bool isCategoryVisible = false;
+                              return StatefulBuilder(builder: (context, st) {
+                                return Column(
+                                  children: [
+                                    ShadowButton(
+                                        onPressed: () {
+                                          st(() {
+                                            isCategoryVisible = !isCategoryVisible;
+                                          });
+                                        },
+                                        title: provider.categories[index]
+                                        ['categoryName'],
+                                        fillColors: const [
+                                          AllColors.semiLiteGreen,
+                                          AllColors.shineGreen
+                                        ]),
+                                    if (isCategoryVisible)
+                                      ListView.separated(
+                                          shrinkWrap: true,
+                                          physics:
+                                          const NeverScrollableScrollPhysics(),
+                                          itemCount: provider
+                                              .categories[index]['topicsList'].length,
+                                          separatorBuilder: (context, i) {
+                                            return gap(0);
+                                          },
+                                          itemBuilder: (context, i) {
+                                            return TopicButton(
+                                                onPressed: () {
+                                                  if (provider.categories[index]
+                                                  ['topicsList'][i]
+                                                  ['status'] ==
+                                                      'locked' && subStatus.toString().contains('none')) {
+                                                    CustomDialog.showPurchaseDialog(
+                                                        context: context);
+                                                  } else {
+                                                    final provider =
+                                                    Provider.of<CategoryProvider>(
+                                                        context,
+                                                        listen: false);
+                                                    final gamePvider = Provider.of<
+                                                        GameScreenProvider>(
+                                                        context,
+                                                        listen: false);
+
+                                                    if (widget.type == 'search') {
+                                                      gamePvider.changeGameType(
+                                                          'searchbycategory');
+                                                      provider.changeSelectedCategory(
+                                                          provider.categories[index]
+                                                          ['topicsList'][i]);
+                                                      Nav.pop(context);
+                                                      final hprovider =
+                                                      Provider.of<HomeProvider>(
+                                                          context,
+                                                          listen: false);
+                                                      hprovider
+                                                          .changeSelectedIndex(4);
+                                                    } else {
+
+                                                      Prefs.getToken().then((token) {
+                                                        Prefs.getPrefs('loginId').then((loginId) {
+                                                          Prefs.getPrefs('wordLimit').then((wordLimit) {
+                                                            Prefs.getPrefs('gameLanguage').then((language) {
+                                                              print(provider.categories[index]['categoryName']);
+                                                              print(provider.categories[index]
+                                                              ['topicsList'][i]['topicsname']);
+                                                              _apiServices
+                                                                  .post(context: context, endpoint: 'topicwise_crossword', body: {
+                                                                "language": language,
+                                                                "userId": loginId,
+                                                                "words_limit": wordLimit,
+                                                                'type':'challenge',
+                                                                "accessToken": token,
+                                                                "category" : provider.categories[index]['categoryName'],
+                                                                "topic": provider.categories[index]
+                                                                ['topicsList'][i]['topicsname'],
+                                                              }).then((value) {
+
+                                                                // print('here');
+                                                                // print(value);
+                                                                if (value['gameDetails'] != null) {
+                                                                  gamePvider.changeGameType(
+                                                                      'challengebycategory');
+                                                                  provider.changeSelectedCategory(
+                                                                      provider.categories[index]
+                                                                      ['topicsList'][i]);
+                                                                  print(provider
+                                                                      .categories[
+                                                                  index][
+                                                                  'topicsList'][i]);
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              WordRelatedPage(
+                                                                                  data: value)));
+                                                                }
+                                                                else {
+                                                                  if(value['message'].toString().contains('Cannot play more')) {
+                                                                    CustomDialog.showGamesFinishedDialog(
+                                                                        context: context);
+                                                                  }
+                                                                  else {
+                                                                    CustomDialog.noGameAvailable(
+                                                                        context: context);
+                                                                  }
+                                                                }
+
+                                                              });
+
+                                                            });
+                                                          });
+                                                        });
+                                                      });
+
+                                                    };
+                                                  }
+                                                },
+                                                lock: provider.categories[index]
+                                                ['topicsList'][i]['status'],
+                                                subStatus: subStatus,
+                                                topicName: provider.categories[index]
+                                                ['topicsList'][i]['topicsname']);
+                                          }),
+                                  ],
+                                );
+                              });
+                            },
+                          ),
+                      ],
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ))),
+    ):
+    Container(
       decoration: const BoxDecoration(gradient: AllColors.bg),
       child: Scaffold(
         backgroundColor: Colors.transparent,

@@ -9,14 +9,14 @@ import 'package:mobile_app_word_search/providers/leaderboard_provider.dart';
 import 'package:mobile_app_word_search/providers/timer_provider.dart';
 import 'package:mobile_app_word_search/views/splash_screen.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:io' show Platform;
 import 'l10n/l10n.dart';
 import 'providers/game_screen_provider.dart';
 import 'providers/games_provider.dart';
 import 'providers/profile_provider.dart';
 import 'widget/sahared_prefs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:flutter/foundation.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
@@ -27,6 +27,7 @@ void main() {
 
   Prefs.getPrefs('loginId').then((value) {
     debugPrint('loginId: $value');
+
   });
 
   Prefs.getPrefs('wordLimit').then((value) {
@@ -34,6 +35,7 @@ void main() {
       Prefs.setPrefs('wordLimit', '6');
     }
   });
+
 
   runApp(
     MultiProvider(
@@ -59,7 +61,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<LanguageProvider>(context);
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Crossword Game',
       builder: (context, child) {
         return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1),

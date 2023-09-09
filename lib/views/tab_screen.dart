@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -125,7 +126,245 @@ class TabScreenState extends State<TabScreen> {
     return WillPopScope(
         onWillPop: showExitPopup,
         child:Consumer<HomeProvider>(builder: (context, provider, _) {
-      return Container(
+      return kIsWeb ?
+          Scaffold(
+            backgroundColor: AllColors.purple_2,
+            body:  Center(
+                child:
+                SizedBox(width: 400 ,child:
+                Container(
+                    decoration: BoxDecoration(
+                        gradient: AllColors.bg,
+                        color: provider.selectedIndex == 4
+                            ? Colors.white
+                            : const Color(0xFF1E155C)),
+                    child:Consumer<GameScreenProvider>(builder: (context, gprovider, _) {
+                      return Scaffold(
+                        backgroundColor: Colors.transparent,
+                        body: pages[provider.selectedIndex],
+                        resizeToAvoidBottomInset: false,
+                        floatingActionButtonLocation:
+                        FloatingActionButtonLocation.centerDocked,
+                        bottomNavigationBar: MediaQuery.of(context).viewInsets.bottom != 0.0
+                            ? null
+                            : AnimatedBottomNavigationBar.builder(
+                          notchMargin: 22,
+                          height: 60,
+                          shadow: BoxShadow(
+                              color: AllColors.black.withOpacity(0.3),
+                              blurRadius: 5,
+                              spreadRadius: 10,
+                              offset: const Offset(1, -6)),
+                          backgroundColor: AllColors.superDarkPurple,
+                          activeIndex: provider.selectedIndex,
+                          gapLocation: GapLocation.center,
+                          notchSmoothness: NotchSmoothness.defaultEdge,
+                          onTap: (index) {
+                            final p =
+                            Provider.of<TimerProvider>(context, listen: false);
+                            final p__ =
+                            Provider.of<GameScreenProvider>(context, listen: false);
+                            p__.reset();
+                            p.stopSeconds();
+                            p.stopSeconds();
+                            p.setTicking(false);
+
+                            provider.changeSelectedIndex(index);
+                            // playVideoAd();
+                          },
+                          itemCount: 4,
+                          tabBuilder: (int index, bool isActive) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    iconList![index].iconData,
+                                    color: isActive
+                                        ? AllColors.liteGreen
+                                        : AllColors.superLitePurple,
+                                  ),
+                                  Label(
+                                      text: iconList![index].text,
+                                      color: isActive
+                                          ? AllColors.liteGreen
+                                          : AllColors.superLitePurple)
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        floatingActionButton: MediaQuery.of(context).viewInsets.bottom !=
+                            0.0
+                            ? null
+                            : Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: FloatingActionButton(
+                            backgroundColor: provider.selectedIndex == 4
+                                && !gprovider.gameEnded
+                                ? AllColors.liteRed
+                                : AllColors.liteGreen,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)),
+                            child: Icon(
+                              provider.selectedIndex == 4
+                                  && !gprovider.gameEnded
+                                  ? CupertinoIcons.square_fill
+                                  : Icons.play_arrow,
+                              size: provider.selectedIndex == 4 && !gprovider.gameEnded? 36 : 50,
+                              color: AllColors.white,
+                              shadows: [
+                                BoxShadow(
+                                    color: AllColors.black.withOpacity(0.5),
+                                    blurRadius: 6,
+                                    spreadRadius: 10,
+                                    offset: const Offset(-1, 3)),
+                              ],
+                            ),
+                            onPressed: () {
+                              final p =
+                              Provider.of<TimerProvider>(context, listen: false);
+                              final gameProvider = Provider.of<GameScreenProvider>(
+                                  context,
+                                  listen: false);
+
+                              if (provider.selectedIndex == 4 && !gameProvider.allowMark) {
+
+                                print(1);
+                                if (gameProvider.gameData['gameDetails']
+                                ['searchtype'] ==
+                                    'search') {
+                                  print(2);
+                                  if (gameProvider.allWordsFromAPI.length ==
+                                      gameProvider.correctWords.length) {
+                                    print(3);
+                                    print('here i am!');
+                                    Nav.push(
+                                        context,
+                                        LevelCompletionPage(
+                                          isCompleted:
+                                          gameProvider.allWordsFromAPI.length ==
+                                              gameProvider.correctWords.length,
+                                          totalWord:
+                                          gameProvider.allWordsFromAPI.length,
+                                          correctWord:
+                                          gameProvider.correctWords.length,
+                                          seconds: p.seconds,
+                                        ));
+                                  }
+
+                                  else {
+                                    print(4);
+                                    final p__ =
+                                    Provider.of<GameScreenProvider>(context, listen: false);
+                                    print('gameEnded here');
+                                    print(p__.gameEnded);
+
+                                    if(p__.gameEnded != true) {
+                                      borderRest();
+                                    }
+                                    else {
+                                      print(8);
+                                      provider.changeSelectedIndex(1);
+                                      // gameProvider.changeGameType('random');
+                                      // final p__ =
+                                      // Provider.of<GameScreenProvider>(context, listen: false);
+                                      // p__.reset();
+                                      // p.stopSeconds();
+                                      // p.resetSeconds();
+                                      // provider.changeSelectedIndex(4);
+                                      // p__.setGameEnded(false);
+                                    }
+                                  }
+                                }
+                                else {
+                                  print(5);
+
+                                  if (gameProvider.correctWordsFromAPI.length ==
+                                      gameProvider.correctWords.length) {
+                                    print(6);
+
+                                    print('check Here');
+                                    if(gameProvider.allowMark) {
+                                      Nav.push(
+                                          context,
+                                          LevelCompletionPage(
+                                            isCompleted: gameProvider
+                                                .correctWordsFromAPI.length ==
+                                                gameProvider.correctWords.length,
+                                            totalWord:
+                                            gameProvider.correctWordsFromAPI.length,
+                                            correctWord:
+                                            gameProvider.correctWords.length,
+                                            seconds: p.seconds,
+                                          ));
+                                    }
+                                    else {
+                                      // provider.changeSelectedIndex(1);
+                                      // final p__ =
+                                      // Provider.of<GameScreenProvider>(context, listen: false);
+                                      // p__.reset();
+                                      // p.stopSeconds();
+                                      // p.resetSeconds();
+                                      // p__.setGameEnded(false);
+                                      print(8);
+
+                                      provider.changeSelectedIndex(1);
+                                      // gameProvider.changeGameType('random');
+                                      // final p__ =
+                                      // Provider.of<GameScreenProvider>(context, listen: false);
+                                      // p__.reset();
+                                      // p.stopSeconds();
+                                      // p.resetSeconds();
+                                      // provider.changeSelectedIndex(4);
+                                      // p__.setGameEnded(false);
+
+                                    }
+
+                                  }
+                                  else {
+                                    final p__ =
+                                    Provider.of<GameScreenProvider>(context, listen: false);
+                                    print('gameEnded');
+                                    print(p__.gameEnded);
+
+                                    if(p__.gameEnded != true) {
+                                      borderRest();
+                                    }
+                                    else {
+                                      print(8);
+                                      provider.changeSelectedIndex(1);
+                                      // gameProvider.changeGameType('random');
+                                      // final p__ =
+                                      // Provider.of<GameScreenProvider>(context, listen: false);
+                                      // p__.reset();
+                                      // p.stopSeconds();
+                                      // p.resetSeconds();
+                                      // provider.changeSelectedIndex(4);
+                                      // p__.setGameEnded(false);
+                                    }
+                                  }
+                                }
+                              }
+
+                              else {
+                                print(8);
+
+                                gameProvider.changeGameType('random');
+                                final p__ =
+                                Provider.of<GameScreenProvider>(context, listen: false);
+                                p__.reset();
+                                p.stopSeconds();
+                                p.resetSeconds();
+                                provider.changeSelectedIndex(4);
+                                p__.setGameEnded(false);
+                              }
+                            },
+                          ),
+                        ),
+                      );})))),
+         ):
+      Container(
           decoration: BoxDecoration(
               gradient: AllColors.bg,
               color: provider.selectedIndex == 4
@@ -221,7 +460,7 @@ class TabScreenState extends State<TabScreen> {
                             context,
                             listen: false);
 
-                        if (provider.selectedIndex == 4) {
+                        if (provider.selectedIndex == 4 && !gameProvider.allowMark) {
 
                           print(1);
                           if (gameProvider.gameData['gameDetails']
@@ -244,7 +483,9 @@ class TabScreenState extends State<TabScreen> {
                                         gameProvider.correctWords.length,
                                     seconds: p.seconds,
                                   ));
-                            } else {
+                            }
+
+                            else {
                               print(4);
                               final p__ =
                               Provider.of<GameScreenProvider>(context, listen: false);
@@ -267,7 +508,8 @@ class TabScreenState extends State<TabScreen> {
                                 // p__.setGameEnded(false);
                               }
                             }
-                          } else {
+                          }
+                          else {
                             print(5);
 
                             if (gameProvider.correctWordsFromAPI.length ==
@@ -335,7 +577,9 @@ class TabScreenState extends State<TabScreen> {
                               }
                             }
                           }
-                        } else {
+                        }
+
+                        else {
                           print(8);
 
                           gameProvider.changeGameType('random');
@@ -369,6 +613,7 @@ class TabScreenState extends State<TabScreen> {
       print(player.playing);
     }
     provider.setGameEnded(true);
+    provider.setAllowMark(false);
 
     p.stopSeconds();
     p.setTicking(false);

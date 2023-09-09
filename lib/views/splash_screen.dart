@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app_word_search/api_services.dart';
 import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
@@ -76,7 +77,33 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return kIsWeb ?
+    Scaffold(
+      backgroundColor: AllColors.purple_2,
+      body:  Center(
+          child:
+          SizedBox(width: 400 ,child:
+          Container(
+            decoration: const BoxDecoration(gradient: AllColors.bg),
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/images/splash_screen_logo.png',
+                      height: 250, width: 250),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      child: LinearProgressIndicator(
+                          color: AllColors.shineGreen,
+                          value: controller.value,
+                          minHeight: 20)),
+                ],
+              ),
+            ),
+          ))),
+    ) :
+    Container(
       decoration: const BoxDecoration(gradient: AllColors.bg),
       child: Scaffold(
         backgroundColor: Colors.transparent,

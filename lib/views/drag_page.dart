@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -152,9 +153,17 @@ class _DrugPageState extends State<DrugPage> {
                                             style: GoogleFonts.inter(textStyle:
                                             Theme.of(context).textTheme.headlineLarge,fontSize: 18, color: Colors.white
                                                 , fontWeight: FontWeight.w700)),
-                                        if (provider.gameType == 'randomwordchallenge')
+                                        if (provider.gameType == 'randomwordchallenge' ||
+                                        provider.gameType == 'challengebycategory'
+                                        || provider.gameType == 'challenge'
+                                        || provider.gameData['gameDetails']
+                                            ['searchtype'] == 'challenge' )
                                           horGap(10),
-                                        if (provider.gameType == 'randomwordchallenge')
+                                        if (provider.gameType == 'randomwordchallenge' ||
+                                            provider.gameType == 'challengebycategory'
+                                            || provider.gameType == 'challenge'
+                                            || provider.gameData['gameDetails']
+                                            ['searchtype'] == 'challenge')
                                           InkWell(
                                               onTap: () {
                                                 CustomDialog.showSuggestionDialog(
@@ -280,7 +289,7 @@ class _DrugPageState extends State<DrugPage> {
                           ]),
                         ),
 
-                        if(provider.gameEnded==false)
+                        if(!provider.gameEnded)
                           if(provider.grid_.isNotEmpty)
                         Container(
                           decoration: BoxDecoration(
@@ -393,7 +402,7 @@ class _DrugPageState extends State<DrugPage> {
                             incorrWords: provider.incorrectWordsFromAPI,
                           ),
                         ),
-                        if(provider.gameEnded==true)
+                        if(provider.gameEnded==true && !provider.allowMark)
                           Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -508,10 +517,17 @@ class _DrugPageState extends State<DrugPage> {
     final provider = Provider.of<TimerProvider>(context, listen: false);
     provider.resetSeconds();
     provider.setTicking(true);
+    Future.delayed(const Duration(milliseconds: 500), () {
+      provider_game.setGameEnded(false);
+    });
+
     print(provider.ticking);
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if(provider.ticking == true) {
        provider.changeSeconds();
+       print(provider_game.allowMark);
+       print(provider_game.gameEnded);
+
         print(provider.seconds);
       }
       else {
@@ -867,8 +883,10 @@ class _DrugPageState extends State<DrugPage> {
           }
         }
         if (provider.correctWords.length > 0) {
+
           if (correctWordsMarked.length ==
               wordsToMark.length) {
+
             final player = AudioPlayer();
             if(!player.playing) {
               // Create a player
@@ -892,47 +910,49 @@ class _DrugPageState extends State<DrugPage> {
                   seconds: p.seconds,
                 ));
           }
-        }
 
-        if(provider.allWordsFromAPI.length == provider.allMarkedWords.length) {
+         else if(provider.allWordsFromAPI.length == provider.allMarkedWords.length) {
 
-          if(correctWordsMarked.length == wordsToMark.length) {
-            final player = AudioPlayer();
-            if(!player.playing) {
-              // Create a player
-              player.setAudioSource(AudioSource.uri(Uri.parse(
-                  "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172346/gamecompleted_dktied.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
-              player.play();
-              print(player.playing);
+            if(correctWordsMarked.length == wordsToMark.length) {
+              final player = AudioPlayer();
+              if(!player.playing) {
+                // Create a player
+                player.setAudioSource(AudioSource.uri(Uri.parse(
+                    "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172346/gamecompleted_dktied.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+                player.play();
+                print(player.playing);
+              }
+              else {
+                player.stop();
+              }
             }
             else {
-              player.stop();
+              final player = AudioPlayer();
+              if(!player.playing) {
+                // Create a player
+                player.setAudioSource(AudioSource.uri(Uri.parse(
+                    "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693173512/gameended_zfar4v.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
+                player.play();
+                print(player.playing);
+              }
+              else {
+                player.stop();
+              }
             }
+            Nav.push(
+                context,
+                LevelCompletionPage(
+                  isCompleted: correctWordsMarked.length ==
+                      wordsToMark.length,
+                  // isCompleted: true,
+                  totalWord: provider.allMarkedWords.length,
+                  correctWord: gameProvider.correctWords.length,
+                  seconds: p.seconds,
+                ));
           }
-          else {
-            final player = AudioPlayer();
-            if(!player.playing) {
-              // Create a player
-              player.setAudioSource(AudioSource.uri(Uri.parse(
-                  "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693173512/gameended_zfar4v.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
-              player.play();
-              print(player.playing);
-            }
-            else {
-              player.stop();
-            }
-          }
-          Nav.push(
-              context,
-              LevelCompletionPage(
-                isCompleted: correctWordsMarked.length ==
-                    wordsToMark.length,
-                // isCompleted: true,
-                totalWord: provider.allMarkedWords.length,
-                correctWord: gameProvider.correctWords.length,
-                seconds: p.seconds,
-              ));
         }
+
+
 
       }
     });

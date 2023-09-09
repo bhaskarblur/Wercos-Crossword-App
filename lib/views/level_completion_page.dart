@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:mobile_app_word_search/admob/admob_service_details.dart';
@@ -95,7 +96,176 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
 
         return true;
       },
-      child: Container(
+      child: kIsWeb ?
+      Scaffold(
+        backgroundColor: AllColors.purple_2,
+        body:  Center(
+            child:
+            SizedBox(width: 400 ,child:
+            Container(
+              decoration: const BoxDecoration(gradient: AllColors.bg),
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 100),
+                        Consumer<GameScreenProvider>(builder: (context, provider, _) {
+                          return Label(
+                              text: provider.gameData['gameDetails']['searchtype'] ==
+                                  'search'
+                                  ? AppLocalizations.of(context)!.rate_this
+                                  : AppLocalizations.of(context)!.rate_this_challange,
+                              fontSize: FontSize.p2);
+                        }),
+                        const SizedBox(height: 10),
+                        StatefulBuilder(builder: (context, st) {
+                          return RatingBarIndicator(
+                              rating: rating,
+                              itemBuilder: (context, index) => InkWell(
+                                onTap: () {
+                                  st(() {
+                                    rating = index + 1;
+                                  });
+                                },
+                                child: const Icon(Icons.star,
+                                    color: AllColors.superLightGreen),
+                              ),
+                              itemCount: 5,
+                              itemPadding: const EdgeInsets.all(4),
+                              unratedColor: AllColors.grey,
+                              itemSize: 30);
+                        }),
+                        const SizedBox(height: 24),
+                        !widget.isCompleted
+                            ? Label(
+                            text: AppLocalizations.of(context)!.game,
+                            fontSize: FontSize.h4,
+                            fontWeight: FontWeight.bold)
+                            : Label(
+                            text: AppLocalizations.of(context)!.congratulations,
+                            fontSize: FontSize.h4),
+                        const SizedBox(height: 4),
+                        !widget.isCompleted
+                            ? Label(
+                            text: AppLocalizations.of(context)!.not_complete,
+                            fontSize: FontSize.h4,
+                            color: AllColors.liteRed,
+                            fontWeight: FontWeight.bold)
+                            : Label(
+                            text: AppLocalizations.of(context)!.complete,
+                            fontSize: FontSize.h4,
+                            color: AllColors.liteGreen,
+                            fontWeight: FontWeight.bold),
+                        const SizedBox(height: 40),
+                        Label(
+                            text: AppLocalizations.of(context)!.hits,
+                            fontSize: FontSize.p1,
+                            fontWeight: FontWeight.w600),
+                        const SizedBox(height: 10),
+                        Label(
+                            text:
+                            '${widget.correctWord} ${AppLocalizations.of(context)!.offf} ${widget.totalWord}',
+                            fontSize: FontSize.p1,
+                            fontWeight: FontWeight.w600),
+                        const SizedBox(height: 40),
+                        Label(
+                            text: AppLocalizations.of(context)!.time,
+                            fontSize: FontSize.p1,
+                            fontWeight: FontWeight.w600),
+                        const SizedBox(height: 10),
+                        Consumer<TimerProvider>(builder: (context, provider, _) {
+                          return Label(
+                              text: formatTime(widget.seconds),
+                              fontSize: FontSize.p1,
+                              fontWeight: FontWeight.w600);
+                        }),
+                        const SizedBox(height: 60),
+                        ShadowButton(
+                            fillColors: const [
+                              AllColors.semiLiteGreen,
+                              AllColors.shineGreen
+                            ],
+                            onPressed: () {
+                              rate();
+
+                              final p =
+                              Provider.of<TimerProvider>(context, listen: false);
+                              p.resetSeconds();
+                              final provider =
+                              Provider.of<HomeProvider>(context, listen: false);
+                              provider.changeSelectedIndex(0);
+
+                              final pProvider = Provider.of<GameScreenProvider>(
+                                  context,
+                                  listen: false);
+                              //pProvider.reset();
+                              Nav.pop(context);
+                              final provider_ =
+                              Provider.of<HomeProvider>(context, listen: false);
+                              provider_.changeSelectedIndex(4);
+                            },
+                            title: AppLocalizations.of(context)!.back),
+                        const SizedBox(height: 16),
+                        ShadowButton(
+                            fillColors: const [
+                              AllColors.liteOrange,
+                              AllColors.orange
+                            ],
+                            onPressed: () {
+                              rate();
+
+                              final provider = Provider.of<GameScreenProvider>(
+                                  context,
+                                  listen: false);
+
+                              print('gamedata');
+                              print(provider.gameData['gameDetails']);
+                              Nav.push(
+                                  context,
+                                  LeaderBoardPage(
+                                      pageName: 'levelComplete',
+                                      gameDetails: provider.gameData['gameDetails']));
+
+                              //  provider.reset();
+                            },
+                            title: AppLocalizations.of(context)!.see_leaderboard),
+                        const SizedBox(height: 16),
+                        // widget.isCompleted
+                        //     ? const SizedBox()
+                        ShadowButton(
+                            fillColors: const [
+                              AllColors.semiLiteGreen,
+                              AllColors.shineGreen
+                            ],
+                            onPressed: () {
+                              rate();
+
+                              final pProvider = Provider.of<GameScreenProvider>(
+                                  context,
+                                  listen: false);
+                              //   pProvider.reset();
+
+                              final p = Provider.of<TimerProvider>(context,
+                                  listen: false);
+                              p.resetSeconds();
+                              p.resetSeconds();
+                              Nav.pop(context);
+                              final provider =
+                              Provider.of<HomeProvider>(context, listen: false);
+                              provider.changeSelectedIndex(1);
+                            },
+                            title: AppLocalizations.of(context)!.startNew_game),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ))),
+      ) :
+      Container(
         decoration: const BoxDecoration(gradient: AllColors.bg),
         child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -239,7 +409,7 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
                             final pProvider = Provider.of<GameScreenProvider>(
                                 context,
                                 listen: false);
-                            pProvider.reset();
+                         //   pProvider.reset();
 
                             final p = Provider.of<TimerProvider>(context,
                                 listen: false);

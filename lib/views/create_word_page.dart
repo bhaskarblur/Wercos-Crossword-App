@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mobile_app_word_search/api_services.dart';
@@ -104,7 +105,377 @@ class _CreateWordPageState extends State<CreateWordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return  kIsWeb ?
+    Scaffold(
+      backgroundColor: AllColors.purple_2,
+      body:  Center(
+          child:
+          SizedBox(width: 400 ,child:
+          Container(
+            decoration: const BoxDecoration(gradient: AllColors.bg),
+            child: Scaffold(
+                resizeToAvoidBottomInset: false,
+                appBar: const PreferredSize(
+                    preferredSize: Size.fromHeight(70),
+                    child: CustomAppBar(isBack: true, isLang: true)),
+                backgroundColor: Colors.transparent,
+                body: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 26),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 20),
+                        Center(
+                            child: Label(
+                                text:
+                                '${AppLocalizations.of(context)!.create.toUpperCase()}  ${widget.type == 'challenge' ? AppLocalizations.of(context)!.challenge.toUpperCase() : AppLocalizations.of(context)!.word_search.toUpperCase()}',
+                                fontSize: FontSize.p2,
+                                fontWeight: FontWeight.w500)),
+                        const SizedBox(height: 10),
+                        Label(
+                            text: AppLocalizations.of(context)!.publication_mode,
+                            fontSize: FontSize.p4,
+                            fontWeight: FontWeight.w500),
+                        const SizedBox(height: 14),
+                        customSwitch([
+                          AppLocalizations.of(context)!.public,
+                          AppLocalizations.of(context)!.privet
+                        ], value: public, onTap: () {
+                          final provider =
+                          Provider.of<ProfileProvider>(context, listen: false);
+                          if (provider.profile['subscriptionstatus'] == 'none') {
+                            CustomDialog.showPurchaseDialog(context: context);
+                          } else {
+                            setState(() {
+                              public = !public;
+                            });
+                          }
+                        }, info: () {
+                          CustomDialog.showSuggestionDialog(
+                              context: context,
+                              suggestions: [
+                                Suggestion(
+                                    AppLocalizations.of(context)!.what_is_challenge,
+                                    AppLocalizations.of(context)!
+                                        .what_is_challenge_description),
+                              ]);
+                        }),
+                        gap(16),
+                        customSwitch([
+                          AppLocalizations.of(context)!.fixed,
+                          AppLocalizations.of(context)!.dynam
+                        ], value: public1, onTap: () {
+                          final provider =
+                          Provider.of<ProfileProvider>(context, listen: false);
+                          if (provider.profile['subscriptionstatus'] == 'none') {
+                            CustomDialog.showPurchaseDialog(context: context);
+                          } else {
+                            setState(() {
+                              public1 = !public1;
+                            });
+                          }
+                        }, info: () {
+                          CustomDialog.showSuggestionDialog(
+                              context: context,
+                              suggestions: [
+                                Suggestion(
+                                    AppLocalizations.of(context)!.dynamic_word_search,
+                                    AppLocalizations.of(context)!
+                                        .dynamic_word_search_description),
+                              ]);
+                        }),
+                        if (!public1 && widget.type == 'search') const SizedBox(height: 20),
+                        if (!public1 && widget.type == 'search')
+                          customDropdown(selectedWordCount!= ''? selectedWordCount : 'Word Count', [
+                            for (int i = 0; i < _list.length; i++) (i + 1).toString()
+                          ], (value) {
+                            setState(() {
+                              selectedWordCount = value!;
+                            });
+                          }, AppLocalizations.of(context)!.wordcount),
+                        const SizedBox(height: 20),
+                        customDropdown(selectedLanguage != ''? selectedLanguage : AppLocalizations.of(context)!.select_language.toString().toUpperCase(), [
+                          AppLocalizations.of(context)!.select_language.toString().toUpperCase(),'ENGLISH', 'ESPAÑOL'],
+                                (value) {
+                              setState(() {
+                                selectedLanguage = value!;
+                              });
+                            }, "Language/Idioma"),
+                        const SizedBox(height: 20),
+                        customTextField(
+                            _c1,
+                            AppLocalizations.of(context)!
+                                .enter_name_of_the_word_search),
+                        const SizedBox(height: 14),
+                        customTextField(
+                            _c2, AppLocalizations.of(context)!.enter_word),
+                        const SizedBox(height: 14),
+                        CupertinoButton(
+                          onPressed: () {
+                            if(_c2.text.length>14) {
+                              var snackBar = SnackBar(content: Text(
+                                  AppLocalizations.of(context)!.wordlimit_
+                              )
+                                  , backgroundColor: AllColors.liteDarkPurple );
+
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                            }
+                            else {
+                              Prefs.getPrefs('subStatus').then((value) => {
+
+                                if(value.toString().contains('1month') ||
+                                    value.toString().contains('1year')  ) {
+                                  if (_c2.text.isNotEmpty) {
+                                    _list.add(
+                                        Word(word: _c2.text.toUpperCase(),
+                                            correct: true)),
+                                    selectedWordCount = _list.length.toString(),
+                                    _c2.clear()
+                                  }
+                                }
+                                else {
+                                  if(_list.length >= 6) {
+                                    if (_c2.text.isNotEmpty) {
+                                      FocusScope.of(context).unfocus(),
+                                      Future.delayed(const Duration(milliseconds: 200), (){
+                                        CustomDialog.showWordsLimit(
+                                            context: context);
+                                      }),
+
+                                    }
+                                  }
+                                  else {
+                                    if (_c2.text.isNotEmpty) {
+                                      _list.add(
+                                          Word(word: _c2.text.toUpperCase(),
+                                              correct: true)),
+                                      selectedWordCount = _list.length.toString(),
+                                      _c2.clear()
+                                    }
+                                  },
+                                }
+                              });
+
+                            }
+                            setState(() {});
+                          },
+                          padding: EdgeInsets.zero,
+                          minSize: 0,
+                          child: Container(
+                            width: double.maxFinite,
+                            height: 40,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                border: Border.all(color: AllColors.white)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Label(
+                                    text: AppLocalizations.of(context)!.add,
+                                    fontSize: 16,
+                                    align: TextAlign.center),
+                                horGap(5),
+                                const Icon(CupertinoIcons.add,
+                                    color: AllColors.white, size: 18)
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        ListView.separated(
+                            shrinkWrap: true,
+                            itemCount: _list.length,
+                            physics: const NeverScrollableScrollPhysics(),
+                            separatorBuilder: (context, index) {
+                              return gap(10);
+                            },
+                            itemBuilder: (context, index) {
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 24, vertical: 15),
+                                      height: 60,
+                                      width: double.maxFinite,
+                                      decoration: BoxDecoration(
+                                          color: AllColors.liteDarkPurple,
+                                          borderRadius: BorderRadius.circular(50)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Label(
+                                              text: _list[index].word!,
+                                              fontSize: FontSize.p2),
+                                          CupertinoButton(
+                                              onPressed: () {
+                                                _list.remove(_list[index]);
+                                                setState(() {});
+                                              },
+                                              padding: EdgeInsets.zero,
+                                              minSize: 0,
+                                              child: const Icon(Icons.close,
+                                                  color: AllColors.white)),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  if (widget.type == 'challenge') horGap(10),
+                                  if (widget.type == 'challenge')
+                                    InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _list[index].correct =
+                                            !(_list[index].correct!);
+                                          });
+                                        },
+                                        child: Container(
+                                            height: 50,
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                                color: _list[index].correct!
+                                                    ? const Color.fromARGB(
+                                                    255, 196, 238, 197)
+                                                    : Colors.transparent,
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                    width: 2,
+                                                    color: _list[index].correct!
+                                                        ? Colors.transparent
+                                                        : Colors.green)),
+                                            child: _list[index].correct! ? const Center(
+                                                child: Icon(Icons.done,
+                                                    color: Colors.green, size: 40)):
+                                            Icon(Icons.done,
+                                                color: Colors.green, size: 0)) ),
+                                ],
+                              );
+                            }),
+                        const SizedBox(height: 90),
+                      ],
+                    ),
+                  ),
+                ),
+                floatingActionButton: Padding(
+                    padding: const EdgeInsets.only(bottom: 25, left: 10, right: 10),
+                    child: ShadowButton(
+                        fillColors: const [
+                          AllColors.semiLiteGreen,
+                          AllColors.shineGreen
+                        ],
+                        onPressed: () {
+                          if (_c1.text.isNotEmpty) {
+                            if (_list.isNotEmpty) {
+                              Prefs.getToken().then((token) {
+                                Prefs.getPrefs('loginId').then((loginId) {
+                                  Prefs.getPrefs('wordLimit').then((wordLimit) {
+                                    List<String> allWords = [];
+                                    List<String> correctWords = [];
+                                    List<String> incorrectWords = [];
+
+                                    for (var element in _list) {
+                                      allWords.add(element.word!.toString());
+                                      if (element.correct!) {
+                                        correctWords.add(element.word!.toString().trim());
+                                      } else {
+                                        incorrectWords.add(element.word!.toString().trim());
+                                      }
+                                    }
+
+                                    _apiServices.post(
+                                        context: context,
+                                        endpoint: widget.gameDetails != null
+                                            ? 'editGame'
+                                            : 'createGame',
+                                        body: {
+                                          "accessToken": token,
+                                          "userId": loginId,
+                                          "gameName": _c1.text,
+                                          "gameLanguage":
+                                          selectedLanguage == "ENGLISH"
+                                              ? 'en'
+                                              : (selectedLanguage == "SPANISH") ? 'es':'en',
+                                          "totalWords": _list.length.toString(),
+                                          "limitedWords":
+                                          widget.type == 'search'
+                                              ? selectedWordCount != '' ? selectedWordCount : _list.length.toString()
+                                              : _list.length.toString()
+                                          // : (!public1 &&
+                                          //         selectedWordCount != null)
+                                          //     ? selectedLanguage
+                                          //     : wordLimit
+                                          ,
+                                          "allWords": jsonEncode(allWords),
+
+
+
+                                          if (widget.type == 'challenge')
+                                            "correctWords": jsonEncode(correctWords),
+                                          if (widget.type == 'challenge')
+                                            "incorrectWords":
+                                            jsonEncode(incorrectWords),
+                                          if (widget.gameDetails != null)
+                                            "gameId": widget.gameDetails['gameid']
+                                                .toString(),
+                                          "gameType": public ? 'public' : 'private',
+                                          "searchType": widget.type == 'challenge'
+                                              ? 'challenge'
+                                              : "search",
+                                        }).then((value) {
+                                      getData(false);
+                                      if(value['message'].toString().contains('created successfully'))
+                                      {
+                                        dialog(context,
+                                            AppLocalizations.of(context)!.created_success, () {
+                                              Nav.pop(context);
+                                              Nav.pop(context);
+
+                                            });
+                                      }
+                                      else if(value['message'].toString().contains('updated successfully'))
+                                      {
+                                        dialog(context,
+                                            AppLocalizations.of(context)!.edited_success, () {
+                                              Nav.pop(context);
+                                              Nav.pop(context);
+
+                                            });
+                                      }
+                                      else {
+                                        dialog(context,
+                                            AppLocalizations.of(context)!.edited_success, () {
+                                              // Nav.pop(context);
+                                              Nav.pop(context);
+
+                                            });
+                                      }
+
+                                    });
+                                  });
+                                });
+                              });
+                            } else {
+                              dialog(context, AppLocalizations.of(context)!.addword, () {
+                                Nav.pop(context);
+                              });
+                            }
+                          } else {
+                            dialog(context, 'Enter Name.', () {
+                              Nav.pop(context);
+                            });
+                          }
+                        },
+                        title: widget.gameDetails != null
+                            ? AppLocalizations.of(context)!.save
+                            : AppLocalizations.of(context)!.generate)),
+                floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked),
+          ))),
+    ) :
+    Container(
       decoration: const BoxDecoration(gradient: AllColors.bg),
       child: Scaffold(
           resizeToAvoidBottomInset: false,

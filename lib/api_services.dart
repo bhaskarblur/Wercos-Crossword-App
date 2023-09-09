@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 // import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -156,7 +157,14 @@ class ApiServices {
 
   Future<bool> connectedOrNot(BuildContext context, {bool show = true}) async {
     try {
-      final result = await http.get(Uri.parse('http://www.google.com'));
+      // add http://
+      final result;
+      if(kIsWeb) {
+        result = await http.get(Uri.parse('www.google.com'));
+      }
+      else {
+        result = await http.get(Uri.parse('http://www.google.com'));
+      }
       if(result.statusCode==200){
         return true;
       }
