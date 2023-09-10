@@ -7,7 +7,7 @@ import 'package:crossword/components/word_line.dart';
 import 'package:crossword/helper/extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
+import 'package:crossword_flutter/providers/game_screen_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'line_painter.dart';

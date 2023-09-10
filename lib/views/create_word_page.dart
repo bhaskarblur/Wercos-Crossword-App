@@ -2,16 +2,16 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:mobile_app_word_search/api_services.dart';
-import 'package:mobile_app_word_search/providers/profile_provider.dart';
-import 'package:mobile_app_word_search/utils/buttons.dart';
-import 'package:mobile_app_word_search/utils/font_size.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/components/labels.dart';
-import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
-import 'package:mobile_app_word_search/widget/navigator.dart';
-import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
-import 'package:mobile_app_word_search/widget/widgets.dart';
+import 'package:crossword_flutter/api_services.dart';
+import 'package:crossword_flutter/providers/profile_provider.dart';
+import 'package:crossword_flutter/utils/buttons.dart';
+import 'package:crossword_flutter/utils/font_size.dart';
+import 'package:crossword_flutter/utils/all_colors.dart';
+import 'package:crossword_flutter/components/labels.dart';
+import 'package:crossword_flutter/utils/custom_app_bar.dart';
+import 'package:crossword_flutter/widget/navigator.dart';
+import 'package:crossword_flutter/widget/sahared_prefs.dart';
+import 'package:crossword_flutter/widget/widgets.dart';
 import 'package:provider/provider.dart';
 import '../components/custom_dialogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -31,7 +31,7 @@ class CreateWordPage extends StatefulWidget {
 class _CreateWordPageState extends State<CreateWordPage> {
   final ApiServices _apiServices = ApiServices();
   bool public = true;
-  bool public1 = true;
+  bool fixDynamo = true;
 
   late String selectedLanguage = '';
   String selectedWordCount = '';
@@ -67,7 +67,13 @@ class _CreateWordPageState extends State<CreateWordPage> {
               } else {
                 public = false;
               }
-              public1 = true;
+              if(value['gameDetails']['gridtype'] == 'dynamic') {
+                fixDynamo = false;
+              }
+              else {
+                fixDynamo = true;
+              }
+
               if (value['gameDetails']['gamelanguage'] == 'en') {
                 selectedLanguage = 'ENGLISH';
               } else {
@@ -165,14 +171,16 @@ class _CreateWordPageState extends State<CreateWordPage> {
                         customSwitch([
                           AppLocalizations.of(context)!.fixed,
                           AppLocalizations.of(context)!.dynam
-                        ], value: public1, onTap: () {
+                        ], value: fixDynamo, onTap: () {
                           final provider =
                           Provider.of<ProfileProvider>(context, listen: false);
                           if (provider.profile['subscriptionstatus'] == 'none') {
                             CustomDialog.showPurchaseDialog(context: context);
                           } else {
                             setState(() {
-                              public1 = !public1;
+                              fixDynamo = !fixDynamo;
+                              print('what is it!');
+                              print(fixDynamo);
                             });
                           }
                         }, info: () {
@@ -185,8 +193,8 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                         .dynamic_word_search_description),
                               ]);
                         }),
-                        if (!public1 && widget.type == 'search') const SizedBox(height: 20),
-                        if (!public1 && widget.type == 'search')
+                        if (!fixDynamo && widget.type == 'search') const SizedBox(height: 20),
+                        if (!fixDynamo && widget.type == 'search')
                           customDropdown(selectedWordCount!= ''? selectedWordCount : 'Word Count', [
                             for (int i = 0; i < _list.length; i++) (i + 1).toString()
                           ], (value) {
@@ -529,14 +537,16 @@ class _CreateWordPageState extends State<CreateWordPage> {
                   customSwitch([
                     AppLocalizations.of(context)!.fixed,
                     AppLocalizations.of(context)!.dynam
-                  ], value: public1, onTap: () {
+                  ], value: fixDynamo, onTap: () {
                     final provider =
                         Provider.of<ProfileProvider>(context, listen: false);
                     if (provider.profile['subscriptionstatus'] == 'none') {
                       CustomDialog.showPurchaseDialog(context: context);
                     } else {
                       setState(() {
-                        public1 = !public1;
+                        fixDynamo = !fixDynamo;
+                        print('what is it!');
+                        print(fixDynamo);
                       });
                     }
                   }, info: () {
@@ -549,8 +559,8 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                   .dynamic_word_search_description),
                         ]);
                   }),
-                  if (!public1 && widget.type == 'search') const SizedBox(height: 20),
-                  if (!public1 && widget.type == 'search')
+                  if (!fixDynamo && widget.type == 'search') const SizedBox(height: 20),
+                  if (!fixDynamo && widget.type == 'search')
                     customDropdown(selectedWordCount!= ''? selectedWordCount : 'Word Count', [
                       for (int i = 0; i < _list.length; i++) (i + 1).toString()
                     ], (value) {
@@ -589,6 +599,9 @@ class _CreateWordPageState extends State<CreateWordPage> {
                       else {
                         Prefs.getPrefs('subStatus').then((value) => {
 
+                          if(_list.length < 18) {
+
+
                           if(value.toString().contains('1month') ||
                               value.toString().contains('1year')  ) {
                             if (_c2.text.isNotEmpty) {
@@ -599,26 +612,39 @@ class _CreateWordPageState extends State<CreateWordPage> {
                           _c2.clear()
                         }
                           }
+                          else
+                            {
+                              if(_list.length >= 6) {
+                                if (_c2.text.isNotEmpty) {
+                                  FocusScope.of(context).unfocus(),
+                                  Future.delayed(
+                                      const Duration(milliseconds: 200), () {
+                                    CustomDialog.showWordsLimit(
+                                        context: context);
+                                  }),
+
+                                }
+                              }
+                              else
+                                {
+                                  if (_c2.text.isNotEmpty) {
+                                    _list.add(
+                                        Word(word: _c2.text.toUpperCase(),
+                                            correct: true)),
+                                    selectedWordCount = _list.length.toString(),
+                                    _c2.clear()
+                                  }
+                                },
+                            }
+                          }
                           else {
-                        if(_list.length >= 6) {
-                          if (_c2.text.isNotEmpty) {
                             FocusScope.of(context).unfocus(),
-                            Future.delayed(const Duration(milliseconds: 200), (){
-                              CustomDialog.showWordsLimit(
+                            Future.delayed(
+                                const Duration(milliseconds: 200), () {
+                              CustomDialog.show18WordsCant(
                                   context: context);
                             }),
 
-                          }
-                        }
-                        else {
-                          if (_c2.text.isNotEmpty) {
-                            _list.add(
-                                Word(word: _c2.text.toUpperCase(),
-                                    correct: true)),
-                            selectedWordCount = _list.length.toString(),
-                            _c2.clear()
-                          }
-                        },
                           }
                         });
 
@@ -774,8 +800,6 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                     ,
                                     "allWords": jsonEncode(allWords),
 
-
-
                                     if (widget.type == 'challenge')
                                       "correctWords": jsonEncode(correctWords),
                                     if (widget.type == 'challenge')
@@ -788,6 +812,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                     "searchType": widget.type == 'challenge'
                                         ? 'challenge'
                                         : "search",
+                                    "gridType" : fixDynamo ? 'fixed' : 'dynamic'
                                   }).then((value) {
                                 getData(false);
                                 if(value['message'].toString().contains('created successfully'))

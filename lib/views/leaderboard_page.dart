@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/api_services.dart';
-import 'package:mobile_app_word_search/providers/leaderboard_provider.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/utils/buttons.dart';
-import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
-import 'package:mobile_app_word_search/views/tab_screen.dart';
-import 'package:mobile_app_word_search/widget/navigator.dart';
-import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
-import 'package:mobile_app_word_search/widget/widgets.dart';
+import 'package:crossword_flutter/api_services.dart';
+import 'package:crossword_flutter/providers/leaderboard_provider.dart';
+import 'package:crossword_flutter/utils/all_colors.dart';
+import 'package:crossword_flutter/utils/buttons.dart';
+import 'package:crossword_flutter/utils/custom_app_bar.dart';
+import 'package:crossword_flutter/views/tab_screen.dart';
+import 'package:crossword_flutter/widget/navigator.dart';
+import 'package:crossword_flutter/widget/sahared_prefs.dart';
+import 'package:crossword_flutter/widget/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../components/labels.dart';

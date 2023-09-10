@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/components/labels.dart';
-import 'package:mobile_app_word_search/components/suggestion/model/suggestion.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/utils/buttons.dart';
-import 'package:mobile_app_word_search/utils/font_size.dart';
-import 'package:mobile_app_word_search/views/subscription_page.dart';
-import 'package:mobile_app_word_search/widget/navigator.dart';
+import 'package:crossword_flutter/components/labels.dart';
+import 'package:crossword_flutter/components/suggestion/model/suggestion.dart';
+import 'package:crossword_flutter/utils/all_colors.dart';
+import 'package:crossword_flutter/utils/buttons.dart';
+import 'package:crossword_flutter/utils/font_size.dart';
+import 'package:crossword_flutter/views/subscription_page.dart';
+import 'package:crossword_flutter/widget/navigator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mobile_app_word_search/widget/widgets.dart';
+import 'package:crossword_flutter/widget/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/home_provider.dart';
@@ -121,6 +121,71 @@ class CustomDialog {
                                   child: Label(
                                       align: TextAlign.center,
                                       text: AppLocalizations.of(context)!.words_limit
+                                      ,
+                                      fontSize: FontSize.p2)),
+                              const Spacer(),
+                              ShadowButton(
+                                  fillColors: const [
+                                    AllColors.semiLiteGreen,
+                                    AllColors.shineGreen
+                                  ],
+                                  onPressed: () {
+                                    Nav.pop(context);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                            const SubscriptionPage()));
+                                  },
+                                  title: AppLocalizations.of(context)!.upgrade)
+                            ]))
+                      ]),
+                    ))
+              ]);
+        });
+  }
+
+  static show18WordsCant({required BuildContext context}) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    height: 250,
+                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: AllColors.alertGradient),
+                    child: Scaffold(
+                      backgroundColor: Colors.transparent,
+                      body: Stack(children: [
+                        Positioned(
+                            top: 10,
+                            right: 10,
+                            child: CupertinoButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                padding: EdgeInsets.zero,
+                                minSize: 0,
+                                child: const Icon(
+                                    CupertinoIcons.multiply_circle,
+                                    color: AllColors.white,
+                                    size: 30))),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 50),
+                            child: Column(children: [
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  child: Label(
+                                      align: TextAlign.center,
+                                      text: AppLocalizations.of(context)!._words_cant
                                       ,
                                       fontSize: FontSize.p2)),
                               const Spacer(),

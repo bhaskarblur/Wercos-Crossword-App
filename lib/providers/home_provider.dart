@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
+import 'package:crossword_flutter/widget/sahared_prefs.dart';
 
 class HomeProvider with ChangeNotifier {
   int _selectedIndex = 4;

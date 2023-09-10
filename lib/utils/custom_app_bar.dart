@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/components/cutom_image_button.dart';
-import 'package:mobile_app_word_search/components/labels.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/utils/font_size.dart';
-import 'package:mobile_app_word_search/views/language_selection_page.dart';
-import 'package:mobile_app_word_search/views/level_page.dart';
-import 'package:mobile_app_word_search/widget/navigator.dart';
-import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
-import 'package:mobile_app_word_search/widget/widgets.dart';
+import 'package:crossword_flutter/components/cutom_image_button.dart';
+import 'package:crossword_flutter/components/labels.dart';
+import 'package:crossword_flutter/utils/all_colors.dart';
+import 'package:crossword_flutter/utils/font_size.dart';
+import 'package:crossword_flutter/views/language_selection_page.dart';
+import 'package:crossword_flutter/views/level_page.dart';
+import 'package:crossword_flutter/widget/navigator.dart';
+import 'package:crossword_flutter/widget/sahared_prefs.dart';
+import 'package:crossword_flutter/widget/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 

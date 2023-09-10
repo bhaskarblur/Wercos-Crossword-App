@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/components/labels.dart';
-import 'package:mobile_app_word_search/providers/home_provider.dart';
-import 'package:mobile_app_word_search/providers/language_provider.dart';
-import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
-import 'package:mobile_app_word_search/utils/font_size.dart';
-import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
+import 'package:crossword_flutter/components/labels.dart';
+import 'package:crossword_flutter/providers/home_provider.dart';
+import 'package:crossword_flutter/providers/language_provider.dart';
+import 'package:crossword_flutter/utils/custom_app_bar.dart';
+import 'package:crossword_flutter/utils/font_size.dart';
+import 'package:crossword_flutter/widget/sahared_prefs.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/all_colors.dart';

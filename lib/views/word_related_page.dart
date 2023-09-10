@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/components/labels.dart';
-import 'package:mobile_app_word_search/providers/home_provider.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/utils/buttons.dart';
-import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
-import 'package:mobile_app_word_search/utils/font_size.dart';
+import 'package:crossword_flutter/components/labels.dart';
+import 'package:crossword_flutter/providers/home_provider.dart';
+import 'package:crossword_flutter/utils/all_colors.dart';
+import 'package:crossword_flutter/utils/buttons.dart';
+import 'package:crossword_flutter/utils/custom_app_bar.dart';
+import 'package:crossword_flutter/utils/font_size.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mobile_app_word_search/widget/navigator.dart';
+import 'package:crossword_flutter/widget/navigator.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/game_screen_provider.dart';

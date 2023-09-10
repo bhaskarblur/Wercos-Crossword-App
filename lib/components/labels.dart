@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
+import 'package:crossword_flutter/utils/all_colors.dart';
 
 class Label extends StatelessWidget {
   final String text;

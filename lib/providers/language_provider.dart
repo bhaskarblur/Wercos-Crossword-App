@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/l10n/l10n.dart';
+import 'package:crossword_flutter/l10n/l10n.dart';
 
 class LanguageProvider with ChangeNotifier {
   Locale _locale = L10n.all.first;

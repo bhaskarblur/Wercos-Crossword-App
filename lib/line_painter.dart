@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:crossword/components/word_line.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
+import 'package:crossword_flutter/providers/game_screen_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'linedecoration.dart';

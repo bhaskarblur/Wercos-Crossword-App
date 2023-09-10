@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/api_services.dart';
-import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
-import 'package:mobile_app_word_search/providers/profile_provider.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/views/tab_screen.dart';
+import 'package:crossword_flutter/api_services.dart';
+import 'package:crossword_flutter/providers/game_screen_provider.dart';
+import 'package:crossword_flutter/providers/profile_provider.dart';
+import 'package:crossword_flutter/utils/all_colors.dart';
+import 'package:crossword_flutter/views/tab_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../l10n/l10n.dart';

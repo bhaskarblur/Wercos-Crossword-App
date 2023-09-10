@@ -4,18 +4,18 @@ import 'dart:math';
 import 'package:crossword/components/line_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:mobile_app_word_search/providers/category_provider.dart';
-import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/widget/navigator.dart';
-import 'package:mobile_app_word_search/widget/widgets.dart';
+import 'package:crossword_flutter/providers/category_provider.dart';
+import 'package:crossword_flutter/providers/game_screen_provider.dart';
+import 'package:crossword_flutter/utils/all_colors.dart';
+import 'package:crossword_flutter/widget/navigator.dart';
+import 'package:crossword_flutter/widget/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../api_services.dart';
 import '../providers/timer_provider.dart';
 import '../widget/sahared_prefs.dart';
 import 'level_completion_page.dart';
-import 'package:mobile_app_word_search/crosswordfile.dart';
+import 'package:crossword_flutter/crosswordfile.dart';
 
 class DrugPage2 extends StatefulWidget {
   const DrugPage2({Key? key}) : super(key: key);
