@@ -185,7 +185,7 @@ class CustomDialog {
                                       horizontal: 20, vertical: 10),
                                   child: Label(
                                       align: TextAlign.center,
-                                      text: AppLocalizations.of(context)!._words_cant
+                                      text: AppLocalizations.of(context)!.words_cant
                                       ,
                                       fontSize: FontSize.p2)),
                               const Spacer(),

@@ -102,7 +102,7 @@
     "time" : "TIME",
     "ok":"OK",
      "users":"Users",
-            "_words_cant": "Cannot add more than 18 words in the game!",
+            "words_cant": "Cannot add more than 18 words in the game!",
     "wordcount":"Word Count",
     "wordlimit_":"Word should be of 14 or less than 14 characters.",
     "wrongcode":"Invalid share code entered. Please try again!",
