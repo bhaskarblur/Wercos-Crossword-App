@@ -1,4 +1,4 @@
-# mobile_app_word_search
+# Crossword Game
 
 A new Flutter project.
 
