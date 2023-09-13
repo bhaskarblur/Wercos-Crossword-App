@@ -7,7 +7,7 @@ class AdmobService {
       return 'ca-app-pub-3736420404472867/2311691422';
     }
     else  if(Platform.isIOS){
-      return 'ca-app-pub-3940256099942544~3347511713';
+      return 'ca-app-pub-3736420404472867/4908076350';
     }
   }
 }

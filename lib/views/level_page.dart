@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/providers/profile_provider.dart';
-import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
-import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
+import 'package:werkos/providers/profile_provider.dart';
+import 'package:werkos/utils/custom_app_bar.dart';
+import 'package:werkos/widget/sahared_prefs.dart';
 import 'package:provider/provider.dart';
 
 import '../components/labels.dart';
@@ -20,7 +21,69 @@ class LevelPage extends StatefulWidget {
 class _LevelPageState extends State<LevelPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return kIsWeb ?
+    Scaffold(
+      backgroundColor: AllColors.purple_2,
+      body:  Center(
+          child:
+          SizedBox(width: 400 ,child:
+          Container(
+              decoration: const BoxDecoration(gradient: AllColors.bg),
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: const PreferredSize(
+                    preferredSize: Size.fromHeight(70),
+                    child: CustomAppBar(isBack: true, isLang: true, isLevel: false)),
+                body: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: Consumer<ProfileProvider>(builder: (context, provider, _) {
+                    print(provider.profile['subscriptionstatus']);
+                    return Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Label(
+                            text: AppLocalizations.of(context)!.select_level,
+                            fontWeight: FontWeight.bold,
+                            fontSize: FontSize.p2),
+                        const SizedBox(height: 20),
+                        levelCard(
+                            '6',
+                            '6 ${AppLocalizations.of(context)!.words} (${AppLocalizations.of(context)!.easy})'
+                                .toUpperCase(),
+                            false),
+                        levelCard(
+                            '9',
+                            '9 ${AppLocalizations.of(context)!.words} (${AppLocalizations.of(context)!.medium})'
+                                .toUpperCase(),
+                            false),
+                        levelCard(
+                            '12',
+                            '12 ${AppLocalizations.of(context)!.words} (${AppLocalizations.of(context)!.advanced})'
+                                .toUpperCase(),
+                            provider.profile['subscriptionstatus'] == 'none'
+                                ? true
+                                : false),
+                        levelCard(
+                            '15',
+                            '15 ${AppLocalizations.of(context)!.words} (${AppLocalizations.of(context)!.hard})'
+                                .toUpperCase(),
+                            provider.profile['subscriptionstatus'] == 'none'
+                                ? true
+                                : false),
+                        levelCard(
+                            '18',
+                            '18  ${AppLocalizations.of(context)!.words} (${AppLocalizations.of(context)!.expert})'
+                                .toUpperCase(),
+                            provider.profile['subscriptionstatus'] == 'none'
+                                ? true
+                                : false),
+                      ],
+                    );
+                  }),
+                ),
+              )))),
+    ) :
+    Container(
         decoration: const BoxDecoration(gradient: AllColors.bg),
         child: Scaffold(
           backgroundColor: Colors.transparent,

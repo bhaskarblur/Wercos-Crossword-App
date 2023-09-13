@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:mobile_app_word_search/widget/navigator.dart';
+import 'package:flutter/services.dart';
+import 'package:werkos/widget/navigator.dart';
 import 'package:provider/provider.dart';
-import 'package:mobile_app_word_search/api_services.dart';
-import 'package:mobile_app_word_search/utils/buttons.dart';
+import 'package:werkos/api_services.dart';
+import 'package:werkos/utils/buttons.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:mobile_app_word_search/utils/font_size.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/components/labels.dart';
-import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
-import 'package:mobile_app_word_search/views/create_word_page.dart';
-import 'package:mobile_app_word_search/views/leaderboard_page.dart';
-import 'package:mobile_app_word_search/providers/games_provider.dart';
-import 'package:mobile_app_word_search/components/custom_dialogs.dart';
+import 'package:werkos/utils/font_size.dart';
+import 'package:werkos/utils/all_colors.dart';
+import 'package:werkos/components/labels.dart';
+import 'package:werkos/utils/custom_app_bar.dart';
+import 'package:werkos/views/create_word_page.dart';
+import 'package:werkos/views/leaderboard_page.dart';
+import 'package:werkos/providers/games_provider.dart';
+import 'package:werkos/components/custom_dialogs.dart';
 import 'package:share_plus/share_plus.dart';
+import '../components/suggestion/model/suggestion.dart';
 import '../widget/widgets.dart';
 import '../widget/sahared_prefs.dart';
 import '../providers/profile_provider.dart';
@@ -152,11 +154,18 @@ class _MyGamesPageState extends State<MyGamesPage> {
                     AllColors.shineGreen
                   ],
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return CreateWordPage(
-                          type: public ? 'search' : 'challenge');
-                    }));
+
+                    if(!public) {
+                      CustomDialog.showChallenge(
+                          context: context);
+                    }
+                    else {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return CreateWordPage(
+                                type: public ? 'search' : 'challenge');
+                          }));
+                    }
                   },
                   title: public
                       ? AppLocalizations.of(context)!.create_word_search
@@ -167,6 +176,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
   }
 
   gamesItem(var details) {
+    var provider = Provider.of<ProfileProvider>(context, listen: false);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       width: double.maxFinite,
@@ -178,13 +188,21 @@ class _MyGamesPageState extends State<MyGamesPage> {
       child: Column(
         children: [
           Center(
-              child: Label(
+              child: new GestureDetector(
+              onTap: () async {
+                await Clipboard.setData(ClipboardData(text: details['sharecode'].toString()));
+                var snackBar = SnackBar(content: Text(AppLocalizations.of(context)!.code_copied)
+                , backgroundColor: AllColors.liteDarkPurple );
+
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+            }, child: Label(
             text:
                 '${AppLocalizations.of(context)!.code_to_share.toUpperCase()}: ${details['sharecode'].toString()}',
             fontSize: FontSize.p2,
             align: TextAlign.center,
             maxLine: 2,
-          )),
+          ))),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -233,7 +251,9 @@ class _MyGamesPageState extends State<MyGamesPage> {
             children: [
               Label(
                   text:
-                      '${AppLocalizations.of(context)!.ratings}: ${details["avgratings"] ?? '0'}/5',
+                      '${AppLocalizations.of(context)!.users}: '
+                          '${details["totalplayed"]}/' '${provider.profile['subscriptionstatus'] ==
+              'none'? '6' : '∞'}',
                   fontSize: FontSize.p2),
               RatingBarIndicator(
                   rating: details["avgratings"] == null
@@ -283,9 +303,18 @@ class _MyGamesPageState extends State<MyGamesPage> {
                   }).then((value) {
                     print('duplicate');
                     print(details.toString());
-                    dialog(context, value['message'], () {
-                      Nav.pop(context);
-                    });
+                    if(value['message'].toString().contains("duplicated successfully"))
+                    {
+                      dialog(context,
+                          AppLocalizations.of(context)!.duplicated_success, () {
+                            Nav.pop(context);
+                            Nav.pop(context);
+
+                          });
+                    }
+                    // dialog(context, value['message'], () {
+                    //   Nav.pop(context);
+                    // });
                     getData(false);
                   });
                 });

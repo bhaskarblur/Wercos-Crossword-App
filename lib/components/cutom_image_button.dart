@@ -5,7 +5,6 @@ class CustomImageButton extends StatelessWidget {
     super.key,
     required this.image,
   });
-
   final String image;
 
   @override
@@ -22,7 +21,7 @@ class CustomImageButton extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Image.asset(
-              image,
+             image,
             ),
           ),
         ],

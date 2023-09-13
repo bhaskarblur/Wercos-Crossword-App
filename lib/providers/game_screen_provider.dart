@@ -1,8 +1,22 @@
+
+import 'package:crossword/components/word_line.dart';
 import 'package:flutter/material.dart';
 import "dart:math";
 class GameScreenProvider with ChangeNotifier {
   dynamic _gameData;
   dynamic get gameData => _gameData;
+
+  dynamic _gameEnded = false;
+  dynamic get gameEnded => _gameEnded;
+
+
+  dynamic _wordIsMarked = false;
+  dynamic get wordIsMarked => _wordIsMarked;
+
+
+
+  dynamic _allowMark = true;
+  dynamic get allowMark => _allowMark;
 
   changeGameData(dynamic value) {
     print('add data');
@@ -11,26 +25,57 @@ class GameScreenProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  setAllowMark(status) {
+    _allowMark=status;
+    notifyListeners();
+  }
+  setWordIsMarked(status) {
+    _allowMark=status;
+    // notifyListeners();
+  }
+
   final List<String> _allWordsFromAPI = [];
   List<String> get allWordsFromAPI => _allWordsFromAPI;
 
+  final List<String> _filteredWordsFromAPI = [];
+  List<String> get filteredWordsFromAPI => _filteredWordsFromAPI;
   final List<String> _correctWordsFromAPI = [];
   List<String> get correctWordsFromAPI => _correctWordsFromAPI;
 
   final List<String> _incorrectWordsFromAPI = [];
   List<String> get incorrectWordsFromAPI => _incorrectWordsFromAPI;
 
+  final List<String> _allMarkedWords = [];
+  List<String> get allMarkedWords => _allMarkedWords;
+
+  final List<WordLine> _allWordlineMarkedWords = [];
+  List<WordLine> get allWordlineMarkedWords => _allWordlineMarkedWords;
+
+  final List<List<int>> _wordLineWordsIndex = [];
+  List<List<int>> get wordLineWordsIndex => _wordLineWordsIndex;
+
+  setGameEnded(status) {
+    _gameEnded= status;
+    notifyListeners();
+  }
+
   addToCorrectWordsIncorrectWordsFromAPI() {
     _allWordsFromAPI.clear();
+    _filteredWordsFromAPI.clear();
+    _allMarkedWords.clear();
+    _allWordlineMarkedWords.clear();
+    _wordLineWordsIndex.clear();
     _correctWordsFromAPI.clear();
     _incorrectWordsFromAPI.clear();
     if (gameData['gameDetails']['searchtype'] == 'search') {
       for (int i = 0; i < _gameData['limitedWords'].length; i++) {
         _allWordsFromAPI.add(_gameData['limitedWords'][i].toUpperCase());
+        filteredWordsFromAPI.add(_gameData['filteredWords'][0][i].toUpperCase());
       }
     } else {
       for (int i = 0; i < _gameData['limitedWords'].length; i++) {
         _allWordsFromAPI.add(_gameData['limitedWords'][i].toUpperCase());
+        filteredWordsFromAPI.add(_gameData['filteredWords'][0][i].toUpperCase());
       }
     }
 
@@ -38,6 +83,8 @@ class GameScreenProvider with ChangeNotifier {
       for (int i = 0; i < _gameData['correctWords'].length; i++) {
         print("correct words__");
         print(_gameData['correctWords'][i]);
+
+
 
         try {
           _correctWordsFromAPI
@@ -48,6 +95,8 @@ class GameScreenProvider with ChangeNotifier {
               .add(_gameData['correctWords'][i].toUpperCase());
         }
       }
+      print('correctWords length');
+      print(_correctWordsFromAPI.length.toString());
     }
     if (_gameData['incorrectWords'] != null) {
       for (int i = 0; i < _gameData['incorrectWords'].length; i++) {
@@ -69,6 +118,39 @@ class GameScreenProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  addToCorrectWords(var correctWord) {
+    correctWords.add(correctWord);
+    notifyListeners();
+  }
+  addToMarkedWords(var correctWord) {
+    allMarkedWords.add(correctWord);
+    notifyListeners();
+  }
+
+  addToWordLineMarkedWords(var correctWord) {
+    allWordlineMarkedWords.add(correctWord);
+    notifyListeners();
+  }
+
+  addToWordLineIndex(var index) {
+    wordLineWordsIndex.add(index);
+    notifyListeners();
+  }
+
+  addToInCorrectWords(var correctWord) {
+    incorrectWords.add(correctWord);
+    notifyListeners();
+  }
+
+  addToFilteredCorrectWords(var correctWord) {
+    filteredcorrectWords.add(correctWord);
+    notifyListeners();
+  }
+
+  addToFilteredInCorrectWords(var correctWord) {
+    filteredincorrectWords.add(correctWord);
+    notifyListeners();
+  }
   resetIncorrectWordsFromAPI() {
     _incorrectWordsFromAPI.clear();
     notifyListeners();
@@ -117,6 +199,12 @@ class GameScreenProvider with ChangeNotifier {
 
   final List<String> _incorrectWords = [];
   List<String> get incorrectWords => _incorrectWords;
+
+  final List<String> _filteredcorrectWords = [];
+  List<String> get filteredcorrectWords => _filteredcorrectWords;
+
+  final List<String> _filteredincorrectWords = [];
+  List<String> get filteredincorrectWords => _filteredincorrectWords;
 
   addToCorrectOrIncorrectWords() {
     int correctIndex = 0;
@@ -171,20 +259,53 @@ class GameScreenProvider with ChangeNotifier {
 
     notifyListeners();
   }
+  Color generateRandomColor() {
+    Random random = Random();
+    // var generatedColor = Random().nextInt(Colors.primaries.length)
+
+    int r = random.nextInt(200) - 110; // Red component between 128 and 255
+    int g = random.nextInt(200) - 110; // Green component between 128 and 255
+    int b = random.nextInt(200) - 110; // Blue component between 128 and 255
+
+    return Color.fromARGB(255, r, g, b);
+  }
 
   changeTile(dynamic value) {
     for (int i = 0; i < value['wordsFound'].length; i++) {
+      var color = generateRandomColor();
       for (int j = 0; j < value['wordsFound'][i].length; j++) {
         _tiles[value['wordsFound'][i][j]].backgroundColor = Colors.white;
         _tiles[value['wordsFound'][i][j]].textColor = const Color(0xFF221962);
-        _tiles[value['wordsFound'][i][j]].borderColor = Colors.red;
+        _tiles[value['wordsFound'][i][j]].borderColor = color;
       }
     }
+    print('corrLength');
+    print(value);
+    print('_corrword');
+    print(filteredcorrectWords);
+    for (int i = 0; i < value['correctWordsFound'].length; i++) {
+      var color;
+      if(allWordlineMarkedWords.length == value['correctWordsFound'].length) {
+        color = allWordlineMarkedWords[i].color;
+      }
+      else {
+        color = generateRandomColor();
+      }
+
+
+      for (int j = 0; j < value['correctWordsFound'][i].length; j++) {
+        _tiles[value['correctWordsFound'][i][j]].backgroundColor = color;
+        _tiles[value['correctWordsFound'][i][j]].textColor = const Color(0xFF221962);
+        _tiles[value['correctWordsFound'][i][j]].borderColor = color;
+      }
+    }
+
     notifyListeners();
   }
 
   resetCorrectWords() {
     _correctWords.clear();
+    _filteredcorrectWords.clear();
     notifyListeners();
   }
 
@@ -205,20 +326,27 @@ class GameScreenProvider with ChangeNotifier {
   }
 
   final List<SingleTileModel> _tiles = [];
+  late List<List<String>> grid_ = [];
   List<SingleTileModel> get tiles => _tiles;
 
   addToTiles() {
     print('add tiles');
     _tiles.clear();
+    grid_.clear();
     for (int i = 0; i < _gameData['crossword_grid'].length; i++) {
+      List<String> list__= [];
       for (int j = 0; j < _gameData['crossword_grid'][i].length; j++) {
         _tiles.add(SingleTileModel(
             alphabet: _gameData['crossword_grid'][i][j].toUpperCase(),
             backgroundColor: Colors.white,
             textColor: const Color(0xFF221962),
             borderColor: Colors.transparent));
+
+        list__.add(_gameData['crossword_grid'][i][j].toUpperCase());
       }
+      grid_.add(list__);
     }
+
     notifyListeners();
   }
 
@@ -253,13 +381,20 @@ class GameScreenProvider with ChangeNotifier {
 
   reset() {
     _allWordsFromAPI.clear();
+    _filteredWordsFromAPI.clear();
+    filteredcorrectWords.clear();
     _correctWordsFromAPI.clear();
     _incorrectWordsFromAPI.clear();
     _allSelectedIndex.clear();
     _correctWords.clear();
     _incorrectWords.clear();
     _trackLastIndex.clear();
+    _allMarkedWords.clear();
+    _allWordlineMarkedWords.clear();
+    _wordLineWordsIndex.clear();
     _tiles.clear();
+    grid_.clear();
+    _gameEnded = false;
   }
 }
 

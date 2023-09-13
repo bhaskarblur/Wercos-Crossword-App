@@ -1,19 +1,23 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mobile_app_word_search/components/labels.dart';
-import 'package:mobile_app_word_search/providers/home_provider.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
-import 'package:mobile_app_word_search/utils/font_size.dart';
-import 'package:mobile_app_word_search/views/language_selection_page.dart';
-import 'package:mobile_app_word_search/views/level_page.dart';
-import 'package:mobile_app_word_search/views/my_account_page.dart';
-import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
+import 'package:werkos/components/labels.dart';
+import 'package:werkos/providers/home_provider.dart';
+import 'package:werkos/utils/all_colors.dart';
+import 'package:werkos/utils/custom_app_bar.dart';
+import 'package:werkos/utils/font_size.dart';
+import 'package:werkos/views/language_selection_page.dart';
+import 'package:werkos/views/level_page.dart';
+import 'package:werkos/views/my_account_page.dart';
+import 'package:werkos/widget/sahared_prefs.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -99,7 +103,8 @@ class OptionPage extends StatelessWidget {
   ),
   OptionItem(
   optionName: AppLocalizations.of(context)!.play.toUpperCase(),
-  onPressed: () {
+  onPressed: () async {
+
   final provider =
   Provider.of<HomeProvider>(context, listen: false);
   provider.changeSelectedIndex(1);

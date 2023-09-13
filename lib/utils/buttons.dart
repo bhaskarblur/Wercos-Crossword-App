@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/components/labels.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/utils/font_size.dart';
+import 'package:werkos/components/labels.dart';
+import 'package:werkos/utils/all_colors.dart';
+import 'package:werkos/utils/font_size.dart';
 
 class ShadowButton extends StatelessWidget {
   final List<Color> fillColors;

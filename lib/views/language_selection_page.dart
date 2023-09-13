@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/components/labels.dart';
-import 'package:mobile_app_word_search/providers/language_provider.dart';
-import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
-import 'package:mobile_app_word_search/utils/font_size.dart';
-import 'package:mobile_app_word_search/widget/sahared_prefs.dart';
+import 'package:werkos/components/labels.dart';
+import 'package:werkos/providers/home_provider.dart';
+import 'package:werkos/providers/language_provider.dart';
+import 'package:werkos/utils/custom_app_bar.dart';
+import 'package:werkos/utils/font_size.dart';
+import 'package:werkos/widget/sahared_prefs.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/all_colors.dart';
@@ -22,7 +24,75 @@ class LanguageSelectionPage extends StatefulWidget {
 class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return kIsWeb ?
+    Scaffold(
+      backgroundColor: AllColors.purple_2,
+      body:  Center(
+          child:
+          SizedBox(width: 400 ,child:
+          Container(
+            decoration: const BoxDecoration(gradient: AllColors.bg),
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: const PreferredSize(
+                  preferredSize: Size.fromHeight(70),
+                  child: CustomAppBar(isBack: true, isLang: false)),
+              body: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: widget.changeType == 'app'
+                    ? FutureBuilder(
+                    future: Prefs.getPrefs('language'),
+                    builder: (context, snapshot) {
+                      return Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Label(
+                              text: AppLocalizations.of(context)!
+                                  .select_language
+                                  .toUpperCase(),
+                              fontSize: FontSize.p2,
+                              fontWeight: FontWeight.bold),
+                          const SizedBox(height: 16),
+                          languageCard(
+                              image: 'assets/images/us_flag.png',
+                              langName: 'ENGLISH',
+                              selected: snapshot.data == 'en' ? true : false),
+                          languageCard(
+                              image: 'assets/images/spanish_flag.png',
+                              langName: 'ESPAÑOL',
+                              selected: snapshot.data == 'es' ? true : false)
+                        ],
+                      );
+                    })
+                    : FutureBuilder(
+                    future: Prefs.getPrefs('gameLanguage'),
+                    builder: (context, snapshot) {
+                      return Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Label(
+                              text: AppLocalizations.of(context)!
+                                  .select_language
+                                  .toUpperCase(),
+                              fontSize: FontSize.p2,
+                              fontWeight: FontWeight.bold),
+                          const SizedBox(height: 16),
+                          languageCard(
+                              image: 'assets/images/us_flag.png',
+                              langName: 'ENGLISH',
+                              selected: snapshot.data == 'en' ? true : false),
+                          languageCard(
+                              image: 'assets/images/spanish_flag.png',
+                              langName: 'ESPAÑOL',
+                              selected: snapshot.data == 'es' ? true : false)
+                        ],
+                      );
+                    }),
+              ),
+            ),
+          ))),
+    ) :
+    Container(
       decoration: const BoxDecoration(gradient: AllColors.bg),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -99,11 +169,14 @@ class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
             provider.setLocale(const Locale('es'));
           }
         } else {
+          final provider = Provider.of<HomeProvider>(context, listen: false);
           if (langName == 'ENGLISH') {
             Prefs.setPrefs('gameLanguage', 'en');
+            provider.changeFlag("assets/images/us_flag.png");
           }
           if (langName == 'ESPAÑOL') {
             Prefs.setPrefs('gameLanguage', 'es');
+            provider.changeFlag("assets/images/spanish_flag.png");
           }
         }
         setState(() {});

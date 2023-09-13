@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:mobile_app_word_search/providers/profile_provider.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/utils/custom_app_bar.dart';
-import 'package:mobile_app_word_search/views/create_word_page.dart';
-import 'package:mobile_app_word_search/components/custom_dialogs.dart';
-import 'package:mobile_app_word_search/widget/widgets.dart';
+import 'package:werkos/providers/profile_provider.dart';
+import 'package:werkos/utils/all_colors.dart';
+import 'package:werkos/utils/custom_app_bar.dart';
+import 'package:werkos/views/create_word_page.dart';
+import 'package:werkos/components/custom_dialogs.dart';
+import 'package:werkos/widget/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../components/labels.dart';
@@ -65,7 +65,8 @@ class CreatePage extends StatelessWidget {
                       if (pprovider.profile['subscriptionstatus'] == 'none') {
                         CustomDialog.showPurchaseDialog(context: context);
                       } else {
-                        Nav.push(context, const CreateWordPage(type: 'challenge'));
+                        CustomDialog.showChallenge(
+                            context: context);
                         
                       }
                     },

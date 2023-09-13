@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/api_services.dart';
-import 'package:mobile_app_word_search/providers/game_screen_provider.dart';
-import 'package:mobile_app_word_search/providers/profile_provider.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
-import 'package:mobile_app_word_search/views/tab_screen.dart';
+import 'package:werkos/api_services.dart';
+import 'package:werkos/providers/game_screen_provider.dart';
+import 'package:werkos/providers/profile_provider.dart';
+import 'package:werkos/utils/all_colors.dart';
+import 'package:werkos/views/tab_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../l10n/l10n.dart';
@@ -76,14 +77,40 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return kIsWeb ?
+    Scaffold(
+      backgroundColor: AllColors.purple_2,
+      body:  Center(
+          child:
+          SizedBox(width: 400 ,child:
+          Container(
+            decoration: const BoxDecoration(gradient: AllColors.bg),
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/images/splash_screen_logo.png',
+                      height: 250, width: 250),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      child: LinearProgressIndicator(
+                          color: AllColors.shineGreen,
+                          value: controller.value,
+                          minHeight: 20)),
+                ],
+              ),
+            ),
+          ))),
+    ) :
+    Container(
       decoration: const BoxDecoration(gradient: AllColors.bg),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/splash_screen_logo.png',
+            Image.asset('assets/images/werkos_logo.jpeg',
                 height: 250, width: 250),
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -126,6 +153,7 @@ class _SplashScreenState extends State<SplashScreen>
             .then((value) {
           final provider = Provider.of<ProfileProvider>(context, listen: false);
           provider.chnageProfile(value);
+          Prefs.setPrefs('subStatus', value['subscriptionstatus']);
           gotoTab();
         });
       });

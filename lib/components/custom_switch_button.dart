@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_word_search/components/custom_dialogs.dart';
-import 'package:mobile_app_word_search/components/suggestion/model/suggestion.dart';
+import 'package:werkos/components/custom_dialogs.dart';
+import 'package:werkos/components/suggestion/model/suggestion.dart';
 
 import '../utils/all_colors.dart';
 import '../utils/font_size.dart';

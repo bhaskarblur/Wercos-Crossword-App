@@ -1,4 +1,4 @@
-package com.aerobola.com.mobile_app_word_search
+package com.werkosgames.werkos
 
 import io.flutter.embedding.android.FlutterActivity
 

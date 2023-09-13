@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile_app_word_search/providers/profile_provider.dart';
-import 'package:mobile_app_word_search/utils/all_colors.dart';
+import 'package:werkos/providers/profile_provider.dart';
+import 'package:werkos/utils/all_colors.dart';
 import 'package:provider/provider.dart';
 
 import '../app_config/app_details.dart';
