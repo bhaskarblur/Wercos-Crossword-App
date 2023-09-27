@@ -1,4 +1,4 @@
-# Crossword Game
+# Wercos Game
 
 A new Flutter project.
 
