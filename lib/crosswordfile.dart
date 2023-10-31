@@ -3,14 +3,15 @@ library crossword;
 import 'dart:math';
 import 'package:crossword/components/letter_offset.dart';
 import 'package:crossword/helper/extensions.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:werkos/providers/game_screen_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:crossword/components/word_line.dart';
+import 'package:werkos/soundConstants.dart';
 import 'line_painter.dart';
 import 'linedecoration.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class Crossword extends StatefulWidget {
   final List<List<String>> letters;
@@ -29,25 +30,25 @@ class Crossword extends StatefulWidget {
 
   const Crossword(
       {super.key,
-        required this.letters,
-        required this.spacing,
-        this.drawCrossLine,
-        required this.onLineDrawn,
-        this.drawHorizontalLine,
-        this.drawVerticalLine,
-        required this.allWords,
-        required this.incorrWords,
-        required this.correctWords,
-        this.lineDecoration = const LineDecoration(),
-        this.textStyle,
-        this.acceptReversedDirection = true,
-        this.transposeMatrix = false})
+      required this.letters,
+      required this.spacing,
+      this.drawCrossLine,
+      required this.onLineDrawn,
+      this.drawHorizontalLine,
+      this.drawVerticalLine,
+      required this.allWords,
+      required this.incorrWords,
+      required this.correctWords,
+      this.lineDecoration = const LineDecoration(),
+      this.textStyle,
+      this.acceptReversedDirection = true,
+      this.transposeMatrix = false})
       : assert(
-  (drawCrossLine ?? true) ||
-      (drawHorizontalLine ?? true) ||
-      (drawVerticalLine ?? true),
-  "At least one of drawCrossLine, drawHorizontalLine, or drawVerticalLine should be true",
-  );
+          (drawCrossLine ?? true) ||
+              (drawHorizontalLine ?? true) ||
+              (drawVerticalLine ?? true),
+          "At least one of drawCrossLine, drawHorizontalLine, or drawVerticalLine should be true",
+        );
 
   @override
   CrosswordState createState() => CrosswordState();
@@ -63,18 +64,19 @@ class CrosswordState extends State<Crossword> {
   LetterOffset? startPoint;
   LetterOffset? endPoint;
   List<List<String>> letters = [];
-  late final player;
+  bool isPlaying = false;
   List<String> incorrectMarked = [];
+  var lastWord;
 
-  bool isMarked=false;
+  bool isMarked = false;
+
   @override
   void initState() {
     // TODO: implement initState
-      letters =
-      widget.transposeMatrix! ?widget.letters: widget.letters.transpose();
+    letters =
+        widget.transposeMatrix! ? widget.letters : widget.letters.transpose();
 
     super.initState();
-    player = AudioPlayer();
   }
 
   //check whether user interaction on the panel within the letter positions limit or outside the area
@@ -155,25 +157,18 @@ class CrosswordState extends State<Crossword> {
         const SizedBox(
           height: 15,
         ),
-    Padding(padding: EdgeInsets.only(bottom: 14),
-    child:
-    Center(
+        Padding(
+          padding: EdgeInsets.only(bottom: 14),
+          child: Center(
             child: GestureDetector(
-              onPanStart: (DragStartDetails details) {
-                final provider = Provider.of<GameScreenProvider>(context, listen: false);
+              onPanStart: (DragStartDetails details) async {
 
-                if(provider.allowMark) {
+                final provider =
+                    Provider.of<GameScreenProvider>(context, listen: false);
+
+                if (provider.allowMark) {
                   color = generateRandomColor();
-                  if (!player.playing) {
-                    // Create a player
-                    player.setAudioSource(AudioSource.uri(Uri.parse(
-                        "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693170533/select_ujtlvr.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
-                    player.play();
-                    print(player.playing);
-                  }
-                  else {
-                    player.stop();
-                  }
+                  await AudioPlayer().play(soundConstants.selectSound);
                   setState(() {
                     startPoint = LetterOffset(
                         offset: details.localPosition, spacing: widget.spacing);
@@ -184,179 +179,197 @@ class CrosswordState extends State<Crossword> {
                         color: color!,
                         letters: letters,
                         acceptReversedDirection:
-                        widget.acceptReversedDirection!));
+                            widget.acceptReversedDirection!));
+                    provider.setCurrentMarkedWord("");
+                    provider.setIsMarkingCurrently(true);
+                    provider.setCurrentMarkedWord(
+                        lineList.last.word.substring(0, 1));
+                    lastWord = lineList.last.word;
+                    provider.setRandomColor(lineList.last.color);
+
+                    // this is to avoid a bug with the grid that creates an unecessary line after matching a word
+                    for(var i=0 ; i<lineList.length - 1;i++) {
+                      print(lineList.elementAt(i).word);
+                      if(!provider.filteredWordsFromAPI.contains(lineList.elementAt(i).word)) {
+                        lineList.removeAt(i);
+                      }
+                    }
 
                   });
                 }
               },
-              onPanUpdate: (DragUpdateDetails details) {
+              onPanUpdate: (DragUpdateDetails details) async {
+                final provider =
+                    Provider.of<GameScreenProvider>(context, listen: false);
 
-    final provider = Provider.of<GameScreenProvider>(context, listen: false);
+                if (provider.allowMark) {
+                  AudioPlayer audioPlayer = new AudioPlayer();
 
-    if(provider.allowMark) {
-      setState(() {
-        if (widget.incorrWords.contains(lineList.last
-            .word)) {
-          isMarked=true;
+                  setState(() {
+                    if (widget.incorrWords.contains(lineList.last.word)) {
+                      isMarked = true;
+                    }
+                    //get initial positions based on user interaction on the panel
+                    final dx = details.localPosition.dx - startPoint!.offset.dx;
+                    final dy = details.localPosition.dy - startPoint!.offset.dy;
 
-        }
-        //get initial positions based on user interaction on the panel
-        final dx = details.localPosition.dx - startPoint!.offset.dx;
-        final dy = details.localPosition.dy - startPoint!.offset.dy;
+                    double angle = atan2(dy, dx);
 
-        double angle = atan2(dy, dx);
+                    // Round the angle to the nearesat multiple of 45 degrees
+                    angle = (angle / (pi / 4)).round() * (pi / 4);
 
-        // Round the angle to the nearest multiple of 45 degrees
-        angle = (angle / (pi / 4)).round() * (pi / 4);
+                    final length = sqrt(dx * dx + dy * dy);
 
-        final length = sqrt(dx * dx + dy * dy);
+                    //get the restricted coordinates using the angle
+                    final restrictedDx = cos(angle) * length;
+                    final restrictedDy = sin(angle) * length;
+                    //Use a custom class to get suitable conversions
+                    LetterOffset c = LetterOffset(
+                        offset: Offset(startPoint!.offset.dx + restrictedDx,
+                            startPoint!.offset.dy + restrictedDy),
+                        spacing: widget.spacing);
 
-        //get the restricted coordinates using the angle
-        final restrictedDx = cos(angle) * length;
-        final restrictedDy = sin(angle) * length;
+                    //line can only be drawn by touching inside the panel
+                    if (isWithinLimit(c)) {
+                      endPoint = c;
+                      print('angle');
+                      // print(endPoint?.getBiggerOffset.direction);
+                      // print(endPoint!.getBiggerOffset.direction - endPoint!.getSmallerOffset.direction);
+                      // if(endPoint!.getBiggerOffset.direction > 0.20 &&
+                      //     endPoint!.getBiggerOffset.direction < 0.80 ) {
+                      //   return;
+                      // }
+                        lineList.last = WordLine(
+                            offsets: [startPoint!, endPoint!],
+                            color: color!,
+                            letters: letters,
+                            acceptReversedDirection:
+                            widget.acceptReversedDirection!);
 
-        //Use a custom class to get suitable conversions
-        LetterOffset c = LetterOffset(
-            offset: Offset(startPoint!.offset.dx + restrictedDx,
-                startPoint!.offset.dy + restrictedDy),
-            spacing: widget.spacing);
 
-        //line can only be drawn by touching inside the panel
-        if (isWithinLimit(c)) {
-          endPoint = c;
-          lineList.last = WordLine(
-              offsets: [startPoint!, endPoint!],
-              color: color!,
-              letters: letters,
-              acceptReversedDirection:
-              widget.acceptReversedDirection!);
-
-        }
-
-      });
-    }
+                      if (provider.currentMarkedWord.toString() !=
+                          lineList.last.word) {
+                        Future.delayed(const Duration(milliseconds: 10),
+                            () async {
+                          await AudioPlayer().play(soundConstants.selectSound);
+                        });
+                        provider.setCurrentMarkedWord(lineList.last.word);
+                      }
+                      // this is to avoid a bug with the grid that creates an unecessary line after matching a word
+                      for(var i=0 ; i<lineList.length - 1;i++) {
+                        print(lineList.elementAt(i).word);
+                        if(!provider.filteredWordsFromAPI.contains(lineList.elementAt(i).word)) {
+                          lineList.removeAt(i);
+                        }
+                      }
+                    }
+                  });
+                }
               },
-              onPanEnd: (DragEndDetails details)  {
-    final provider = Provider.of<GameScreenProvider>(context, listen: false);
-
-    if(provider.allowMark) {
-      //get the last line drawn from the list
-      List<Offset> usedOffsets = lineList.last.getTotalOffsets;
-      if (!player.playing) {
-        // Create a player
-        player.setAudioSource(AudioSource.uri(Uri.parse(
-            "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693170533/select_ujtlvr.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
-        player.play();
-        print(player.playing);
-      }
-      else {
-        player.stop();
-      }
-      setState(() {
-        //Check if the line can be drawn on specific angles
-        if (selectedOffsets
-            .toSet()
-            .intersection(usedOffsets.toSet())
-            .isEmpty &&
-            lineList.last.offsets
-                .map((e) => e.getSmallerOffset)
-                .toSet()
-                .length >
-                1 &&
-            (((widget.drawHorizontalLine ?? true)
-                ? isHorizontalLine(lineList.last.offsets)
-                : false) ||
-                ((widget.drawVerticalLine ?? true)
-                    ? isVerticalLine(lineList.last.offsets)
-                    : false) ||
-                ((widget.drawCrossLine ?? true)
-                    ? isCrossLine(lineList.last.offsets)
-                    : false))) {
-          //   selectedOffsets.addAll(usedOffsets);
+              onPanEnd: (DragEndDetails details) async {
+                //get initial positions based on user interaction on the panel
 
 
-          final provider = Provider.of<GameScreenProvider>(
-              context, listen: false);
-          print('word:');
-          print(lineList.last.word);
+                final provider =
+                    Provider.of<GameScreenProvider>(context, listen: false);
 
-          print('incorrect words:');
-          print(widget.incorrWords);
+                if (provider.allowMark) {
+                  //get the last line drawn from the list
+                  List<Offset> usedOffsets = lineList.last.getTotalOffsets;
+                  await AudioPlayer().play(soundConstants.selectSound);
+                  setState(() {
+                    provider.setIsMarkingCurrently(false);
+                    provider.setCurrentMarkedWord(lineList.last.word);
 
-          print('marked words:');
-          print(wordsMarked.length);
+                    //Check if the line can be drawn on specific angles
+                    if (selectedOffsets
+                            .toSet()
+                            .intersection(usedOffsets.toSet())
+                            .isEmpty &&
+                        lineList.last.offsets
+                                .map((e) => e.getSmallerOffset)
+                                .toSet()
+                                .length >
+                            1 &&
+                        (((widget.drawHorizontalLine ?? true)
+                                ? isHorizontalLine(lineList.last.offsets)
+                                : false) ||
+                            ((widget.drawVerticalLine ?? true)
+                                ? isVerticalLine(lineList.last.offsets)
+                                : false) ||
+                            ((widget.drawCrossLine ?? true)
+                                ? isCrossLine(lineList.last.offsets)
+                                : false))) {
+                      //   selectedOffsets.addAll(usedOffsets);
+
+                      final provider = Provider.of<GameScreenProvider>(context,
+                          listen: false);
+                      print('word:');
+                      print(lineList.last.word);
+
+                      print('incorrect words:');
+                      print(widget.incorrWords);
+
+                      print('marked words:');
+                      print(wordsMarked.length);
+
+                      var reverseWord = lineList.last.word
+                          .toString()
+                          .split('')
+                          .reversed
+                          .join('');
+                      print(reverseWord);
+                      if (wordsMarked.contains(lineList.last.word) == false) {
+
+                        if (widget.allWords.contains(lineList.last.word) ||
+                            widget.allWords.contains(reverseWord)) {
 
 
-          if (wordsMarked.contains(lineList.last.word) == false) {
-            if (widget.allWords.contains(lineList.last.word)) {
-              if (widget.correctWords.contains(lineList.last.word)) {
-                print('correct');
+                          if (widget.correctWords
+                                  .contains(lineList.last.word) ||
+                              widget.correctWords.contains(reverseWord)) {
+                            print('correct');
 
-                wordsMarked.add(lineList.last.word);
-                wordsAreMarked.add(lineList.last);
-                provider.addToWordLineMarkedWords(lineList.last);
-              }
-              else if (widget.incorrWords.contains(lineList.last
-                  .word)) {
-                //set a line color when the selected word is incorrect
-                lineList.last.color =
-                widget.lineDecoration!.incorrectColor!;
-                print('incorrect');
+                            wordsMarked.add(lineList.last.word);
+                            wordsAreMarked.add(lineList.last);
+                            provider.addToWordLineMarkedWords(lineList.last);
+                          } else if (widget.incorrWords
+                                  .contains(lineList.last.word) ||
+                              widget.incorrWords.contains(reverseWord)) {
+                            //set a line color when the selected word is incorrect
+                            lineList.last.color =
+                                widget.lineDecoration!.incorrectColor!;
+                            print('incorrect');
+                            wordsMarked.add(lineList.last.word);
+                            incorrectMarked.add(lineList.last.word);
+                            wordsAreMarked.add(lineList.last);
+                          }
 
-                wordsMarked.add(lineList.last.word);
-                incorrectMarked.add(lineList.last.word);
-                wordsAreMarked.add(lineList.last);
-
-              }
-
-              widget.onLineDrawn(lineList.map((e) => e.word)
-                  .toList());
-            }
-
-
-            else {
-              Future.delayed(const Duration(milliseconds: 250), () {
-                if (!player.playing) {
-                  // Create a player
-                  player.setAudioSource(AudioSource.uri(Uri.parse(
-                      "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693172345/notmatched_vbbjtb.wav"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
-                  player.play();
-                  print(player.playing);
+                          widget.onLineDrawn(
+                              lineList.map((e) => e.word).toList());
+                        } else {
+                          Future.delayed(const Duration(milliseconds: 50),
+                              () async {
+                            await AudioPlayer().play(soundConstants.notMatched);
+                          });
+                          startPoint = null;
+                          endPoint = null;
+                          lineList.removeLast();
+                        }
+                      } else {
+                        startPoint = null;
+                        endPoint = null;
+                        lineList.removeLast();
+                      }
+                      //return a list of word
+                    } else {
+                      print('already used');
+                      startPoint = null;
+                      endPoint = null;
+                      lineList.removeLast();
+                    }
+                  });
                 }
-                else {
-                  player.stop();
-                }
-              });
-              startPoint = null;
-              endPoint = null;
-              lineList.removeLast();
-
-              // if (widget.lineDecoration!.incorrectColor != null) {
-              //   set a line color when the selected word is incorrect
-              // lineList.last.color =
-              // widget.lineDecoration!.incorrectColor!;
-              // }
-              // else {
-
-              // selectedOffsets.remove(usedOffsets);
-              // }
-            }
-          }
-          else {
-            startPoint = null;
-            endPoint = null;
-            lineList.removeLast();
-          }
-          //return a list of word
-
-        } else {
-          print('already used');
-          startPoint = null;
-          endPoint = null;
-          lineList.removeLast();
-        }
-      });
-    }
               },
               child: CustomPaint(
                 //paints lines on the screen
@@ -373,12 +386,12 @@ class CrosswordState extends State<Crossword> {
                     incorrectMarked: incorrectMarked,
                     spacing: widget.spacing,
                     hints: widget.allWords),
-                size: Size(letters.length * widget.spacing.dx ,
+                size: Size(letters.length * widget.spacing.dx,
                     letters.first.length * widget.spacing.dy),
               ),
             ),
           ),
-    )
+        )
       ],
     );
   }

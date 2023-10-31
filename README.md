@@ -1,4 +1,4 @@
-# Wercos Game
+# mobile_app_word_search
 
 A new Flutter project.
 

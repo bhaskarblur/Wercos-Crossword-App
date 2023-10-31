@@ -11,7 +11,9 @@
     
     "options" : "Opciones",
     "my_account" : "Mi cuenta",
-    "select_language" : "Seleccione el idioma",
+    "select_language" : "IDIOMA DE LA APP",
+     "already_exists" : "Esta palabra ya existe en la lista y no se puede volver a agregar",
+     "less_than_3" : "Esta palabra tiene menos de 3 caracteres, vuelva a verificar la palabra.",
     "back" : "Regresar",
 
     "publication_mode" : "Modo de publicación",

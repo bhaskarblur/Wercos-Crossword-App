@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen>
               body: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('assets/images/splash_screen_logo.png',
+                  Image.asset('assets/images/werkos_logo.jpeg',
                       height: 250, width: 250),
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),

@@ -229,7 +229,7 @@ class TabScreenState extends State<TabScreen> {
                                   context,
                                   listen: false);
 
-                              if (provider.selectedIndex == 4 && !gameProvider.allowMark) {
+                              if (provider.selectedIndex == 4) {
 
                                 print(1);
                                 if (gameProvider.gameData['gameDetails']
@@ -357,16 +357,13 @@ class TabScreenState extends State<TabScreen> {
 
                               else {
                                 print(85);
-
                                 gameProvider.changeGameType('random');
-                                final p__ =
-                                Provider.of<GameScreenProvider>(context, listen: false);
-                                p__.reset();
+                                gameProvider.reset();
                                 p.stopSeconds();
                                 p.resetSeconds();
                                 provider.changeSelectedIndex(4);
                                 provider.setSearching(false);
-                                p__.setGameEnded(false);
+                                gameProvider.setGameEnded(false);
                               }
                             },
                           ),
@@ -642,7 +639,7 @@ class TabScreenState extends State<TabScreen> {
     p.setTicking(false);
     print('checkhere');
     print(provider.gameType);
-    if(provider.gameType == 'randomwordchallenge') {
+    if(provider.gameType.contains("challenge")) {
       provider.filteredWordsFromAPI.forEach((element) {
         print(!provider.allMarkedWords.contains(element));
         print(provider.correctWordsFromAPI.contains(element));

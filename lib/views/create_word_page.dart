@@ -606,22 +606,46 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     onPressed: () {
                       print('lang here');
                       print(selectedLanguage);
+
+                      for(var word in _list) {
+
+                        if(word.word == _c2.text.toString().toUpperCase()) {
+                          FocusScope.of(context).unfocus();
+                          Future.delayed(
+                              const Duration(milliseconds: 200), () {
+                            CustomDialog.showDuplicateWordWarning(
+                                context: context);
+                          });
+                          return;
+                        }
+                      }
+
+
                       if(_c2.text.length>14) {
                         var snackBar = SnackBar(content: Text(
                           AppLocalizations.of(context)!.wordlimit_
-                        )
-                            , backgroundColor: AllColors.liteDarkPurple );
+                        ), backgroundColor: AllColors.liteDarkPurple );
 
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
                       }
                       else {
+                        if(_c2.text.length < 3 && _c2.text.length > 0) {
+                          FocusScope.of(context).unfocus();
+                          Future.delayed(
+                              const Duration(milliseconds: 200), () {
+                            CustomDialog.showCharacterLengthDialog(
+                                context: context);
+                              });
+                          return;
+                        }
                         Prefs.getPrefs('subStatus').then((value) => {
 
                           if(_list.length < 18) {
 
 
-                          if(value.toString().contains('1month') ||
+
+                        if(value.toString().contains('1month') ||
                               value.toString().contains('1year')  ) {
                             if (_c2.text.isNotEmpty) {
                           _list.add(
@@ -655,6 +679,8 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                   }
                                 },
                             }
+
+
                           }
                           else {
                             FocusScope.of(context).unfocus(),

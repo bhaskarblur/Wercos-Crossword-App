@@ -14,7 +14,9 @@
     
     "options" : "Options",
     "my_account" : "MY ACCOUNT",
-    "select_language" : "SELECT LANGUAGE",
+    "select_language" : "APP LANGUAGE",
+     "already_exists" : "This word already exists in the list & cannot be added again",
+     "less_than_3" : "This word has less than 3 characters, please recheck the word.",
      "select_language_game" : "Select Language for this game",
     "back" : "Back",
 
@@ -43,7 +45,7 @@
     "random_word_search" : "Random word search",
     "word_search_categories" : "Word search categories",
     "random_challenge" : "Random Challenge",
-    "challenge_by_category" : "Challange by category",
+    "challenge_by_category" : "Challenge by category",
     "play_by_entering_code" : "Play by code",
     "enter_code" : "Enter code",
     "play_with_entered_code" : "Play with the entered code",
@@ -97,7 +99,7 @@
     "this_feature" : "This feature is only available for premium users. Upgrade to use this feature.",
     
     "rate_this" : "RATE THIS WORD SEARCH",
-    "rate_this_challange" : "RATE THIS CHALLANGE",
+    "rate_this_challange" : "RATE THIS CHALLENGE",
     "game" : "GAME",
     "not_complete" : "NOT COMPLETED",
     "congratulations" : "CONGRATULATIONS!",

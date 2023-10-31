@@ -45,6 +45,7 @@ dependencies:
   pay: ^1.1.2
   crossword: ^0.0.3
   share_plus: ^4.0.4
+  audioplayers: ^5.2.0
 
   # freezed_annotation: ^2.4.1
   # json_annotation: ^4.8.1
@@ -82,6 +83,7 @@ dev_dependencies:
   freezed: ^2.4.1
   json_serializable: ^6.7.1
   just_audio: ^0.9.34
+  audioplayers: ^5.2.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -100,6 +102,12 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/audio/
+    - assets/audio/select.wav
+    - assets/audio/gamecompleted.wav
+    - assets/audio/gameended.mp3
+    - assets/audio/notmatched.wav
+    - assets/audio/wronganswer.wav
+    - assets/audio/correctanswer.mp3
 #  fonts:
 #      - family: Inter
 #        fonts:

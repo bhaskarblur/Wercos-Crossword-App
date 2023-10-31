@@ -9,19 +9,47 @@ class GameScreenProvider with ChangeNotifier {
   dynamic _gameEnded = false;
   dynamic get gameEnded => _gameEnded;
 
-
   dynamic _wordIsMarked = false;
   dynamic get wordIsMarked => _wordIsMarked;
 
 
+  dynamic _isMarkingCurrently = false;
+  dynamic get isMarkingCurrently => _isMarkingCurrently;
 
+  dynamic _currentMarkedWord = "Word";
+  dynamic get currentMarkedWord => _currentMarkedWord;
+  dynamic _randomColor = const Color(0x00000000);
+  dynamic get randomColor => _randomColor;
   dynamic _allowMark = true;
   dynamic get allowMark => _allowMark;
+
+  dynamic _challengeData = "";
+  dynamic get challengeData => _challengeData;
 
   changeGameData(dynamic value) {
     print('add data');
     _gameData = value;
     addToTiles();
+    notifyListeners();
+  }
+
+  setIsMarkingCurrently(bool status) {
+    _isMarkingCurrently = status;
+    notifyListeners();
+  }
+
+  setCurrentMarkedWord(String word) {
+    _currentMarkedWord = word;
+    notifyListeners();
+  }
+
+  setChallengeData(dynamic data) {
+    _challengeData = data;
+    notifyListeners();
+  }
+
+  setRandomColor(Color color) {
+    _randomColor = color;
     notifyListeners();
   }
 
@@ -113,6 +141,61 @@ class GameScreenProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  reAddWordsForChallenge() {
+    _allWordsFromAPI.clear();
+    _filteredWordsFromAPI.clear();
+    _allMarkedWords.clear();
+    _allWordlineMarkedWords.clear();
+    _wordLineWordsIndex.clear();
+    _correctWordsFromAPI.clear();
+    _incorrectWordsFromAPI.clear();
+    if (challengeData['gameDetails']['searchtype'] == 'search') {
+      for (int i = 0; i < challengeData['limitedWords'].length; i++) {
+        _allWordsFromAPI.add(challengeData['limitedWords'][i].toUpperCase());
+        filteredWordsFromAPI.add(challengeData['filteredWords'][0][i].toUpperCase());
+      }
+    } else {
+      for (int i = 0; i < challengeData['limitedWords'].length; i++) {
+        _allWordsFromAPI.add(challengeData['limitedWords'][i].toUpperCase());
+        filteredWordsFromAPI.add(challengeData['filteredWords'][0][i].toUpperCase());
+      }
+    }
+
+    if (challengeData['correctWords'] != null) {
+      for (int i = 0; i < challengeData['correctWords'].length; i++) {
+        print("correct words__");
+        print(challengeData['correctWords'][i]);
+
+
+
+        try {
+          _correctWordsFromAPI
+              .add(challengeData['correctWords'][i].toUpperCase());
+        }
+        catch(e) {
+          _correctWordsFromAPI
+              .add(challengeData['correctWords'][i].toUpperCase());
+        }
+      }
+      print('correctWords length');
+      print(_correctWordsFromAPI.length.toString());
+    }
+    if (challengeData['incorrectWords'] != null) {
+      for (int i = 0; i < challengeData['incorrectWords'].length; i++) {
+        try {
+          _incorrectWordsFromAPI
+              .add(challengeData['incorrectWords'][i].toUpperCase());
+        }
+        catch(e) {
+          _incorrectWordsFromAPI
+              .add(challengeData['incorrectWords'][i].toUpperCase());
+        }
+      }
+    }
+
+    addToTiles();
+    notifyListeners();
+  }
   resetCorrectWordsFromAPI() {
     _correctWordsFromAPI.clear();
     notifyListeners();
@@ -392,6 +475,19 @@ class GameScreenProvider with ChangeNotifier {
     _allMarkedWords.clear();
     _allWordlineMarkedWords.clear();
     _wordLineWordsIndex.clear();
+    _tiles.clear();
+    grid_.clear();
+    _gameEnded = false;
+  }
+
+  resetOldGame() {
+    _allWordsFromAPI.clear();
+    _filteredWordsFromAPI.clear();
+    filteredcorrectWords.clear();
+    _correctWordsFromAPI.clear();
+    _incorrectWordsFromAPI.clear();
+    _filteredincorrectWords.clear();
+    _filteredcorrectWords.clear();
     _tiles.clear();
     grid_.clear();
     _gameEnded = false;

@@ -145,6 +145,126 @@ class CustomDialog {
         });
   }
 
+  static showCharacterLengthDialog({required BuildContext context}) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    height: 250,
+                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: AllColors.alertGradient),
+                    child: Scaffold(
+                      backgroundColor: Colors.transparent,
+                      body: Stack(children: [
+                        Positioned(
+                            top: 10,
+                            right: 10,
+                            child: CupertinoButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                padding: EdgeInsets.zero,
+                                minSize: 0,
+                                child: const Icon(
+                                    CupertinoIcons.multiply_circle,
+                                    color: AllColors.white,
+                                    size: 30))),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 50),
+                            child: Column(children: [
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  child: Label(
+                                      align: TextAlign.center,
+                                      text: AppLocalizations.of(context)!.less_than_3
+                                      ,
+                                      fontSize: FontSize.p2)),
+                              const Spacer(),
+                              ShadowButton(
+                                  fillColors: const [
+                                    AllColors.semiLiteGreen,
+                                    AllColors.shineGreen
+                                  ],
+                                  onPressed: () {
+                                    Nav.pop(context);
+                                  },
+                                  title: AppLocalizations.of(context)!.ok)
+                            ]))
+                      ]),
+                    ))
+              ]);
+        });
+  }
+
+  static showDuplicateWordWarning({required BuildContext context}) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    height: 250,
+                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: AllColors.alertGradient),
+                    child: Scaffold(
+                      backgroundColor: Colors.transparent,
+                      body: Stack(children: [
+                        Positioned(
+                            top: 10,
+                            right: 10,
+                            child: CupertinoButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                padding: EdgeInsets.zero,
+                                minSize: 0,
+                                child: const Icon(
+                                    CupertinoIcons.multiply_circle,
+                                    color: AllColors.white,
+                                    size: 30))),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 50),
+                            child: Column(children: [
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  child: Label(
+                                      align: TextAlign.center,
+                                      text: AppLocalizations.of(context)!.already_exists
+                                      ,
+                                      fontSize: FontSize.p2)),
+                              const Spacer(),
+                              ShadowButton(
+                                  fillColors: const [
+                                    AllColors.semiLiteGreen,
+                                    AllColors.shineGreen
+                                  ],
+                                  onPressed: () {
+                                    Nav.pop(context);
+                                  },
+                                  title: AppLocalizations.of(context)!.ok)
+                            ]))
+                      ]),
+                    ))
+              ]);
+        });
+  }
+
   static show18WordsCant({required BuildContext context}) {
     return showDialog(
         context: context,

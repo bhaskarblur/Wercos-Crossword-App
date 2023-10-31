@@ -8,7 +8,7 @@ const String defaultApplePay = '''{
     "countryCode": "US",
     "currencyCode": "USD",
     "requiredBillingContactFields": ["emailAddress", "name", "phoneNumber"],
-    "requiredShippingContactFields": [],
+    "requiredShippingContactFields": []
   }
 }''';
 

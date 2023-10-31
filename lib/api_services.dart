@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'app_config/app_details.dart';
 import 'widget/navigator.dart';
@@ -27,7 +28,8 @@ class ApiServices {
       if (progressBar) {
         loader(context);
       }
-      var res = await http.get(Uri.parse(baseUrl + endpoint),
+
+      var res = await http.get(Uri.parse(kIsWeb ? baseUrl2 + endpoint : baseUrl + endpoint),
           headers: {"Authorization": "Bearer $token"});
       if (progressBar) {
         Nav.pop(context);
@@ -57,7 +59,7 @@ class ApiServices {
         loader(context);
       }
 
-      var res = await http.post(Uri.parse(baseUrl + endpoint), body: body);
+      var res = await http.post(Uri.parse(kIsWeb ? baseUrl2 + endpoint : baseUrl  + endpoint), body: body);
       if (progressBar) {
         Nav.pop(context);
       }
@@ -90,7 +92,7 @@ class ApiServices {
       if (context.mounted) {
         loader(context);
       }
-      var res = await http.patch(Uri.parse(baseUrl + endpoint),
+      var res = await http.patch(Uri.parse(kIsWeb ? baseUrl2 + endpoint : baseUrl  + endpoint),
           headers: {"Authorization": "Bearer $token"}, body: body);
       if (context.mounted) {
         Nav.pop(context);
@@ -118,7 +120,7 @@ class ApiServices {
       if (context.mounted) {
         loader(context);
       }
-      var res = await http.post(Uri.parse(baseUrl + endpoint),
+      var res = await http.post(Uri.parse(kIsWeb ? baseUrl2 + endpoint : baseUrl + endpoint),
           headers: {"Authorization": "Bearer $token"});
       if (context.mounted) {
         Nav.pop(context);

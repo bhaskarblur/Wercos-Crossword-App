@@ -196,13 +196,29 @@ class _MyGamesPageState extends State<MyGamesPage> {
 
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-            }, child: Label(
-            text:
-                '${AppLocalizations.of(context)!.code_to_share.toUpperCase()}: ${details['sharecode'].toString()}',
+            }, child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children : [
+        const SizedBox(width: 10),
+        Label(text:'${AppLocalizations.of(context)!.code_to_share.toUpperCase()}: ${details['sharecode'].toString()}',
             fontSize: FontSize.p2,
             align: TextAlign.center,
             maxLine: 2,
-          ))),
+          ),
+        CupertinoButton(
+            onPressed: () async {
+              await Clipboard.setData(ClipboardData(text: details['sharecode'].toString()));
+              var snackBar = SnackBar(content: Text(AppLocalizations.of(context)!.code_copied)
+                  , backgroundColor: AllColors.liteDarkPurple );
+
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+            },
+            padding: EdgeInsets.zero,
+            minSize: 0,
+            child: const Icon(Icons.copy, color: AllColors.white))
+    ])
+              )),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

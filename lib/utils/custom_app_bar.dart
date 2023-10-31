@@ -81,8 +81,21 @@ class CustomAppBar extends StatefulWidget {
               },
               child: Column(
                 children: [
-                  CustomImageButton(
-                      image: provider.getFlag()),
+                  FutureBuilder(
+                      future: Prefs.getPrefs('gameLanguage'),
+                      builder: (context, snapshot) {
+                        return Column(
+                          children: [
+                            const SizedBox(height: 5),
+                            snapshot.data == 'en' ?
+                            CustomImageButton(
+                                image: 'assets/images/us_flag.png')
+                                :   CustomImageButton(
+                                image:  'assets/images/spanish_flag.png'),
+                            const SizedBox(width: 5),
+                          ],
+                        );
+                      }),
                   SizedBox(height: 5),
                   Label(
                       text: "Idioma/Language",

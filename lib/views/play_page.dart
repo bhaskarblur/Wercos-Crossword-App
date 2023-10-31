@@ -204,7 +204,9 @@ class _PlayPageState extends State<PlayPage> {
                                           print('testgmae');
                                           print(value);
                                           if (value['gameDetails'] != null) {
+                                            gameScreenProvider.reset();
                                             gameScreenProvider.changeGameData(value);
+                                            gameScreenProvider.setChallengeData(value);
                                             gameScreenProvider.changeGameType('randomwordchallenge');
                                             gameScreenProvider.addToCorrectWordsIncorrectWordsFromAPI();
                                             if (value['gameDetails']['searchtype'] == 'search') {

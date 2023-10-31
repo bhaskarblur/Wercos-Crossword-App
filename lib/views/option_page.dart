@@ -71,13 +71,23 @@ class OptionPage extends StatelessWidget {
   text: AppLocalizations.of(context)!.select_language.toUpperCase(),
   fontSize: FontSize.p2),
   const SizedBox(width: 10),
+    FutureBuilder(
+        future: Prefs.getPrefs('language'),
+        builder: (context, snapshot) {
+          return Column(
+            children: [
+              const SizedBox(height: 5),
+              snapshot.data == 'en' ?
+              Image.asset('assets/images/us_flag.png',
+                  height: 45, width: 45)
+              :   Image.asset('assets/images/spanish_flag.png',
+                  height: 45, width: 45),
+              const SizedBox(width: 5),
+            ],
+          );
+        }),
 
 
-  Image.asset('assets/images/us_flag.png',
-  height: 45, width: 45) ,
-    const SizedBox(width: 5),
-  Image.asset('assets/images/spanish_flag.png',
-  height: 45, width: 45)
   ],
   )),
   ),
