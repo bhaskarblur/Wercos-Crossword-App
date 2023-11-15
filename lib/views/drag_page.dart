@@ -47,10 +47,18 @@ class _DrugPageState extends State<DrugPage> {
     return Color.fromARGB(155, r, g, b);
   }
 
+  var soundPref_ = "on";
+
   @override
   void initState() {
     getData();
 
+    Future.delayed(const Duration(milliseconds: 0), () async {
+      var soundPref = await Prefs.getPrefs("sound");
+      setState(() {
+      soundPref_ = soundPref!;
+      });
+    });
     super.initState();
     lineColors = List.generate(100, (index) => generateRandomColor()).toList();
     player = AudioPlayer();
@@ -245,7 +253,7 @@ class _DrugPageState extends State<DrugPage> {
                                                                     : TextAlign
                                                                         .center,
                                                         style: TextStyle(
-                                                            fontSize: 13,
+                                                            fontSize: 12.8,
                                                             decoration: provider
                                                                     .correctWords
                                                                     .contains(
@@ -306,7 +314,7 @@ class _DrugPageState extends State<DrugPage> {
                                                                 : TextAlign
                                                                     .center,
                                                         style: TextStyle(
-                                                            fontSize: 13,
+                                                            fontSize: 12.8,
                                                             decoration: provider
                                                                     .correctWords
                                                                     .contains(provider.allWordsFromAPI[index]
@@ -349,8 +357,10 @@ class _DrugPageState extends State<DrugPage> {
                                 acceptReversedDirection: true,
                                 drawVerticalLine: true,
                                 drawHorizontalLine: true,
-                                spacing: MediaQuery.of(context).size.width <= 376 ? const Offset(30, 33) :
-                                const Offset(32, 33),
+                                spacing:
+                                    MediaQuery.of(context).size.width <= 376
+                                        ? const Offset(30, 33)
+                                        : const Offset(32, 33),
                                 drawCrossLine: true,
                                 onLineDrawn: (List<String> words) async {
                                   var reverseWord = words.last
@@ -359,8 +369,9 @@ class _DrugPageState extends State<DrugPage> {
                                       .reversed
                                       .join('');
                                   print(reverseWord);
-                                  var index = provider.filteredWordsFromAPI
-                                      .indexOf(words.last.toString());
+                                  var index = provider.filteredWordsFromAPI.
+                                  indexOf(words.last.toString());
+
                                   if (index < 0) {
                                     index = provider.filteredWordsFromAPI
                                         .indexOf(reverseWord);
@@ -375,25 +386,38 @@ class _DrugPageState extends State<DrugPage> {
                                       provider.addToCorrectWords(word_);
                                       provider.addToFilteredCorrectWords(
                                           words.last.toString());
-                                      await AudioPlayer().play(soundConstants.correctAnswer);
+                                      if (soundPref_ == "on") {
+                                        await AudioPlayer()
+                                            .play(soundConstants.correctAnswer);
+                                      }
                                       // print(player.playing);
                                     }
-                                  } else {
+                                  }
+                                  else {
                                     if (provider.correctWordsFromAPI
-                                        .contains(words.last.toString())) {
+                                        .contains(words.last.toString()) || provider.correctWordsFromAPI
+                                        .contains(reverseWord)) {
                                       provider.addToCorrectWords(word_);
                                       provider.addToMarkedWords(word_);
                                       provider.addToFilteredCorrectWords(
                                           words.last.toString());
-                                      await AudioPlayer().play(soundConstants.correctAnswer);
+                                      if (soundPref_ == "on") {
+                                        await AudioPlayer()
+                                            .play(soundConstants.correctAnswer);
+                                      }
                                     } else if (provider.incorrectWordsFromAPI
-                                        .contains(words.last.toString())) {
+                                        .contains(words.last.toString()) ||
+                                        provider.incorrectWordsFromAPI
+                                            .contains(reverseWord)) {
                                       provider.addToInCorrectWords(word_);
                                       print('__incorrect__');
                                       provider.addToMarkedWords(word_);
                                       provider.addToFilteredInCorrectWords(
                                           words.last.toString());
-                                      await AudioPlayer().play(soundConstants.wrongAnswer);
+                                      if (soundPref_ == "on") {
+                                        await AudioPlayer()
+                                            .play(soundConstants.wrongAnswer);
+                                      }
                                       // print(player.playing);
                                     }
                                   }
@@ -527,21 +551,27 @@ class _DrugPageState extends State<DrugPage> {
               Consumer<GameScreenProvider>(builder: (context, provider, _) {
             return provider.isMarkingCurrently
                 ? Container(
-                    padding: EdgeInsets.only(top: MediaQuery.of(context).size.height < 900 && MediaQuery.of(context).size.height > 650 ?
-                    MediaQuery.of(context).size.height/2 - MediaQuery.of(context).size.height/4 :
-                    MediaQuery.of(context).size.height/2 - MediaQuery.of(context).size.height/3.5),
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height < 900 &&
+                                MediaQuery.of(context).size.height > 650
+                            ? MediaQuery.of(context).size.height / 2 -
+                                MediaQuery.of(context).size.height / 4
+                            : MediaQuery.of(context).size.height / 2 -
+                                MediaQuery.of(context).size.height / 3.5),
                     child: Container(
                         decoration: BoxDecoration(
-                            color: AllColors.shineGreen,
-                            borderRadius: BorderRadius.circular(0),
+                          color: AllColors.shineGreen,
+                          borderRadius: BorderRadius.circular(0),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black38.withOpacity(0.2),
                               spreadRadius: 2,
                               blurRadius: 6,
-                              offset: Offset(1, 1), // changes position of shadow
+                              offset:
+                                  Offset(1, 1), // changes position of shadow
                             ),
-                          ],),
+                          ],
+                        ),
                         child: Padding(
                           padding: EdgeInsets.only(
                               top: 6, bottom: 6, left: 12, right: 12),
@@ -577,7 +607,7 @@ class _DrugPageState extends State<DrugPage> {
     timerProvider.setTicking(false);
     timerProvider.resetSeconds();
 
-    if(provider.gameType != 'gamewithcode') {
+    if (provider.gameType != 'gamewithcode') {
       provider.reset();
     }
     print(provider.gameType);
@@ -603,6 +633,9 @@ class _DrugPageState extends State<DrugPage> {
         provider.gameType == 'searchbycategory') {
       categorySearch();
     }
+
+    print(provider.correctWordsFromAPI);
+    print(provider.incorrectWordsFromAPI);
   }
 
   void startTimer() {
@@ -612,7 +645,7 @@ class _DrugPageState extends State<DrugPage> {
     provider.resetSeconds();
     provider.setTicking(true);
     Future.delayed(const Duration(milliseconds: 200), () {
-      if(provider_game.gameType.contains("randomwordchallenge")) {
+      if (provider_game.gameType.contains("randomwordchallenge")) {
         provider_game.reAddWordsForChallenge();
       }
       provider_game.setGameEnded(false);
@@ -925,12 +958,13 @@ class _DrugPageState extends State<DrugPage> {
     p.stopSeconds();
     p.setTicking(false);
     gameProvider.setGameEnded(true);
+    print('totalWords_');
+    print(gameProvider.allWordsFromAPI.length);
     Future.delayed(const Duration(milliseconds: 500), () async {
       if (gameProvider.gameData['gameDetails']['searchtype'] == 'search') {
-
-
-        await AudioPlayer().play(soundConstants.gameCompleted);
-
+        if (soundPref_ == "on") {
+          await AudioPlayer().play(soundConstants.gameCompleted);
+        }
         Nav.push(
             context,
             LevelCompletionPage(
@@ -959,35 +993,70 @@ class _DrugPageState extends State<DrugPage> {
         }
         if (provider.correctWords.length > 0) {
           if (correctWordsMarked.length == wordsToMark.length) {
-            await AudioPlayer().play(soundConstants.gameCompleted);
+            if (soundPref_ == "on") {
+              await AudioPlayer().play(soundConstants.gameCompleted);
+            }
 
-            Nav.push(
-                context,
-                LevelCompletionPage(
-                  // isCompleted: gameProvider.correctWordsFromAPI.length ==
-                  //     gameProvider.correctWords.length,
-                  isCompleted: true,
-                  totalWord: gameProvider.allWordsFromAPI.length,
-                  correctWord: gameProvider.correctWords.length,
-                  seconds: p.seconds,
-                ));
+            if (provider.incorrectWords.length > 0) {
+              Nav.push(
+                  context,
+                  LevelCompletionPage(
+                    // isCompleted: gameProvider.correctWordsFromAPI.length ==
+                    //     gameProvider.correctWords.length,
+                    isCompleted: true,
+                    totalWord: gameProvider.filteredWordsFromAPI.length,
+                    correctWord: gameProvider.filteredWordsFromAPI.length -
+                        gameProvider.incorrectWords.length,
+                    seconds: p.seconds,
+                  ));
+            } else {
+              Nav.push(
+                  context,
+                  LevelCompletionPage(
+                    // isCompleted: gameProvider.correctWordsFromAPI.length ==
+                    //     gameProvider.correctWords.length,
+                    isCompleted: true,
+                    totalWord: gameProvider.filteredWordsFromAPI.length,
+                    correctWord: gameProvider.allWordsFromAPI.length,
+                    seconds: p.seconds,
+                  ));
+            }
           } else if (provider.allWordsFromAPI.length ==
               provider.allMarkedWords.length) {
             if (correctWordsMarked.length == wordsToMark.length) {
-              await AudioPlayer().play(soundConstants.gameCompleted);
+              if (soundPref_ == "on") {
+                await AudioPlayer().play(soundConstants.gameCompleted);
+              }
             } else {
-              await AudioPlayer().play(soundConstants.gameEnded);
+              if (soundPref_ == "on") {
+                await AudioPlayer().play(soundConstants.gameEnded);
+              }
             }
-            Nav.push(
-                context,
-                LevelCompletionPage(
-                  isCompleted: correctWordsMarked.length == wordsToMark.length,
-                  // isCompleted: true,
-                  totalWord: gameProvider.allWordsFromAPI.length,
-                  // totalWord: provider.allMarkedWords.length,
-                  correctWord: gameProvider.correctWords.length,
-                  seconds: p.seconds,
-                ));
+
+            if (provider.incorrectWords.length > 0) {
+              Nav.push(
+                  context,
+                  LevelCompletionPage(
+                    // isCompleted: gameProvider.correctWordsFromAPI.length ==
+                    //     gameProvider.correctWords.length,
+                    isCompleted: true,
+                    totalWord: gameProvider.filteredWordsFromAPI.length,
+                    correctWord: gameProvider.filteredWordsFromAPI.length -
+                        gameProvider.incorrectWords.length,
+                    seconds: p.seconds,
+                  ));
+            } else {
+              Nav.push(
+                  context,
+                  LevelCompletionPage(
+                    // isCompleted: gameProvider.correctWordsFromAPI.length ==
+                    //     gameProvider.correctWords.length,
+                    isCompleted: true,
+                    totalWord: gameProvider.filteredWordsFromAPI.length,
+                    correctWord: gameProvider.filteredWordsFromAPI.length,
+                    seconds: p.seconds,
+                  ));
+            }
           }
         }
       }

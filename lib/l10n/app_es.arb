@@ -1,14 +1,14 @@
 {
     "language" : "Español",
-    
+
     "play" : "Jugar",
     "my_games" : "Mis juegos",
-    
+
     "create" : "Crear",
     "word_search" : "SOPA DE LETRAS",
     "challenge" : "RETO",
     "level" : "Nivel",
-    
+
     "options" : "Opciones",
     "my_account" : "Mi cuenta",
     "select_language" : "IDIOMA DE LA APP",
@@ -25,7 +25,7 @@
     "enter_word" : "Ingrese la palabra",
     "add" : "Agregar",
     "generate" : "Generar",
-
+    "delete_game":"¿Estás seguro de que quieres eliminar el juego?",
     "my_crated_games" : "Mis juegos creados",
     "word_searches" : "SOPAS DE LETRAS",
     "challenges" : "RETOS",
@@ -54,7 +54,7 @@
     "advanced" : "Avanzado",
     "hard" : "Duro",
     "expert" : "Experto",
-    
+
     "username" : "Nombre de usuario",
     "change" : "Cambiar",
     "save" : "Guardar",
@@ -90,20 +90,29 @@
     "what_is_challenge" : "¿Qué es un desafío?",
     "what_is_challenge_description" : "En un desafío, hay palabras correctas e incorrectas en la lista y en la cuadrícula. Solo debes marcar las palabras que correspondan al título del reto. Por ejemplo, si el título del reto es: Países Europeos, solo se deben marcar los países europeos, los que no son de Europa no se deben marcar ya que serían incorrectos.",
     "this_feature" : "Esta característica solo está disponible para usuarios premium. Actualice para usar esta función.",
-    "hits":"aciertos",
+    "hits":"Aciertos",
     "rate_this" : "CALAIFICAR ESTA SOPA DE LETRAS",
     "rate_this_challange" : "CALAIFICAR ESTE RETO",
     "game" : "JUEGO",
     "not_complete" : "NO COMPLETADO",
     "congratulations" : "!FELICIDADES!",
     "complete" : "COMPLETADO",
-    "hits" : "ACIERTOS",
+    "hits" : "Aciertos",
+    "user" : "Usuario",
+    "time" : "Tiempo",
     "offf" : "de",
-    "time" : "TIEMPO",
+        "correct" :"Correcta",
+            "incorrect" :"Incorrecta",
+    "privacy_policy":"Aviso de privacidad",
+    "time" : "Tiempo",
+       "sound":"SONIDO",
+           "active":"ACTIVO",
+             "inactive":"INACTIVO",
     "yes": "SI",
        "no": "NO",
       "exit_app" : "Estás seguro que quieres salir del app?",
      "ok":"OK",
+         "end_game":"¿Estás seguro de que quieres terminar el juego?",
      "users":"Usuarios",
         "code_copied": "Después de copiar",
      "words_no": "¡No se pueden agregar más de 18 palabras en el juego!",
@@ -119,6 +128,7 @@
   "created_success":"Juego creado existosamente",
       "edited_success":"Actualizado exitosamente",
       "duplicated_success": "Duplicado exitosamente",
+       "deleted_success": "Juego eliminado con éxito",
       "no_search_found": "No hay resultado,por favor  intenta con otras palabras.",
        "publicprivate": "¿Qué es una sopa de letras pública o privada?",
               "publicprivatedesc": "Una Word search privada la puede jugar cualquier persona que use la app, las privadas solamente se puede jugar por medio de un código compartido.",

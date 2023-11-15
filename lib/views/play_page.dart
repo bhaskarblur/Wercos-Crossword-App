@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../components/custom_dialogs.dart';
+import '../providers/timer_provider.dart';
 import '../widget/sahared_prefs.dart';
 import '../widget/widgets.dart';
 
@@ -39,12 +40,34 @@ class _PlayPageState extends State<PlayPage> {
         decoration: const BoxDecoration(gradient: AllColors.bg),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: const PreferredSize(
+          appBar: PreferredSize(
               preferredSize: Size.fromHeight(70),
-              child: CustomAppBar(
-                isBack: false,
-                isLang: true,
-              )),
+              child: CustomAppBar(isBack: provider.prevIndex != 1 ? true : false, isLang: true, backOnPressed: () {
+                final timeProvider =
+                Provider.of<TimerProvider>(context, listen: false);
+
+                final homeProvider = Provider.of<HomeProvider>(
+                    context,
+                    listen: false);
+
+                final gameProvider = Provider.of<GameScreenProvider>(
+                    context,
+                    listen: false);
+                print(homeProvider.prevIndex);
+                if(homeProvider.prevIndex == 4) {
+                  gameProvider.changeGameType('random');
+                  gameProvider.reset();
+                  timeProvider.stopSeconds();
+                  timeProvider.resetSeconds();
+                  gameProvider.setGameEnded(false);
+                  homeProvider.changeSelectedIndex(4);
+                  homeProvider.setSearching(false);
+                }
+                else {
+                  homeProvider.changeSelectedIndex(homeProvider.prevIndex);
+                  provider.changePreviousIndex(provider.selectedIndex);
+                }
+              },)),
           body: SingleChildScrollView(
             child: Center(
               child: Padding(

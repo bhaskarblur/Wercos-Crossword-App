@@ -218,6 +218,47 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
                                   '${AppLocalizations.of(context)!.word_search_name}: ${provider.leaderboard['gameName']}',
                               fontWeight: FontWeight.w500,
                               fontSize: FontSize.p2),
+                          const SizedBox(height: 20),
+                          Container(
+                            padding: EdgeInsets.only(left: 65, right: 55),
+                              child:
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Label(
+                                  text:
+                                      AppLocalizations.of(context)!.users,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: FontSize.p4),
+                              Row(
+                                children: [
+                                  Label(
+                                      text:
+                                      AppLocalizations.of(context)!.hits,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: FontSize.p4),
+                FutureBuilder(
+    future: Prefs.getPrefs('language'),
+    builder: (context, snapshot) {
+      return snapshot.data == "es" ?
+      const SizedBox(width: 13) : const SizedBox(width: 30);
+    }),
+                                  Label(
+                                      text:
+                                      AppLocalizations.of(context)!.time,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: FontSize.p4),
+                                  FutureBuilder(
+                                      future: Prefs.getPrefs('language'),
+                                      builder: (context, snapshot) {
+                                        return snapshot.data == "es" ?
+                                        const SizedBox(width: 0) : const SizedBox(width: 5);
+                                      })
+                                ]
+                              )
+                            ],
+                          )),
                           const SizedBox(height: 10),
                           ListView.separated(
                               shrinkWrap: true,
@@ -232,9 +273,9 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
                                   children: [
                                     Container(
                                       margin: const EdgeInsets.symmetric(
-                                          horizontal: 34),
+                                          horizontal: 26),
                                       padding: const EdgeInsets.only(
-                                          left: 34, right: 10),
+                                          left: 32, right: 15),
                                       width: double.maxFinite,
                                       height: 55,
                                       decoration: BoxDecoration(
@@ -258,27 +299,23 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
                                           Expanded(
                                             flex: 1,
                                             child: Text(
-                                                provider.leaderboard['leaderboards'][index]['crosswordscore'].toString() + " " +
-                                                    AppLocalizations.of(context)!.hits,
+                                                provider.leaderboard['leaderboards'][index]['crosswordscore'].toString(),
                                                 textAlign: TextAlign.end,
                                                 style: const TextStyle(
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.w600,
-                                                    fontSize: FontSize.p5))
+                                                    fontSize: FontSize.p4))
                                           ),
-                                          horGap(10),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Text(
-                                                provider.leaderboard[
+                                          horGap(30),
+                                          Text(provider.leaderboard[
                                                         'leaderboards'][index]
                                                     ['timescoretext'],
                                                 textAlign: TextAlign.end,
                                                 style: const TextStyle(
                                                     color: AllColors.orange,
                                                     fontWeight: FontWeight.w600,
-                                                    fontSize: FontSize.p5)),
-                                          ),
+                                                    fontSize: FontSize.p4)),
+                                          const SizedBox(width: 5)
                                         ],
                                       ),
                                     ),

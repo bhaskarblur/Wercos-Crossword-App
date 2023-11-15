@@ -23,6 +23,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:werkos/components/model/bottom_navigation_item.dart';
 
 import '../admob/admob_service_details.dart';
+import '../components/custom_dialogs.dart';
 import '../providers/timer_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -168,7 +169,8 @@ class TabScreenState extends State<TabScreen> {
                             p.stopSeconds();
                             p.stopSeconds();
                             p.setTicking(false);
-
+                            provider.changePreviousIndex(provider.selectedIndex);
+                            print(provider.prevIndex);
                             provider.changeSelectedIndex(index);
                             provider.setSearching(false);
                             // playVideoAd();
@@ -241,6 +243,8 @@ class TabScreenState extends State<TabScreen> {
                                     print(3);
                                     print('here i am!');
                                     print('reach here1');
+                                    provider.changePreviousIndex(provider.selectedIndex);
+                                    print(provider.prevIndex);
                                     provider.changeSelectedIndex(1);
                                     // Nav.push(
                                     //     context,
@@ -264,10 +268,19 @@ class TabScreenState extends State<TabScreen> {
                                     print(p__.gameEnded);
 
                                     if(p__.gameEnded != true) {
-                                      borderRest();
+                                      CustomDialog.endGameDialog(
+                                          onPressed: () {
+                                            Nav.pop(context);
+                                            borderRest();
+                                          },
+                                          apiServices : _apiServices,
+                                          context: context);
+                                      // borderRest();
                                     }
                                     else {
                                       print(82);
+                                      provider.changePreviousIndex(provider.selectedIndex);
+                                      print(provider.prevIndex);
                                       provider.changeSelectedIndex(1);
                                       provider.setSearching(false);
                                       // gameProvider.changeGameType('random');
@@ -290,6 +303,8 @@ class TabScreenState extends State<TabScreen> {
 
                                     print('check Here');
                                     print('reach here2');
+                                    provider.changePreviousIndex(provider.selectedIndex);
+                                    print(provider.prevIndex);
                                     provider.changeSelectedIndex(1);
                                     if(gameProvider.allowMark) {
                                       // Nav.push(
@@ -314,7 +329,8 @@ class TabScreenState extends State<TabScreen> {
                                       // p.resetSeconds();
                                       // p__.setGameEnded(false);
                                       print(83);
-
+                                      provider.changePreviousIndex(provider.selectedIndex);
+                                      print(provider.prevIndex);
                                       provider.changeSelectedIndex(1);
                                       provider.setSearching(false);
                                       // gameProvider.changeGameType('random');
@@ -336,10 +352,19 @@ class TabScreenState extends State<TabScreen> {
                                     print(p__.gameEnded);
 
                                     if(p__.gameEnded != true) {
-                                      borderRest();
+                                      CustomDialog.endGameDialog(
+                                          onPressed: () {
+                                            Nav.pop(context);
+                                            borderRest();
+                                          },
+                                          apiServices : _apiServices,
+                                          context: context);
+                                      // borderRest();
                                     }
                                     else {
                                       print(84);
+                                      provider.changePreviousIndex(provider.selectedIndex);
+                                      print(provider.prevIndex);
                                       provider.changeSelectedIndex(1);
                                       provider.setSearching(false);
                                       // gameProvider.changeGameType('random');
@@ -361,6 +386,8 @@ class TabScreenState extends State<TabScreen> {
                                 gameProvider.reset();
                                 p.stopSeconds();
                                 p.resetSeconds();
+                                provider.changePreviousIndex(provider.selectedIndex);
+                                print(provider.prevIndex);
                                 provider.changeSelectedIndex(4);
                                 provider.setSearching(false);
                                 gameProvider.setGameEnded(false);
@@ -406,7 +433,8 @@ class TabScreenState extends State<TabScreen> {
                       p.stopSeconds();
                       p.stopSeconds();
                       p.setTicking(false);
-
+                      provider.changePreviousIndex(provider.selectedIndex);
+                      print(provider.prevIndex);
                       provider.changeSelectedIndex(index);
                       provider.setSearching(false);
                       // playVideoAd();
@@ -495,6 +523,7 @@ class TabScreenState extends State<TabScreen> {
                             }
 
                             else {
+
                               print(4);
                               final p__ =
                               Provider.of<GameScreenProvider>(context, listen: false);
@@ -502,10 +531,19 @@ class TabScreenState extends State<TabScreen> {
                               print(p__.gameEnded);
 
                               if(p__.gameEnded != true) {
-                                borderRest();
+                                CustomDialog.endGameDialog(
+                                    onPressed: () {
+                                      Nav.pop(context);
+                                      borderRest();
+                                    },
+                                    apiServices : _apiServices,
+                                    context: context);
+                                // borderRest();
                               }
                               else {
                                 print(86);
+                                provider.changePreviousIndex(provider.selectedIndex);
+                                print(provider.prevIndex);
                                 provider.changeSelectedIndex(1);
                                 provider.setSearching(false);
                                 // gameProvider.changeGameType('random');
@@ -528,6 +566,8 @@ class TabScreenState extends State<TabScreen> {
 
                               print('check Here');
                               print('reach here4');
+                              provider.changePreviousIndex(provider.selectedIndex);
+                              print(provider.prevIndex);
                               provider.changeSelectedIndex(1);
                               if(gameProvider.allowMark) {
                                 // Nav.push(
@@ -552,7 +592,8 @@ class TabScreenState extends State<TabScreen> {
                                 // p.resetSeconds();
                                 // p__.setGameEnded(false);
                                 print(87);
-
+                                provider.changePreviousIndex(provider.selectedIndex);
+                                print(provider.prevIndex);
                                 provider.changeSelectedIndex(1);
                                 provider.setSearching(false);
                                 // gameProvider.changeGameType('random');
@@ -574,11 +615,20 @@ class TabScreenState extends State<TabScreen> {
                               print(p__.gameEnded);
 
                               if(p__.gameEnded != true) {
-                                borderRest();
+                                CustomDialog.endGameDialog(
+                                  onPressed: () {
+                                    Nav.pop(context);
+                                    borderRest();
+                                  },
+                                    apiServices : _apiServices,
+                                    context: context);
+                                // borderRest();
                               }
                               else {
                                 print(88);
                                 provider.setSearching(false);
+                                provider.changePreviousIndex(provider.selectedIndex);
+                                print(provider.prevIndex);
                                 provider.changeSelectedIndex(1);
                                 // gameProvider.changeGameType('random');
                                 // final p__ =
@@ -603,11 +653,15 @@ class TabScreenState extends State<TabScreen> {
                             p__.reset();
                             p.stopSeconds();
                             p.resetSeconds();
+                            provider.changePreviousIndex(provider.selectedIndex);
+                            print(provider.prevIndex);
                             provider.changeSelectedIndex(4);
                             provider.setSearching(false);
                             p__.setGameEnded(false);
                           }
                           else {
+                            provider.changePreviousIndex(provider.selectedIndex);
+                            print(provider.prevIndex);
                             provider.changeSelectedIndex(1);
                           }
                         }
@@ -623,7 +677,8 @@ class TabScreenState extends State<TabScreen> {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
     final p = Provider.of<TimerProvider>(context, listen: false);
     List<String> rest = [];
-
+    List<String> incorrectWordsTotalInList = [];
+    List<String> incorrectWordsNotMarked = [];
     final player = AudioPlayer();
     if(!player.playing) {
       // Create a player
@@ -639,12 +694,41 @@ class TabScreenState extends State<TabScreen> {
     p.setTicking(false);
     print('checkhere');
     print(provider.gameType);
-    if(provider.gameType.contains("challenge")) {
+    print('totalWords_');
+
+
+    for(var word in provider.allWordsFromAPI) {
+      print('checkIncorrectAll');
+      print(provider.incorrectWordsFromAPI.contains(word));
+      if(provider.incorrectWordsFromAPI.contains(word)) {
+        // getting list of incorrect words inside grid
+        incorrectWordsTotalInList.add(word);
+      }
+    }
+
+    for(var word in incorrectWordsTotalInList) {
+      print('checkIncorrectNotMarked');
+      print(!provider.incorrectWords.contains(word));
+      if(!provider.incorrectWords.contains(word)) {
+        // getting list of incorrect words not marked
+        incorrectWordsNotMarked.add(word);
+      }
+    }
+    print('incorrectWordsTotalInList');
+    print('incorrectWordsNotMarked]');
+    print(incorrectWordsTotalInList);
+    print(incorrectWordsNotMarked);
+    print(provider.incorrectWordsFromAPI);
+    print(provider.allWordsFromAPI.length);
+    print(provider.gameType);
+    if(provider.gameData['gameDetails']['searchtype'] == 'challenge') {
+
       provider.filteredWordsFromAPI.forEach((element) {
-        print(!provider.allMarkedWords.contains(element));
-        print(provider.correctWordsFromAPI.contains(element));
+        print(element);
         if(!provider.allMarkedWords.contains(element)
-            && provider.correctWordsFromAPI.contains(element)) {
+            && provider.correctWordsFromAPI.contains(element) &&
+            !provider.filteredcorrectWords.contains(element) &&
+            !provider.filteredincorrectWords.contains(element)) {
 
          rest.add(element);
         }
@@ -652,12 +736,17 @@ class TabScreenState extends State<TabScreen> {
     }
     else {
       provider.filteredWordsFromAPI.forEach((element) {
-        if (!provider.correctWordsFromAPI.contains(element) &&
+        print(element);
+        if (!provider.filteredcorrectWords.contains(element) &&
             !provider.filteredincorrectWords.contains(element)) {
           rest.add(element);
+
         }
       });
+
     }
+    print("rest");
+    print(rest);
     Prefs.getToken().then((token) {
       Prefs.getPrefs('loginId').then((loginId) {
         _apiServices.post(
@@ -686,15 +775,44 @@ class TabScreenState extends State<TabScreen> {
           }
           else {
             Future.delayed(const Duration(seconds: 5), () {
-              Nav.push(
-                  context,
-                  LevelCompletionPage(
-                    isCompleted: provider.correctWordsFromAPI.length ==
-                        provider.correctWords.length,
-                    totalWord: provider.correctWordsFromAPI.length,
-                    correctWord: provider.correctWords.length,
-                    seconds: p.seconds,
-                  ));
+              if(provider.correctWords.length > 0 ) {
+                if (provider.incorrectWords.length > 0) {
+                  Nav.push(
+                      context,
+                      LevelCompletionPage(
+                        // isCompleted: gameProvider.correctWordsFromAPI.length ==
+                        //     gameProvider.correctWords.length,
+                        isCompleted: true,
+                        totalWord: provider.filteredWordsFromAPI.length,
+                        correctWord: provider.correctWords.length + incorrectWordsNotMarked.length,
+                        seconds: p.seconds,
+                      ));
+                }
+                else {
+                  Nav.push(
+                      context,
+                      LevelCompletionPage(
+                        // isCompleted: gameProvider.correctWordsFromAPI.length ==
+                        //     gameProvider.correctWords.length,
+                        isCompleted: true,
+                        totalWord: provider.filteredWordsFromAPI.length,
+                        correctWord:  provider.correctWords.length + incorrectWordsNotMarked.length,
+                        seconds: p.seconds,
+                      ));
+                }
+              }
+              else {
+                Nav.push(
+                    context,
+                    LevelCompletionPage(
+                      // isCompleted: gameProvider.correctWordsFromAPI.length ==
+                      //     gameProvider.correctWords.length,
+                      isCompleted: true,
+                      totalWord: provider.filteredWordsFromAPI.length,
+                      correctWord: provider.correctWords.length,
+                      seconds: p.seconds,
+                    ));
+              }
             });
           }
         });

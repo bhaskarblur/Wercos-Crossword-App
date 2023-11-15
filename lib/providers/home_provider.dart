@@ -5,6 +5,8 @@ class HomeProvider with ChangeNotifier {
   int _selectedIndex = 4;
   int get selectedIndex => _selectedIndex;
 
+  int _prevIndex = 4;
+  int get prevIndex => _prevIndex;
   dynamic _isSearching = false;
   dynamic get isSearching => _isSearching;
 
@@ -16,8 +18,13 @@ class HomeProvider with ChangeNotifier {
 
    late List<dynamic>  _filteredsearchResult;
   List<dynamic> get filteredsearchResult => _filteredsearchResult;
+
   changeSelectedIndex(int value) {
     _selectedIndex = value;
+    notifyListeners();
+  }
+  changePreviousIndex(int value) {
+    _prevIndex = value;
     notifyListeners();
   }
 

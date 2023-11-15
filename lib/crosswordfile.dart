@@ -9,6 +9,7 @@ import 'package:werkos/providers/game_screen_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:crossword/components/word_line.dart';
 import 'package:werkos/soundConstants.dart';
+import 'package:werkos/widget/sahared_prefs.dart';
 import 'line_painter.dart';
 import 'linedecoration.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -28,27 +29,26 @@ class Crossword extends StatefulWidget {
   final TextStyle? textStyle;
   final bool? acceptReversedDirection;
 
-  const Crossword(
-      {super.key,
-      required this.letters,
-      required this.spacing,
-      this.drawCrossLine,
-      required this.onLineDrawn,
-      this.drawHorizontalLine,
-      this.drawVerticalLine,
-      required this.allWords,
-      required this.incorrWords,
-      required this.correctWords,
-      this.lineDecoration = const LineDecoration(),
-      this.textStyle,
-      this.acceptReversedDirection = true,
-      this.transposeMatrix = false})
+  const Crossword({super.key,
+    required this.letters,
+    required this.spacing,
+    this.drawCrossLine,
+    required this.onLineDrawn,
+    this.drawHorizontalLine,
+    this.drawVerticalLine,
+    required this.allWords,
+    required this.incorrWords,
+    required this.correctWords,
+    this.lineDecoration = const LineDecoration(),
+    this.textStyle,
+    this.acceptReversedDirection = true,
+    this.transposeMatrix = false})
       : assert(
-          (drawCrossLine ?? true) ||
-              (drawHorizontalLine ?? true) ||
-              (drawVerticalLine ?? true),
-          "At least one of drawCrossLine, drawHorizontalLine, or drawVerticalLine should be true",
-        );
+  (drawCrossLine ?? true) ||
+      (drawHorizontalLine ?? true) ||
+      (drawVerticalLine ?? true),
+  "At least one of drawCrossLine, drawHorizontalLine, or drawVerticalLine should be true",
+  );
 
   @override
   CrosswordState createState() => CrosswordState();
@@ -69,12 +69,19 @@ class CrosswordState extends State<Crossword> {
   var lastWord;
 
   bool isMarked = false;
+  var soundPref_ = "on";
 
   @override
   void initState() {
     // TODO: implement initState
     letters =
-        widget.transposeMatrix! ? widget.letters : widget.letters.transpose();
+    widget.transposeMatrix! ? widget.letters : widget.letters.transpose();
+
+    Future.delayed(const Duration(milliseconds: 0), () async {
+      var soundPref = await Prefs.getPrefs("sound");
+      soundPref_ = soundPref!;
+      setState(() {});
+    });
 
     super.initState();
   }
@@ -162,13 +169,16 @@ class CrosswordState extends State<Crossword> {
           child: Center(
             child: GestureDetector(
               onPanStart: (DragStartDetails details) async {
-
                 final provider =
-                    Provider.of<GameScreenProvider>(context, listen: false);
+                Provider.of<GameScreenProvider>(context, listen: false);
 
                 if (provider.allowMark) {
                   color = generateRandomColor();
-                  await AudioPlayer().play(soundConstants.selectSound);
+
+                  if (soundPref_ == "on") {
+                    await AudioPlayer().play(soundConstants.selectSound);
+                  }
+
                   setState(() {
                     startPoint = LetterOffset(
                         offset: details.localPosition, spacing: widget.spacing);
@@ -179,7 +189,7 @@ class CrosswordState extends State<Crossword> {
                         color: color!,
                         letters: letters,
                         acceptReversedDirection:
-                            widget.acceptReversedDirection!));
+                        widget.acceptReversedDirection!));
                     provider.setCurrentMarkedWord("");
                     provider.setIsMarkingCurrently(true);
                     provider.setCurrentMarkedWord(
@@ -188,19 +198,23 @@ class CrosswordState extends State<Crossword> {
                     provider.setRandomColor(lineList.last.color);
 
                     // this is to avoid a bug with the grid that creates an unecessary line after matching a word
-                    for(var i=0 ; i<lineList.length - 1;i++) {
-                      print(lineList.elementAt(i).word);
-                      if(!provider.filteredWordsFromAPI.contains(lineList.elementAt(i).word)) {
+                    for (var i = 0; i < lineList.length - 1; i++) {
+                      print(lineList
+                          .elementAt(i)
+                          .word);
+                      if (!provider.filteredWordsFromAPI
+                          .contains(lineList
+                          .elementAt(i)
+                          .word)) {
                         lineList.removeAt(i);
                       }
                     }
-
                   });
                 }
               },
               onPanUpdate: (DragUpdateDetails details) async {
                 final provider =
-                    Provider.of<GameScreenProvider>(context, listen: false);
+                Provider.of<GameScreenProvider>(context, listen: false);
 
                 if (provider.allowMark) {
                   AudioPlayer audioPlayer = new AudioPlayer();
@@ -239,26 +253,33 @@ class CrosswordState extends State<Crossword> {
                       //     endPoint!.getBiggerOffset.direction < 0.80 ) {
                       //   return;
                       // }
-                        lineList.last = WordLine(
-                            offsets: [startPoint!, endPoint!],
-                            color: color!,
-                            letters: letters,
-                            acceptReversedDirection:
-                            widget.acceptReversedDirection!);
-
+                      lineList.last = WordLine(
+                          offsets: [startPoint!, endPoint!],
+                          color: color!,
+                          letters: letters,
+                          acceptReversedDirection:
+                          widget.acceptReversedDirection!);
 
                       if (provider.currentMarkedWord.toString() !=
                           lineList.last.word) {
                         Future.delayed(const Duration(milliseconds: 10),
-                            () async {
-                          await AudioPlayer().play(soundConstants.selectSound);
-                        });
+                                () async {
+                              if (soundPref_ == "on") {
+                                await AudioPlayer()
+                                    .play(soundConstants.selectSound);
+                              }
+                            });
                         provider.setCurrentMarkedWord(lineList.last.word);
                       }
                       // this is to avoid a bug with the grid that creates an unecessary line after matching a word
-                      for(var i=0 ; i<lineList.length - 1;i++) {
-                        print(lineList.elementAt(i).word);
-                        if(!provider.filteredWordsFromAPI.contains(lineList.elementAt(i).word)) {
+                      for (var i = 0; i < lineList.length - 1; i++) {
+                        print(lineList
+                            .elementAt(i)
+                            .word);
+                        if (!provider.filteredWordsFromAPI
+                            .contains(lineList
+                            .elementAt(i)
+                            .word)) {
                           lineList.removeAt(i);
                         }
                       }
@@ -269,31 +290,32 @@ class CrosswordState extends State<Crossword> {
               onPanEnd: (DragEndDetails details) async {
                 //get initial positions based on user interaction on the panel
 
-
                 final provider =
-                    Provider.of<GameScreenProvider>(context, listen: false);
+                Provider.of<GameScreenProvider>(context, listen: false);
 
                 if (provider.allowMark) {
                   //get the last line drawn from the list
                   List<Offset> usedOffsets = lineList.last.getTotalOffsets;
-                  await AudioPlayer().play(soundConstants.selectSound);
+                  if (soundPref_ == "on") {
+                    await AudioPlayer().play(soundConstants.selectSound);
+                  }
                   setState(() {
                     provider.setIsMarkingCurrently(false);
                     provider.setCurrentMarkedWord(lineList.last.word);
 
                     //Check if the line can be drawn on specific angles
                     if (selectedOffsets
-                            .toSet()
-                            .intersection(usedOffsets.toSet())
-                            .isEmpty &&
+                        .toSet()
+                        .intersection(usedOffsets.toSet())
+                        .isEmpty &&
                         lineList.last.offsets
-                                .map((e) => e.getSmallerOffset)
-                                .toSet()
-                                .length >
+                            .map((e) => e.getSmallerOffset)
+                            .toSet()
+                            .length >
                             1 &&
                         (((widget.drawHorizontalLine ?? true)
-                                ? isHorizontalLine(lineList.last.offsets)
-                                : false) ||
+                            ? isHorizontalLine(lineList.last.offsets)
+                            : false) ||
                             ((widget.drawVerticalLine ?? true)
                                 ? isVerticalLine(lineList.last.offsets)
                                 : false) ||
@@ -319,39 +341,50 @@ class CrosswordState extends State<Crossword> {
                           .reversed
                           .join('');
                       print(reverseWord);
-                      if (wordsMarked.contains(lineList.last.word) == false) {
 
+                      if (wordsMarked.contains(lineList.last.word) == false) {
                         if (widget.allWords.contains(lineList.last.word) ||
                             widget.allWords.contains(reverseWord)) {
 
-
-                          if (widget.correctWords
-                                  .contains(lineList.last.word) ||
+                          if (widget.correctWords.contains(lineList.last.word) ||
                               widget.correctWords.contains(reverseWord)) {
                             print('correct');
 
                             wordsMarked.add(lineList.last.word);
                             wordsAreMarked.add(lineList.last);
                             provider.addToWordLineMarkedWords(lineList.last);
-                          } else if (widget.incorrWords
-                                  .contains(lineList.last.word) ||
+
+                          } else if (widget.incorrWords.contains(lineList.last.word) ||
                               widget.incorrWords.contains(reverseWord)) {
                             //set a line color when the selected word is incorrect
                             lineList.last.color =
-                                widget.lineDecoration!.incorrectColor!;
+                            widget.lineDecoration!.incorrectColor!;
                             print('incorrect');
-                            wordsMarked.add(lineList.last.word);
-                            incorrectMarked.add(lineList.last.word);
-                            wordsAreMarked.add(lineList.last);
+                            if(widget.incorrWords.contains(lineList.last.word)) {
+                              wordsMarked.add(lineList.last.word);
+                              incorrectMarked.add(lineList.last.word);
+                              wordsAreMarked.add(lineList.last);
+                              print('straight');
+                            }
+                            else if(widget.incorrWords.contains(reverseWord)) {
+                              wordsMarked.add(reverseWord);
+                              incorrectMarked.add(reverseWord);
+                              WordLine line = lineList.last;
+                              wordsAreMarked.add(lineList.last);
+                              print('reverse');
+                            }
                           }
 
                           widget.onLineDrawn(
                               lineList.map((e) => e.word).toList());
                         } else {
                           Future.delayed(const Duration(milliseconds: 50),
-                              () async {
-                            await AudioPlayer().play(soundConstants.notMatched);
-                          });
+                                  () async {
+                                if (soundPref_ == "on") {
+                                  await AudioPlayer()
+                                      .play(soundConstants.notMatched);
+                                }
+                              });
                           startPoint = null;
                           endPoint = null;
                           lineList.removeLast();

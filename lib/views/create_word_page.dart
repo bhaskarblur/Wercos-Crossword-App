@@ -125,261 +125,311 @@ class _CreateWordPageState extends State<CreateWordPage> {
                     preferredSize: Size.fromHeight(70),
                     child: CustomAppBar(isBack: true, isLang: true)),
                 backgroundColor: Colors.transparent,
-                body: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 26),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 20),
-                        Center(
-                            child: Label(
-                                text:
-                                '${AppLocalizations.of(context)!.create.toUpperCase()}  ${widget.type == 'challenge' ? AppLocalizations.of(context)!.challenge.toUpperCase() : AppLocalizations.of(context)!.word_search.toUpperCase()}',
-                                fontSize: FontSize.p2,
-                                fontWeight: FontWeight.w500)),
-                        const SizedBox(height: 10),
-                        Label(
-                            text: AppLocalizations.of(context)!.publication_mode,
-                            fontSize: FontSize.p4,
-                            fontWeight: FontWeight.w500),
-                        const SizedBox(height: 14),
-                        customSwitch([
-                          AppLocalizations.of(context)!.public,
-                          AppLocalizations.of(context)!.privet
-                        ], value: public, onTap: () {
-                          final provider =
-                          Provider.of<ProfileProvider>(context, listen: false);
-                          if (provider.profile['subscriptionstatus'] == 'none') {
-                            CustomDialog.showPurchaseDialog(context: context);
-                          } else {
-                            setState(() {
-                              public = !public;
-                            });
-                          }
-                        }, info: () {
-                          CustomDialog.showSuggestionDialog(
-                              context: context,
-                              suggestions: [
-                                Suggestion(
-                                    AppLocalizations.of(context)!.publicprivate,
+                body : SingleChildScrollView(
+                  child:
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: Column(
+                              children : [
+                                const SizedBox(height: 20),
+                                Center(
+                                    child: Label(
+                                        text:
+                                        '${AppLocalizations.of(context)!.create.toUpperCase()}  ${widget.type == 'challenge' ? AppLocalizations.of(context)!.challenge.toUpperCase() : AppLocalizations.of(context)!.word_search.toUpperCase()}',
+                                        fontSize: FontSize.p2,
+                                        fontWeight: FontWeight.w500)),
+                                const SizedBox(height: 25),
+                                customTextField(
+                                    _c1,
                                     AppLocalizations.of(context)!
-                                        .publicprivatedesc),
-                              ]);
-                        }),
-                        gap(16),
-                        customSwitch([
-                          AppLocalizations.of(context)!.fixed,
-                          AppLocalizations.of(context)!.dynam
-                        ], value: fixDynamo, onTap: () {
-                          final provider =
-                          Provider.of<ProfileProvider>(context, listen: false);
-                          if (provider.profile['subscriptionstatus'] == 'none') {
-                            CustomDialog.showPurchaseDialog(context: context);
-                          } else {
-                            setState(() {
-                              fixDynamo = !fixDynamo;
-                              print('what is it!');
-                              print(fixDynamo);
-                            });
-                          }
-                        }, info: () {
+                                        .enter_name_of_the_word_search),
+                                const SizedBox(height: 14),
+                                customTextField(
+                                    _c2, AppLocalizations.of(context)!.enter_word),
+                                const SizedBox(height: 14),
+                                CupertinoButton(
+                                  onPressed: () {
+                                    print('lang here');
+                                    print(selectedLanguage);
 
-                        if(widget.type == 'challenge') {
-                          CustomDialog.showSuggestionDialog(
-                              context: context,
-                              suggestions: [
-                                Suggestion(
-                                    AppLocalizations.of(context)!
-                                        .dynamic_word_challenge,
-                                    AppLocalizations.of(context)!
-                                        .dynamic_word_challenge_description),
-                              ]);
-                        }
-                        else {
-                          CustomDialog.showSuggestionDialog(
-                              context: context,
-                              suggestions: [
-                                Suggestion(
-                                    AppLocalizations.of(context)!
-                                        .dynamic_word_search,
-                                    AppLocalizations.of(context)!
-                                        .dynamic_word_search_description),
-                              ]);
-                        }
-                        }),
-                        if (!fixDynamo && widget.type == 'search') const SizedBox(height: 20),
-                        if (!fixDynamo && widget.type == 'search')
-                          customDropdown(selectedWordCount!= ''? selectedWordCount : 'Word Count', [
-                            for (int i = 0; i < _list.length; i++) (i + 1).toString()
-                          ], (value) {
-                            setState(() {
-                              selectedWordCount = value!;
-                            });
-                          }, AppLocalizations.of(context)!.wordcount),
-                        const SizedBox(height: 20),
-                        customDropdown(selectedLanguage != ''? selectedLanguage : AppLocalizations.of(context)!.select_language.toString().toUpperCase(), [
-                          AppLocalizations.of(context)!.select_language.toString().toUpperCase(),'ENGLISH', 'ESPAÑOL'],
-                                (value) {
-                              setState(() {
-                                selectedLanguage = value!;
-                              });
-                            }, "Language/Idioma"),
-                        const SizedBox(height: 20),
-                        customTextField(
-                            _c1,
-                            AppLocalizations.of(context)!
-                                .enter_name_of_the_word_search),
-                        const SizedBox(height: 14),
-                        customTextField(
-                            _c2, AppLocalizations.of(context)!.enter_word),
-                        const SizedBox(height: 14),
-                        CupertinoButton(
-                          onPressed: () {
-                            if(_c2.text.length>14) {
-                              var snackBar = SnackBar(content: Text(
-                                  AppLocalizations.of(context)!.wordlimit_
-                              )
-                                  , backgroundColor: AllColors.liteDarkPurple );
+                                    for(var word in _list) {
 
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                      if(word.word == _c2.text.toString().toUpperCase()) {
+                                        FocusScope.of(context).unfocus();
+                                        Future.delayed(
+                                            const Duration(milliseconds: 200), () {
+                                          CustomDialog.showDuplicateWordWarning(
+                                              context: context);
+                                        });
+                                        return;
+                                      }
+                                    }
 
-                            }
-                            else {
-                              Prefs.getPrefs('subStatus').then((value) => {
 
-                                if(value.toString().contains('1month') ||
-                                    value.toString().contains('1year')  ) {
-                                  if (_c2.text.isNotEmpty) {
-                                    _list.add(
-                                        Word(word: _c2.text.toUpperCase(),
-                                            correct: true)),
-                                    selectedWordCount = _list.length.toString(),
-                                    _c2.clear()
-                                  }
-                                }
-                                else {
-                                  if(_list.length >= 6) {
-                                    if (_c2.text.isNotEmpty) {
-                                      FocusScope.of(context).unfocus(),
-                                      Future.delayed(const Duration(milliseconds: 200), (){
-                                        CustomDialog.showWordsLimit(
-                                            context: context);
-                                      }),
+                                    if(_c2.text.length>14) {
+                                      var snackBar = SnackBar(content: Text(
+                                          AppLocalizations.of(context)!.wordlimit_
+                                      ), backgroundColor: AllColors.liteDarkPurple );
+
+                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
                                     }
-                                  }
-                                  else {
-                                    if (_c2.text.isNotEmpty) {
-                                      _list.add(
-                                          Word(word: _c2.text.toUpperCase(),
-                                              correct: true)),
-                                      selectedWordCount = _list.length.toString(),
-                                      _c2.clear()
+                                    else {
+                                      if(_c2.text.length < 3 && _c2.text.length > 0) {
+                                        FocusScope.of(context).unfocus();
+                                        Future.delayed(
+                                            const Duration(milliseconds: 200), () {
+                                          CustomDialog.showCharacterLengthDialog(
+                                              context: context);
+                                        });
+                                        return;
+                                      }
+                                      Prefs.getPrefs('subStatus').then((value) => {
+
+                                        if(_list.length < 18) {
+
+
+
+                                          if(value.toString().contains('1month') ||
+                                              value.toString().contains('1year')  ) {
+                                            if (_c2.text.isNotEmpty) {
+                                              _list.add(
+                                                  Word(word: _c2.text.toUpperCase(),
+                                                      correct: true)),
+                                              selectedWordCount = _list.length.toString(),
+                                              _c2.clear()
+                                            }
+                                          }
+                                          else
+                                            {
+                                              if(_list.length >= 6) {
+                                                if (_c2.text.isNotEmpty) {
+                                                  FocusScope.of(context).unfocus(),
+                                                  Future.delayed(
+                                                      const Duration(milliseconds: 200), () {
+                                                    CustomDialog.showWordsLimit(
+                                                        context: context);
+                                                  }),
+
+                                                }
+                                              }
+                                              else
+                                                {
+                                                  if (_c2.text.isNotEmpty) {
+                                                    _list.add(
+                                                        Word(word: _c2.text.toUpperCase(),
+                                                            correct: true)),
+                                                    selectedWordCount = _list.length.toString(),
+                                                    _c2.clear()
+                                                  }
+                                                },
+                                            }
+
+
+                                        }
+                                        else {
+                                          FocusScope.of(context).unfocus(),
+                                          Future.delayed(
+                                              const Duration(milliseconds: 200), () {
+                                            CustomDialog.show18WordsCant(
+                                                context: context);
+                                          }),
+
+                                        }
+                                      });
+
                                     }
+                                    setState(() {});
                                   },
-                                }
-                              });
-
-                            }
-                            setState(() {});
-                          },
-                          padding: EdgeInsets.zero,
-                          minSize: 0,
-                          child: Container(
-                            width: double.maxFinite,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                border: Border.all(color: AllColors.white)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Label(
-                                    text: AppLocalizations.of(context)!.add,
-                                    fontSize: 16,
-                                    align: TextAlign.center),
-                                horGap(5),
-                                const Icon(CupertinoIcons.add,
-                                    color: AllColors.white, size: 18)
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-                        ListView.separated(
-                            shrinkWrap: true,
-                            itemCount: _list.length,
-                            physics: const NeverScrollableScrollPhysics(),
-                            separatorBuilder: (context, index) {
-                              return gap(10);
-                            },
-                            itemBuilder: (context, index) {
-                              return Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 24, vertical: 15),
-                                      height: 60,
-                                      width: double.maxFinite,
-                                      decoration: BoxDecoration(
-                                          color: AllColors.liteDarkPurple,
-                                          borderRadius: BorderRadius.circular(50)),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Label(
-                                              text: _list[index].word!,
-                                              fontSize: FontSize.p2),
-                                          CupertinoButton(
-                                              onPressed: () {
-                                                _list.remove(_list[index]);
-                                                setState(() {});
-                                              },
-                                              padding: EdgeInsets.zero,
-                                              minSize: 0,
-                                              child: const Icon(Icons.close,
-                                                  color: AllColors.white)),
-                                        ],
-                                      ),
+                                  padding: EdgeInsets.zero,
+                                  minSize: 0,
+                                  child: Container(
+                                    width: double.maxFinite,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        border: Border.all(color: AllColors.white)),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Label(
+                                            text: AppLocalizations.of(context)!.add,
+                                            fontSize: 16,
+                                            align: TextAlign.center),
+                                        horGap(5),
+                                        const Icon(CupertinoIcons.add,
+                                            color: AllColors.white, size: 18)
+                                      ],
                                     ),
                                   ),
-                                  if (widget.type == 'challenge') horGap(10),
-                                  if (widget.type == 'challenge')
-                                    InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            _list[index].correct =
-                                            !(_list[index].correct!);
-                                          });
-                                        },
-                                        child: Container(
-                                            height: 50,
-                                            width: 50,
-                                            decoration: BoxDecoration(
-                                                color: _list[index].correct!
-                                                    ? const Color.fromARGB(
-                                                    255, 196, 238, 197)
-                                                    : Colors.transparent,
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                    width: 2,
-                                                    color: _list[index].correct!
-                                                        ? Colors.transparent
-                                                        : Colors.green)),
-                                            child: _list[index].correct! ? const Center(
-                                                child: Icon(Icons.done,
-                                                    color: Colors.green, size: 40)):
-                                            Icon(Icons.done,
-                                                color: Colors.green, size: 0)) ),
-                                ],
-                              );
-                            }),
-                        const SizedBox(height: 90),
-                      ],
-                    ),
+                                ),
+                                const SizedBox(height: 14),
+                                ListView.separated(
+                                    shrinkWrap: true,
+                                    itemCount: _list.length,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    separatorBuilder: (context, index) {
+                                      return gap(10);
+                                    },
+                                    itemBuilder: (context, index) {
+                                      return Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 24, vertical: 15),
+                                              height: 60,
+                                              width: double.maxFinite,
+                                              decoration: BoxDecoration(
+                                                  color: AllColors.liteDarkPurple,
+                                                  borderRadius: BorderRadius.circular(50)),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Label(
+                                                      text: _list[index].word!,
+                                                      fontSize: FontSize.p2),
+                                                  CupertinoButton(
+                                                      onPressed: () {
+                                                        _list.remove(_list[index]);
+                                                        setState(() {});
+                                                      },
+                                                      padding: EdgeInsets.zero,
+                                                      minSize: 0,
+                                                      child: const Icon(Icons.close,
+                                                          color: AllColors.white)),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          if (widget.type == 'challenge') horGap(10),
+                                          if (widget.type == 'challenge')
+                                            InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    _list[index].correct =
+                                                    !(_list[index].correct!);
+                                                  });
+                                                },
+                                                child: Container(
+                                                    height: 50,
+                                                    width: 50,
+                                                    decoration: BoxDecoration(
+                                                        color: _list[index].correct!
+                                                            ? const Color.fromARGB(
+                                                            255, 196, 238, 197)
+                                                            : Colors.transparent,
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(
+                                                            width: 2,
+                                                            color: _list[index].correct!
+                                                                ? Colors.transparent
+                                                                : Colors.green)),
+                                                    child: _list[index].correct! ? const Center(
+                                                        child: Icon(Icons.done,
+                                                            color: Colors.green, size: 40)):
+                                                    Icon(Icons.done,
+                                                        color: Colors.green, size: 0)) ),
+                                        ],
+                                      );
+                                    }),
+                                const SizedBox(height: 20),
+                              ])),
+
+                      Container(
+                          decoration: BoxDecoration(
+                              color: AllColors.litePurple
+                          ),
+                          child:
+                          Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 13),
+                              child:
+                              Column(
+                                  children: [
+                                    Row(
+                                        children : [
+                                          Label(
+                                              text: AppLocalizations.of(context)!.publication_mode,
+                                              fontSize: FontSize.p4,
+                                              fontWeight: FontWeight.w500),
+                                        ],
+                                        mainAxisAlignment: MainAxisAlignment.start),
+                                    const SizedBox(height: 14),
+                                    Column(
+                                        children : [
+                                          customSwitch([
+                                            AppLocalizations.of(context)!.public,
+                                            AppLocalizations.of(context)!.privet
+                                          ], value: public, onTap: () {
+                                            final provider =
+                                            Provider.of<ProfileProvider>(context, listen: false);
+                                            if (provider.profile['subscriptionstatus'] == 'none') {
+                                              CustomDialog.showPurchaseDialog(context: context);
+                                            } else {
+                                              setState(() {
+                                                public = !public;
+                                              });
+                                            }
+                                          }, info: () {
+                                            CustomDialog.showSuggestionDialog(
+                                                context: context,
+                                                suggestions: [
+                                                  Suggestion(
+                                                      AppLocalizations.of(context)!.publicprivate,
+                                                      AppLocalizations.of(context)!
+                                                          .publicprivatedesc),
+                                                ]);
+                                          }),
+                                          gap(16),
+                                          customSwitch([
+                                            AppLocalizations.of(context)!.fixed,
+                                            AppLocalizations.of(context)!.dynam
+                                          ], value: fixDynamo, onTap: () {
+                                            final provider =
+                                            Provider.of<ProfileProvider>(context, listen: false);
+                                            if (provider.profile['subscriptionstatus'] == 'none') {
+                                              CustomDialog.showPurchaseDialog(context: context);
+                                            } else {
+                                              setState(() {
+                                                fixDynamo = !fixDynamo;
+                                                print('what is it!');
+                                                print(fixDynamo);
+                                              });
+                                            }
+                                          }, info: () {
+                                            CustomDialog.showSuggestionDialog(
+                                                context: context,
+                                                suggestions: [
+                                                  Suggestion(
+                                                      AppLocalizations.of(context)!.dynamic_word_challenge,
+                                                      AppLocalizations.of(context)!
+                                                          .dynamic_word_challenge_description),
+                                                ]);
+                                          }),
+                                          if (!fixDynamo && widget.type == 'search') const SizedBox(height: 20),
+                                          if (!fixDynamo && widget.type == 'search')
+                                            customDropdown(selectedWordCount!= ''? selectedWordCount : 'Word Count', [
+                                              for (int i = 0; i < _list.length; i++) (i + 1).toString()
+                                            ], (value) {
+                                              setState(() {
+                                                selectedWordCount = value!;
+                                              });
+                                            }, AppLocalizations.of(context)!.wordcount),
+                                          const SizedBox(height: 20),
+                                          customDropdown(selectedLanguage != ''? selectedLanguage : AppLocalizations.of(context)!.select_language.toString().toUpperCase(), [
+                                            AppLocalizations.of(context)!.select_language.toString().toUpperCase(),'ENGLISH', 'ESPAÑOL'],
+                                                  (value) {
+                                                setState(() {
+                                                  selectedLanguage = value!;
+                                                });
+                                              }, "Language/Idioma"),
+                                        ]) ]))),
+                      const SizedBox(height: 90),
+                    ],
                   ),
                 ),
                 floatingActionButton: Padding(
@@ -390,8 +440,6 @@ class _CreateWordPageState extends State<CreateWordPage> {
                           AllColors.shineGreen
                         ],
                         onPressed: () {
-                          print('lang here');
-                          print(selectedLanguage);
                           if (_c1.text.isNotEmpty) {
                             if (_list.isNotEmpty) {
                               Prefs.getToken().then((token) {
@@ -422,7 +470,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                           "gameLanguage":
                                           selectedLanguage == "ENGLISH"
                                               ? 'en'
-                                              : (selectedLanguage == "SPANISH") ? 'es':'en',
+                                              : (selectedLanguage == "ESPAÑOL") ? 'es':'en',
                                           "totalWords": _list.length.toString(),
                                           "limitedWords":
                                           widget.type == 'search'
@@ -434,8 +482,6 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                           //     : wordLimit
                                           ,
                                           "allWords": jsonEncode(allWords),
-
-
 
                                           if (widget.type == 'challenge')
                                             "correctWords": jsonEncode(correctWords),
@@ -449,6 +495,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                           "searchType": widget.type == 'challenge'
                                               ? 'challenge'
                                               : "search",
+                                          "gridType" : fixDynamo ? 'fixed' : 'dynamic'
                                         }).then((value) {
                                       getData(false);
                                       if(value['message'].toString().contains('created successfully'))
@@ -488,7 +535,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                               });
                             }
                           } else {
-                            dialog(context, 'Enter Name.', () {
+                            dialog(context, AppLocalizations.of(context)!.enter_name_of_the_word_search, () {
                               Nav.pop(context);
                             });
                           }
@@ -508,152 +555,82 @@ class _CreateWordPageState extends State<CreateWordPage> {
               preferredSize: Size.fromHeight(70),
               child: CustomAppBar(isBack: true, isLang: true)),
           backgroundColor: Colors.transparent,
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 26),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  Center(
-                      child: Label(
-                          text:
-                              '${AppLocalizations.of(context)!.create.toUpperCase()}  ${widget.type == 'challenge' ? AppLocalizations.of(context)!.challenge.toUpperCase() : AppLocalizations.of(context)!.word_search.toUpperCase()}',
-                          fontSize: FontSize.p2,
-                          fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 10),
-                  Label(
-                      text: AppLocalizations.of(context)!.publication_mode,
-                      fontSize: FontSize.p4,
-                      fontWeight: FontWeight.w500),
-                  const SizedBox(height: 14),
-                  customSwitch([
-                    AppLocalizations.of(context)!.public,
-                    AppLocalizations.of(context)!.privet
-                  ], value: public, onTap: () {
-                    final provider =
-                        Provider.of<ProfileProvider>(context, listen: false);
-                    if (provider.profile['subscriptionstatus'] == 'none') {
-                      CustomDialog.showPurchaseDialog(context: context);
-                    } else {
-                      setState(() {
-                        public = !public;
-                      });
-                    }
-                  }, info: () {
-                    CustomDialog.showSuggestionDialog(
-                        context: context,
-                        suggestions: [
-                          Suggestion(
-                              AppLocalizations.of(context)!.publicprivate,
-                              AppLocalizations.of(context)!
-                                  .publicprivatedesc),
-                        ]);
-                  }),
-                  gap(16),
-                  customSwitch([
-                    AppLocalizations.of(context)!.fixed,
-                    AppLocalizations.of(context)!.dynam
-                  ], value: fixDynamo, onTap: () {
-                    final provider =
-                        Provider.of<ProfileProvider>(context, listen: false);
-                    if (provider.profile['subscriptionstatus'] == 'none') {
-                      CustomDialog.showPurchaseDialog(context: context);
-                    } else {
-                      setState(() {
-                        fixDynamo = !fixDynamo;
-                        print('what is it!');
-                        print(fixDynamo);
-                      });
-                    }
-                  }, info: () {
-                    CustomDialog.showSuggestionDialog(
-                        context: context,
-                        suggestions: [
-                          Suggestion(
-                              AppLocalizations.of(context)!.dynamic_word_challenge,
-                              AppLocalizations.of(context)!
-                                  .dynamic_word_challenge_description),
-                        ]);
-                  }),
-                  if (!fixDynamo && widget.type == 'search') const SizedBox(height: 20),
-                  if (!fixDynamo && widget.type == 'search')
-                    customDropdown(selectedWordCount!= ''? selectedWordCount : 'Word Count', [
-                      for (int i = 0; i < _list.length; i++) (i + 1).toString()
-                    ], (value) {
-                      setState(() {
-                        selectedWordCount = value!;
-                      });
-                    }, AppLocalizations.of(context)!.wordcount),
-                  const SizedBox(height: 20),
-                  customDropdown(selectedLanguage != ''? selectedLanguage : AppLocalizations.of(context)!.select_language.toString().toUpperCase(), [
-                    AppLocalizations.of(context)!.select_language.toString().toUpperCase(),'ENGLISH', 'ESPAÑOL'],
-                      (value) {
-                    setState(() {
-                      selectedLanguage = value!;
-                    });
-                  }, "Language/Idioma"),
-                  const SizedBox(height: 20),
-                  customTextField(
-                      _c1,
-                      AppLocalizations.of(context)!
-                          .enter_name_of_the_word_search),
-                  const SizedBox(height: 14),
-                  customTextField(
-                      _c2, AppLocalizations.of(context)!.enter_word),
-                  const SizedBox(height: 14),
-                  CupertinoButton(
-                    onPressed: () {
-                      print('lang here');
-                      print(selectedLanguage);
+          body : SingleChildScrollView(
+            child:
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+            Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: Column(
+              children : [
+                const SizedBox(height: 20),
+                Center(
+                    child: Label(
+                        text:
+                        '${AppLocalizations.of(context)!.create.toUpperCase()}  ${widget.type == 'challenge' ? AppLocalizations.of(context)!.challenge.toUpperCase() : AppLocalizations.of(context)!.word_search.toUpperCase()}',
+                        fontSize: FontSize.p2,
+                        fontWeight: FontWeight.w500)),
+                const SizedBox(height: 25),
+                customTextField(
+                    _c1,
+                    AppLocalizations.of(context)!
+                        .enter_name_of_the_word_search),
+                const SizedBox(height: 14),
+                customTextField(
+                    _c2, AppLocalizations.of(context)!.enter_word),
+                const SizedBox(height: 14),
+                CupertinoButton(
+                  onPressed: () {
+                    print('lang here');
+                    print(selectedLanguage);
 
-                      for(var word in _list) {
+                    for(var word in _list) {
 
-                        if(word.word == _c2.text.toString().toUpperCase()) {
-                          FocusScope.of(context).unfocus();
-                          Future.delayed(
-                              const Duration(milliseconds: 200), () {
-                            CustomDialog.showDuplicateWordWarning(
-                                context: context);
-                          });
-                          return;
-                        }
+                      if(word.word == _c2.text.toString().toUpperCase()) {
+                        FocusScope.of(context).unfocus();
+                        Future.delayed(
+                            const Duration(milliseconds: 200), () {
+                          CustomDialog.showDuplicateWordWarning(
+                              context: context);
+                        });
+                        return;
                       }
+                    }
 
 
-                      if(_c2.text.length>14) {
-                        var snackBar = SnackBar(content: Text(
+                    if(_c2.text.length>14) {
+                      var snackBar = SnackBar(content: Text(
                           AppLocalizations.of(context)!.wordlimit_
-                        ), backgroundColor: AllColors.liteDarkPurple );
+                      ), backgroundColor: AllColors.liteDarkPurple );
 
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
+                    }
+                    else {
+                      if(_c2.text.length < 3 && _c2.text.length > 0) {
+                        FocusScope.of(context).unfocus();
+                        Future.delayed(
+                            const Duration(milliseconds: 200), () {
+                          CustomDialog.showCharacterLengthDialog(
+                              context: context);
+                        });
+                        return;
                       }
-                      else {
-                        if(_c2.text.length < 3 && _c2.text.length > 0) {
-                          FocusScope.of(context).unfocus();
-                          Future.delayed(
-                              const Duration(milliseconds: 200), () {
-                            CustomDialog.showCharacterLengthDialog(
-                                context: context);
-                              });
-                          return;
-                        }
-                        Prefs.getPrefs('subStatus').then((value) => {
+                      Prefs.getPrefs('subStatus').then((value) => {
 
-                          if(_list.length < 18) {
+                        if(_list.length < 18) {
 
 
-
-                        if(value.toString().contains('1month') ||
+                          if(value.toString().contains('1month') ||
                               value.toString().contains('1year')  ) {
                             if (_c2.text.isNotEmpty) {
-                          _list.add(
-                              Word(word: _c2.text.toUpperCase(),
-                                  correct: true)),
-                          selectedWordCount = _list.length.toString(),
-                          _c2.clear()
-                        }
+                              _list.add(
+                                  Word(word: _c2.text.toUpperCase(),
+                                      correct: true)),
+                              selectedWordCount = _list.length.toString(),
+                              _c2.clear()
+                            }
                           }
                           else
                             {
@@ -681,99 +658,114 @@ class _CreateWordPageState extends State<CreateWordPage> {
                             }
 
 
-                          }
-                          else {
-                            FocusScope.of(context).unfocus(),
-                            Future.delayed(
-                                const Duration(milliseconds: 200), () {
-                              CustomDialog.show18WordsCant(
-                                  context: context);
-                            }),
+                        }
+                        else {
+                          FocusScope.of(context).unfocus(),
+                          Future.delayed(
+                              const Duration(milliseconds: 200), () {
+                            CustomDialog.show18WordsCant(
+                                context: context);
+                          }),
 
-                          }
-                        });
+                        }
+                      });
 
-                      }
-                      setState(() {});
-                    },
-                    padding: EdgeInsets.zero,
-                    minSize: 0,
-                    child: Container(
-                      width: double.maxFinite,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border: Border.all(color: AllColors.white)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Label(
-                              text: AppLocalizations.of(context)!.add,
-                              fontSize: 16,
-                              align: TextAlign.center),
-                          horGap(5),
-                          const Icon(CupertinoIcons.add,
-                              color: AllColors.white, size: 18)
-                        ],
-                      ),
+                    }
+                    setState(() {});
+                  },
+                  padding: EdgeInsets.zero,
+                  minSize: 0,
+                  child: Container(
+                    width: double.maxFinite,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        border: Border.all(color: AllColors.white)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Label(
+                            text: AppLocalizations.of(context)!.add,
+                            fontSize: 16,
+                            align: TextAlign.center),
+                        horGap(5),
+                        const Icon(CupertinoIcons.add,
+                            color: AllColors.white, size: 18)
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 14),
-                  ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: _list.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      separatorBuilder: (context, index) {
-                        return gap(10);
-                      },
-                      itemBuilder: (context, index) {
-                        return Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 15),
-                                height: 60,
-                                width: double.maxFinite,
-                                decoration: BoxDecoration(
-                                    color: AllColors.liteDarkPurple,
-                                    borderRadius: BorderRadius.circular(50)),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Label(
-                                        text: _list[index].word!,
-                                        fontSize: FontSize.p2),
-                                    CupertinoButton(
-                                        onPressed: () {
-                                          _list.remove(_list[index]);
-                                          setState(() {});
-                                        },
-                                        padding: EdgeInsets.zero,
-                                        minSize: 0,
-                                        child: const Icon(Icons.close,
-                                            color: AllColors.white)),
-                                  ],
-                                ),
+                ),
+                const SizedBox(height: 20),
+                _list.length > 0 && widget.type == "challenge"?
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children : [
+                    Label(
+                        text: AppLocalizations.of(context)!.correct,
+                        fontSize: 11),
+                    const SizedBox(width: 8),
+                    Label(
+                        text: AppLocalizations.of(context)!.incorrect,
+                        fontSize: 11),
+                  ]) :   const SizedBox(height: 0),
+                const SizedBox(height: 10),
+                ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: _list.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    separatorBuilder: (context, index) {
+                      return gap(10);
+                    },
+                    itemBuilder: (context, index) {
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 15),
+                              height: 60,
+                              width: double.maxFinite,
+                              decoration: BoxDecoration(
+                                  color: AllColors.liteDarkPurple,
+                                  borderRadius: BorderRadius.circular(50)),
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Label(
+                                      text: _list[index].word!,
+                                      fontSize: FontSize.p2),
+                                  CupertinoButton(
+                                      onPressed: () {
+                                        _list.remove(_list[index]);
+                                        setState(() {});
+                                      },
+                                      padding: EdgeInsets.zero,
+                                      minSize: 0,
+                                      child: const Icon(Icons.close,
+                                          color: AllColors.white)),
+                                ],
                               ),
                             ),
-                            if (widget.type == 'challenge') horGap(10),
-                            if (widget.type == 'challenge')
-                              InkWell(
+                          ),
+                          if (widget.type == 'challenge') horGap(10),
+                          if (widget.type == 'challenge')
+                            Row(
+                            children : [
+                          InkWell(
                                 onTap: () {
                                   setState(() {
-                                    _list[index].correct =
-                                        !(_list[index].correct!);
+                                    _list[index].correct = true;
                                   });
                                 },
+                              // 0157238
                                 child: Container(
-                                    height: 50,
-                                    width: 50,
+                                    height: 42,
+                                    width: 42,
                                     decoration: BoxDecoration(
                                         color: _list[index].correct!
                                             ? const Color.fromARGB(
-                                                255, 196, 238, 197)
+                                            255, 196, 238, 197)
                                             : Colors.transparent,
                                         shape: BoxShape.circle,
                                         border: Border.all(
@@ -781,17 +773,134 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                             color: _list[index].correct!
                                                 ? Colors.transparent
                                                 : Colors.green)),
-                                    child: _list[index].correct! ? const Center(
+                                    child: _list[index].correct!
+                                        ? const Center(
                                         child: Icon(Icons.done,
-                                            color: Colors.green, size: 40)):
-                        Icon(Icons.done,
-                        color: Colors.green, size: 0)) ),
-                          ],
-                        );
-                      }),
-                  const SizedBox(height: 90),
-                ],
-              ),
+                                            color: Colors.green, size: 30)):
+                                    Icon(Icons.done,
+                                        color: Colors.green, size: 0)) ),
+                              const SizedBox(width: 15),
+                              InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _list[index].correct = false;
+                                    });
+                                  },
+                                  child: Container(
+                                      height: 42,
+                                      width: 42,
+                                      decoration: BoxDecoration(
+                                          color: !_list[index].correct!
+                                              ? Colors.redAccent
+                                              : Colors.transparent,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                              width: 2,
+                                              color:!_list[index].correct!
+                                                  ? Colors.transparent
+                                                  : Colors.redAccent)),
+                                      child: !_list[index].correct!
+                                          ? const Center(
+                                          child: Icon(Icons.close,
+                                              color: AllColors.darkPurple, size: 30)):
+                                      Icon(Icons.done,
+                                          color: Colors.green, size: 0)) )])
+                        ],
+                      );
+                    }),
+                const SizedBox(height: 20),
+              ])),
+
+                Container(
+                    decoration: BoxDecoration(
+                        color: AllColors.litePurple
+                    ),
+                    child:
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 13),
+                        child:
+                    Column(
+                        children: [
+                          Row(
+                            children : [
+                          Label(
+                              text: AppLocalizations.of(context)!.publication_mode,
+                              fontSize: FontSize.p4,
+                              fontWeight: FontWeight.w500),
+                        ],
+                          mainAxisAlignment: MainAxisAlignment.start),
+                          const SizedBox(height: 14),
+                          Column(
+                              children : [
+                                customSwitch([
+                                  AppLocalizations.of(context)!.public,
+                                  AppLocalizations.of(context)!.privet
+                                ], value: public, onTap: () {
+                                  final provider =
+                                  Provider.of<ProfileProvider>(context, listen: false);
+                                  if (provider.profile['subscriptionstatus'] == 'none') {
+                                    CustomDialog.showPurchaseDialog(context: context);
+                                  } else {
+                                    setState(() {
+                                      public = !public;
+                                    });
+                                  }
+                                }, info: () {
+                                  CustomDialog.showSuggestionDialog(
+                                      context: context,
+                                      suggestions: [
+                                        Suggestion(
+                                            AppLocalizations.of(context)!.publicprivate,
+                                            AppLocalizations.of(context)!
+                                                .publicprivatedesc),
+                                      ]);
+                                }),
+                                gap(16),
+                                customSwitch([
+                                  AppLocalizations.of(context)!.fixed,
+                                  AppLocalizations.of(context)!.dynam
+                                ], value: fixDynamo, onTap: () {
+                                  final provider =
+                                  Provider.of<ProfileProvider>(context, listen: false);
+                                  if (provider.profile['subscriptionstatus'] == 'none') {
+                                    CustomDialog.showPurchaseDialog(context: context);
+                                  } else {
+                                    setState(() {
+                                      fixDynamo = !fixDynamo;
+                                      print('what is it!');
+                                      print(fixDynamo);
+                                    });
+                                  }
+                                }, info: () {
+                                  CustomDialog.showSuggestionDialog(
+                                      context: context,
+                                      suggestions: [
+                                        Suggestion(
+                                            AppLocalizations.of(context)!.dynamic_word_challenge,
+                                            AppLocalizations.of(context)!
+                                                .dynamic_word_challenge_description),
+                                      ]);
+                                }),
+                                if (!fixDynamo && widget.type == 'search') const SizedBox(height: 20),
+                                if (!fixDynamo && widget.type == 'search')
+                                  customDropdown(selectedWordCount!= ''? selectedWordCount : 'Word Count', [
+                                    for (int i = 0; i < _list.length; i++) (i + 1).toString()
+                                  ], (value) {
+                                    setState(() {
+                                      selectedWordCount = value!;
+                                    });
+                                  }, AppLocalizations.of(context)!.wordcount),
+                                const SizedBox(height: 20),
+                                customDropdown(selectedLanguage != ''? selectedLanguage : AppLocalizations.of(context)!.select_language.toString().toUpperCase(), [
+                                  AppLocalizations.of(context)!.select_language.toString().toUpperCase(),'ENGLISH', 'ESPAÑOL'],
+                                        (value) {
+                                      setState(() {
+                                        selectedLanguage = value!;
+                                      });
+                                    }, "Language/Idioma"),
+                              ]) ]))),
+                const SizedBox(height: 90),
+              ],
             ),
           ),
           floatingActionButton: Padding(
@@ -897,7 +1006,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                         });
                       }
                     } else {
-                      dialog(context, 'Enter Name.', () {
+                      dialog(context, AppLocalizations.of(context)!.enter_name_of_the_word_search, () {
                         Nav.pop(context);
                       });
                     }

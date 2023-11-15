@@ -16,6 +16,9 @@ import 'package:werkos/providers/games_provider.dart';
 import 'package:werkos/components/custom_dialogs.dart';
 import 'package:share_plus/share_plus.dart';
 import '../components/suggestion/model/suggestion.dart';
+import '../providers/game_screen_provider.dart';
+import '../providers/home_provider.dart';
+import '../providers/timer_provider.dart';
 import '../widget/widgets.dart';
 import '../widget/sahared_prefs.dart';
 import '../providers/profile_provider.dart';
@@ -68,13 +71,39 @@ class _MyGamesPageState extends State<MyGamesPage> {
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<HomeProvider>(builder: (context, provider, _) {
     return Container(
         decoration: const BoxDecoration(gradient: AllColors.bg),
         child: Scaffold(
             backgroundColor: Colors.transparent,
-            appBar: const PreferredSize(
+            appBar: PreferredSize(
                 preferredSize: Size.fromHeight(70),
-                child: CustomAppBar(isBack: false, isLang: true)),
+                child: CustomAppBar(isBack: provider.prevIndex != 2 ? true : false, isLang: true, backOnPressed: () {
+                  final timeProvider =
+                  Provider.of<TimerProvider>(context, listen: false);
+
+                  final homeProvider = Provider.of<HomeProvider>(
+                      context,
+                      listen: false);
+
+                  final gameProvider = Provider.of<GameScreenProvider>(
+                      context,
+                      listen: false);
+                  print(homeProvider.prevIndex);
+                  if(homeProvider.prevIndex == 4) {
+                    gameProvider.changeGameType('random');
+                    gameProvider.reset();
+                    timeProvider.stopSeconds();
+                    timeProvider.resetSeconds();
+                    gameProvider.setGameEnded(false);
+                    homeProvider.changeSelectedIndex(4);
+                    homeProvider.setSearching(false);
+                  }
+                  else {
+                    homeProvider.changeSelectedIndex(homeProvider.prevIndex);
+                    provider.changePreviousIndex(provider.selectedIndex);
+                  }
+                },)),
             body: Consumer<GamesProvider>(builder: (context, provider, _) {
               return SingleChildScrollView(
                 child: Center(
@@ -172,7 +201,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
                       : ('${AppLocalizations.of(context)!.create} ${AppLocalizations.of(context)!.challenge.toLowerCase()}')),
             ),
             floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked));
+                FloatingActionButtonLocation.centerDocked)); });
   }
 
   gamesItem(var details) {
@@ -244,8 +273,48 @@ class _MyGamesPageState extends State<MyGamesPage> {
             children: [
               Label(
                   text:
-                      '${AppLocalizations.of(context)!.words}: ${details['totalwords']}',
+                  '${AppLocalizations.of(context)!.words}: ${details['totalwords']}',
                   fontSize: FontSize.p2),
+              Row(
+                  children: [
+              CupertinoButton(
+                  onPressed: () {
+                    CustomDialog.deleteGame(
+                      onPressed: () {
+                        Prefs.getToken().then((token) {
+                          Prefs.getPrefs('loginId').then((loginId) {
+                            _apiServices
+                                .post(context: context, endpoint: 'deleteUserGame', body: {
+                              "accessToken": token,
+                              "gameId":details['gameid'].toString(),
+                              "userId": loginId,
+                            }).then((value) {
+                              print('delete');
+                              print(details['gameid'].toString());
+                              getData(false);
+                              if(value['message'].toString().contains("deleted"))
+                              {
+                                dialog(context,
+                                    AppLocalizations.of(context)!.deleted_success, () {
+                                      Nav.pop(context);
+                                      Nav.pop(context);
+                                    });
+                              }
+                              // dialog(context, value['message'], () {
+                              //   Nav.pop(context);
+                              // });
+                            });
+                          });
+                        });
+                      },
+                      apiServices : _apiServices,
+                      gameId: details['gameid'].toString(),
+                        context: context);
+                  },
+                  padding: EdgeInsets.zero,
+                  minSize: 0,
+                  child: const Icon(Icons.delete, color: AllColors.white)),
+                    const SizedBox(width: 10),
               CupertinoButton(
                   onPressed: () {
                     Nav.push(
@@ -259,6 +328,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
                   padding: EdgeInsets.zero,
                   minSize: 0,
                   child: Image.asset('assets/icons/edit_icon.png'))
+    ])
             ],
           ),
           const SizedBox(height: 5),

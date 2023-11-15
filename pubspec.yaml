@@ -84,7 +84,7 @@ dev_dependencies:
   json_serializable: ^6.7.1
   just_audio: ^0.9.34
   audioplayers: ^5.2.0
-
+  url_launcher: ^6.1.14
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

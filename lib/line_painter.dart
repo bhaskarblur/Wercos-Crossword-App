@@ -66,14 +66,30 @@ class LinePainter extends CustomPainter {
 
       // Paint each part of a word on the grid
       for (int i = 0; i < wordLine_.offsets.length - 1; i++) {
+        var reverseWord = wordLine_.word
+            .toString()
+            .split('')
+            .reversed
+            .join('');
+        if(incorrWords.contains(wordLine_.word) ||
+            incorrWords.contains(reverseWord) ) {
 
-        if(incorrWords.contains(wordLine_.word)) {
-             canvas.drawRRect(RRect.fromRectAndRadius(
-          Rect.fromLTRB(wordLine_.offsets[i].getBiggerOffset.dx - 14,
-              wordLine_.offsets[i].getBiggerOffset.dy - 14,
-              wordLine_.offsets[i + 1].getBiggerOffset.dx + 14,
-              wordLine_.offsets[i + 1].getBiggerOffset.dy + 14),
-          Radius.circular(15.0)), paintBorder);
+          if(incorrWords.contains(reverseWord)) {
+            canvas.drawRRect(RRect.fromRectAndRadius(
+                Rect.fromLTRB(wordLine_.offsets[i+1].getBiggerOffset.dx - 14,
+                    wordLine_.offsets[i+1].getBiggerOffset.dy - 14,
+                    wordLine_.offsets[i].getBiggerOffset.dx + 14,
+                    wordLine_.offsets[i].getBiggerOffset.dy + 14),
+                Radius.circular(15.0)), paintBorder);
+          }
+          else {
+            canvas.drawRRect(RRect.fromRectAndRadius(
+                Rect.fromLTRB(wordLine_.offsets[i].getBiggerOffset.dx - 14,
+                    wordLine_.offsets[i].getBiggerOffset.dy - 14,
+                    wordLine_.offsets[i + 1].getBiggerOffset.dx + 14,
+                    wordLine_.offsets[i + 1].getBiggerOffset.dy + 14),
+                Radius.circular(15.0)), paintBorder);
+          }
         }
         else {
           canvas.drawLine(wordLine_.offsets[i].getBiggerOffset,

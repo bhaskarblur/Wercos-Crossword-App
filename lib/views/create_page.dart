@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:werkos/providers/home_provider.dart';
 import 'package:werkos/providers/profile_provider.dart';
 import 'package:werkos/utils/all_colors.dart';
 import 'package:werkos/utils/custom_app_bar.dart';
@@ -9,6 +10,8 @@ import 'package:werkos/widget/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../components/labels.dart';
+import '../providers/game_screen_provider.dart';
+import '../providers/timer_provider.dart';
 import '../utils/font_size.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -21,11 +24,37 @@ class CreatePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: const BoxDecoration(gradient: AllColors.bg),
-        child: Scaffold(
+        child: Consumer<HomeProvider>(builder: (context, provider, _) {
+        return Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: const PreferredSize(
+          appBar: PreferredSize(
               preferredSize: Size.fromHeight(70),
-              child: CustomAppBar(isBack: false, isLang: true)),
+              child: CustomAppBar(isBack: provider.prevIndex != 0 ? true : false, isLang: true, backOnPressed: () {
+                final timeProvider =
+                Provider.of<TimerProvider>(context, listen: false);
+
+                final homeProvider = Provider.of<HomeProvider>(
+                    context,
+                    listen: false);
+
+                final gameProvider = Provider.of<GameScreenProvider>(
+                    context,
+                    listen: false);
+                print(homeProvider.prevIndex);
+                if(homeProvider.prevIndex == 4) {
+                  gameProvider.changeGameType('random');
+                  gameProvider.reset();
+                  timeProvider.stopSeconds();
+                  timeProvider.resetSeconds();
+                  gameProvider.setGameEnded(false);
+                  homeProvider.changeSelectedIndex(4);
+                  homeProvider.setSearching(false);
+                }
+                else {
+                  homeProvider.changeSelectedIndex(homeProvider.prevIndex);
+                  provider.changePreviousIndex(provider.selectedIndex);
+                }
+              },)),
           body: Column(
             children: [
               const SizedBox(height: 20),
@@ -102,6 +131,6 @@ class CreatePage extends StatelessWidget {
               ),
             ],
           ),
-        ));
+        ); }));
   }
 }

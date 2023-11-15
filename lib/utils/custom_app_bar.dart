@@ -28,7 +28,7 @@ class CustomAppBar extends StatefulWidget {
   });
 
   final VoidCallback? languageOnPressed;
-  final VoidCallback? backOnPressed;
+  final Function()? backOnPressed;
   final VoidCallback? levelOnPressed;
 
   final bool isLang;
@@ -109,10 +109,8 @@ class CustomAppBar extends StatefulWidget {
           widget.isBack
               ? Expanded(
             child: CupertinoButton(
-              onPressed: () {
+              onPressed: widget.backOnPressed != null ? widget.backOnPressed : () {
                 Nav.pop(context);
-                // Navigator.pushReplacement(context,
-                //     MaterialPageRoute(builder: (context) => Dashboard()));
               },
               minSize: 0,
               padding: EdgeInsets.zero,
