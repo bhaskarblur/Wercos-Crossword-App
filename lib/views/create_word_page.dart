@@ -897,7 +897,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                       setState(() {
                                         selectedLanguage = value!;
                                       });
-                                    }, "Language/Idioma"),
+                                    }, AppLocalizations.of(context)!.select_language_game),
                               ]) ]))),
                 const SizedBox(height: 90),
               ],

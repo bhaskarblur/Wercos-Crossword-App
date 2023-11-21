@@ -4,12 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:werkos/api_services.dart';
 import 'package:werkos/providers/game_screen_provider.dart';
+import 'package:werkos/soundConstants.dart';
 import 'package:werkos/views/level_completion_page.dart';
 import 'package:werkos/widget/navigator.dart';
 import 'package:werkos/widget/sahared_prefs.dart';
+import 'package:werkos/soundConstants.dart';
 import 'package:provider/provider.dart';
 import 'package:werkos/views/play_page.dart';
 import 'package:werkos/views/drag_page.dart';
@@ -46,6 +48,8 @@ class TabScreenState extends State<TabScreen> {
   ];
 
   List<BottomNavigationItem>? iconList;
+
+  var soundPref_ = "on";
 
   void playVideoAd() {
     // MobileAds.instance.updateRequestConfiguration(
@@ -679,14 +683,17 @@ class TabScreenState extends State<TabScreen> {
     List<String> rest = [];
     List<String> incorrectWordsTotalInList = [];
     List<String> incorrectWordsNotMarked = [];
-    final player = AudioPlayer();
-    if(!player.playing) {
-      // Create a player
-      player.setAudioSource(AudioSource.uri(Uri.parse(
-          "https://res.cloudinary.com/dsnb1bl19/video/upload/v1693173512/gameended_zfar4v.mp3"))); // Schemes: (https: | file: | asset: )     // Play without waiting for completion
-      player.play();
-      print(player.playing);
-    }
+
+    Future.delayed(const Duration(milliseconds: 0), () async {
+      var soundPref = await Prefs.getPrefs("sound");
+      setState(() {
+        soundPref_ = soundPref!;
+      });
+      if (soundPref_ == "on") {
+        await AudioPlayer().play(soundConstants.gameEnded);
+      }
+    });
+
     provider.setGameEnded(true);
     provider.setAllowMark(false);
 
@@ -695,11 +702,17 @@ class TabScreenState extends State<TabScreen> {
     print('checkhere');
     print(provider.gameType);
     print('totalWords_');
-
-
-    for(var word in provider.allWordsFromAPI) {
-      print('checkIncorrectAll');
-      print(provider.incorrectWordsFromAPI.contains(word));
+    print(provider.allWordsFromAPI);
+    print(provider.filteredWordsFromAPI);
+    print('totalIncorrectWords');
+    print(provider.incorrectWordsFromAPI);
+    // for(var word in provider.allWordsFromAPI) {
+    //   if(provider.incorrectWordsFromAPI.contains(word)) {
+    //     getting list of incorrect words inside grid
+        // incorrectWordsTotalInList.add(word);
+      // }
+    // }
+    for(var word in provider.filteredWordsFromAPI) {
       if(provider.incorrectWordsFromAPI.contains(word)) {
         // getting list of incorrect words inside grid
         incorrectWordsTotalInList.add(word);
@@ -707,8 +720,7 @@ class TabScreenState extends State<TabScreen> {
     }
 
     for(var word in incorrectWordsTotalInList) {
-      print('checkIncorrectNotMarked');
-      print(!provider.incorrectWords.contains(word));
+
       if(!provider.incorrectWords.contains(word)) {
         // getting list of incorrect words not marked
         incorrectWordsNotMarked.add(word);
@@ -724,7 +736,6 @@ class TabScreenState extends State<TabScreen> {
     if(provider.gameData['gameDetails']['searchtype'] == 'challenge') {
 
       provider.filteredWordsFromAPI.forEach((element) {
-        print(element);
         if(!provider.allMarkedWords.contains(element)
             && provider.correctWordsFromAPI.contains(element) &&
             !provider.filteredcorrectWords.contains(element) &&

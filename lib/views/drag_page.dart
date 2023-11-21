@@ -253,7 +253,7 @@ class _DrugPageState extends State<DrugPage> {
                                                                     : TextAlign
                                                                         .center,
                                                         style: TextStyle(
-                                                            fontSize: 12.8,
+                                                            fontSize: 12,
                                                             decoration: provider
                                                                     .correctWords
                                                                     .contains(
@@ -314,7 +314,7 @@ class _DrugPageState extends State<DrugPage> {
                                                                 : TextAlign
                                                                     .center,
                                                         style: TextStyle(
-                                                            fontSize: 12.8,
+                                                            fontSize: 12,
                                                             decoration: provider
                                                                     .correctWords
                                                                     .contains(provider.allWordsFromAPI[index]
