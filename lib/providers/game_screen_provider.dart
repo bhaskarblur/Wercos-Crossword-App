@@ -12,6 +12,11 @@ class GameScreenProvider with ChangeNotifier {
   dynamic _wordIsMarked = false;
   dynamic get wordIsMarked => _wordIsMarked;
 
+  dynamic _hasGoBack = false;
+  dynamic get hasGoBack => _hasGoBack;
+
+  dynamic _hasRated = false;
+  dynamic get hasRated => _hasRated;
 
   dynamic _isMarkingCurrently = false;
   dynamic get isMarkingCurrently => _isMarkingCurrently;
@@ -38,6 +43,15 @@ class GameScreenProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  changeHasGoBack(bool value) {
+    _hasGoBack = value;
+    notifyListeners();
+  }
+
+  changeHasRated(bool value) {
+    _hasRated = value;
+    notifyListeners();
+  }
   setCurrentMarkedWord(String word) {
     _currentMarkedWord = word;
     notifyListeners();

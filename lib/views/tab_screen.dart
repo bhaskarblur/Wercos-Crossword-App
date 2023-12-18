@@ -175,6 +175,8 @@ class TabScreenState extends State<TabScreen> {
                             p.setTicking(false);
                             provider.changePreviousIndex(provider.selectedIndex);
                             print(provider.prevIndex);
+                            p__.changeHasGoBack(false);
+                            p__.changeHasRated(false);
                             provider.changeSelectedIndex(index);
                             provider.setSearching(false);
                             // playVideoAd();
@@ -250,6 +252,8 @@ class TabScreenState extends State<TabScreen> {
                                     provider.changePreviousIndex(provider.selectedIndex);
                                     print(provider.prevIndex);
                                     provider.changeSelectedIndex(1);
+                                    gameProvider.changeHasGoBack(false);
+                                    gameProvider.changeHasRated(false);
                                     // Nav.push(
                                     //     context,
                                     //     LevelCompletionPage(
@@ -286,6 +290,8 @@ class TabScreenState extends State<TabScreen> {
                                       provider.changePreviousIndex(provider.selectedIndex);
                                       print(provider.prevIndex);
                                       provider.changeSelectedIndex(1);
+                                      p__.changeHasGoBack(false);
+                                      p__.changeHasRated(false);
                                       provider.setSearching(false);
                                       // gameProvider.changeGameType('random');
                                       // final p__ =
@@ -310,6 +316,8 @@ class TabScreenState extends State<TabScreen> {
                                     provider.changePreviousIndex(provider.selectedIndex);
                                     print(provider.prevIndex);
                                     provider.changeSelectedIndex(1);
+                                    gameProvider.changeHasGoBack(false);
+                                    gameProvider.changeHasRated(false);
                                     if(gameProvider.allowMark) {
                                       // Nav.push(
                                       //     context,
@@ -337,6 +345,8 @@ class TabScreenState extends State<TabScreen> {
                                       print(provider.prevIndex);
                                       provider.changeSelectedIndex(1);
                                       provider.setSearching(false);
+                                      gameProvider.changeHasGoBack(false);
+                                      gameProvider.changeHasRated(false);
                                       // gameProvider.changeGameType('random');
                                       // final p__ =
                                       // Provider.of<GameScreenProvider>(context, listen: false);
@@ -370,6 +380,8 @@ class TabScreenState extends State<TabScreen> {
                                       provider.changePreviousIndex(provider.selectedIndex);
                                       print(provider.prevIndex);
                                       provider.changeSelectedIndex(1);
+                                      gameProvider.changeHasGoBack(false);
+                                      gameProvider.changeHasRated(false);
                                       provider.setSearching(false);
                                       // gameProvider.changeGameType('random');
                                       // final p__ =
@@ -393,6 +405,8 @@ class TabScreenState extends State<TabScreen> {
                                 provider.changePreviousIndex(provider.selectedIndex);
                                 print(provider.prevIndex);
                                 provider.changeSelectedIndex(4);
+                                gameProvider.changeHasGoBack(false);
+                                gameProvider.changeHasRated(false);
                                 provider.setSearching(false);
                                 gameProvider.setGameEnded(false);
                               }
@@ -440,6 +454,8 @@ class TabScreenState extends State<TabScreen> {
                       provider.changePreviousIndex(provider.selectedIndex);
                       print(provider.prevIndex);
                       provider.changeSelectedIndex(index);
+                      p__.changeHasGoBack(false);
+                      p__.changeHasRated(false);
                       provider.setSearching(false);
                       // playVideoAd();
                     },
@@ -512,6 +528,8 @@ class TabScreenState extends State<TabScreen> {
                               print('here i am!');
                               print('reach here3');
                               provider.changeSelectedIndex(1);
+                              gameProvider.changeHasGoBack(false);
+                              gameProvider.changeHasRated(false);
                               // Nav.push(
                               //     context,
                               //     LevelCompletionPage(
@@ -550,6 +568,8 @@ class TabScreenState extends State<TabScreen> {
                                 print(provider.prevIndex);
                                 provider.changeSelectedIndex(1);
                                 provider.setSearching(false);
+                                gameProvider.changeHasGoBack(false);
+                                gameProvider.changeHasRated(false);
                                 // gameProvider.changeGameType('random');
                                 // final p__ =
                                 // Provider.of<GameScreenProvider>(context, listen: false);
@@ -573,6 +593,8 @@ class TabScreenState extends State<TabScreen> {
                               provider.changePreviousIndex(provider.selectedIndex);
                               print(provider.prevIndex);
                               provider.changeSelectedIndex(1);
+                              gameProvider.changeHasGoBack(false);
+                              gameProvider.changeHasRated(false);
                               if(gameProvider.allowMark) {
                                 // Nav.push(
                                 //     context,
@@ -599,6 +621,8 @@ class TabScreenState extends State<TabScreen> {
                                 provider.changePreviousIndex(provider.selectedIndex);
                                 print(provider.prevIndex);
                                 provider.changeSelectedIndex(1);
+                                gameProvider.changeHasGoBack(false);
+                                gameProvider.changeHasRated(false);
                                 provider.setSearching(false);
                                 // gameProvider.changeGameType('random');
                                 // final p__ =
@@ -634,6 +658,8 @@ class TabScreenState extends State<TabScreen> {
                                 provider.changePreviousIndex(provider.selectedIndex);
                                 print(provider.prevIndex);
                                 provider.changeSelectedIndex(1);
+                                gameProvider.changeHasGoBack(false);
+                                gameProvider.changeHasRated(false);
                                 // gameProvider.changeGameType('random');
                                 // final p__ =
                                 // Provider.of<GameScreenProvider>(context, listen: false);
@@ -660,6 +686,8 @@ class TabScreenState extends State<TabScreen> {
                             provider.changePreviousIndex(provider.selectedIndex);
                             print(provider.prevIndex);
                             provider.changeSelectedIndex(4);
+                            gameProvider.changeHasGoBack(false);
+                            gameProvider.changeHasRated(false);
                             provider.setSearching(false);
                             p__.setGameEnded(false);
                           }
@@ -667,6 +695,8 @@ class TabScreenState extends State<TabScreen> {
                             provider.changePreviousIndex(provider.selectedIndex);
                             print(provider.prevIndex);
                             provider.changeSelectedIndex(1);
+                            gameProvider.changeHasGoBack(false);
+                            gameProvider.changeHasRated(false);
                           }
                         }
                       },
@@ -687,7 +717,11 @@ class TabScreenState extends State<TabScreen> {
     Future.delayed(const Duration(milliseconds: 0), () async {
       var soundPref = await Prefs.getPrefs("sound");
       setState(() {
-        soundPref_ = soundPref!;
+        try {
+          soundPref_ = soundPref!;
+        } catch (e) {
+          print(e);
+        }
       });
       if (soundPref_ == "on") {
         await AudioPlayer().play(soundConstants.gameEnded);

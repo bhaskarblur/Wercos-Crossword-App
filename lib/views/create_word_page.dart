@@ -151,10 +151,12 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                     _c2, AppLocalizations.of(context)!.enter_word),
                                 const SizedBox(height: 14),
                                 CupertinoButton(
+                                  padding: EdgeInsets.zero,
+                                  minSize: 0,
                                   onPressed: () {
-                                    print('lang here');
+                                    print(_c2.text);
+                                    print('langss here');
                                     print(selectedLanguage);
-
                                     for(var word in _list) {
 
                                       if(word.word == _c2.text.toString().toUpperCase()) {
@@ -166,6 +168,11 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                         });
                                         return;
                                       }
+                                    }
+
+                                    if(_c2.text.contains(new RegExp(r'[0-9]'))) {
+                                      CustomDialog.showNumbersIncludedWarning(context: context);
+                                      return;
                                     }
 
 
@@ -244,8 +251,6 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                     }
                                     setState(() {});
                                   },
-                                  padding: EdgeInsets.zero,
-                                  minSize: 0,
                                   child: Container(
                                     width: double.maxFinite,
                                     height: 40,
@@ -362,8 +367,8 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                     Column(
                                         children : [
                                           customSwitch([
-                                            AppLocalizations.of(context)!.public,
-                                            AppLocalizations.of(context)!.privet
+                                            widget.type == "search" ? AppLocalizations.of(context)!.public_search : AppLocalizations.of(context)!.public_challenge  ,
+                                            widget.type == "search" ?  AppLocalizations.of(context)!.privet_search : AppLocalizations.of(context)!.privet_challenge
                                           ], value: public, onTap: () {
                                             final provider =
                                             Provider.of<ProfileProvider>(context, listen: false);
@@ -379,15 +384,17 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                                 context: context,
                                                 suggestions: [
                                                   Suggestion(
-                                                      AppLocalizations.of(context)!.publicprivate,
-                                                      AppLocalizations.of(context)!
-                                                          .publicprivatedesc),
+                                                      widget.type == "search" ?  AppLocalizations.of(context)!.publicprivate_search :
+                                                      AppLocalizations.of(context)!.publicprivate_challenge,
+                                                      widget.type == "search" ? AppLocalizations.of(context)!
+                                                          .publicprivatedesc_search : AppLocalizations.of(context)!.publicprivatedesc_challenge
+                                                  ),
                                                 ]);
                                           }),
                                           gap(16),
                                           customSwitch([
-                                            AppLocalizations.of(context)!.fixed,
-                                            AppLocalizations.of(context)!.dynam
+                                            widget.type == "search" ? AppLocalizations.of(context)!.fixed_search : AppLocalizations.of(context)!.fixed_challenge ,
+                                            widget.type == "search" ?  AppLocalizations.of(context)!.dynam_search : AppLocalizations.of(context)!.dynam_challenge
                                           ], value: fixDynamo, onTap: () {
                                             final provider =
                                             Provider.of<ProfileProvider>(context, listen: false);
@@ -405,9 +412,12 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                                 context: context,
                                                 suggestions: [
                                                   Suggestion(
+                                                      widget.type == "search" ? AppLocalizations.of(context)!.dynamic_word_search :
                                                       AppLocalizations.of(context)!.dynamic_word_challenge,
-                                                      AppLocalizations.of(context)!
-                                                          .dynamic_word_challenge_description),
+                                                      widget.type == "search" ? AppLocalizations.of(context)!
+                                                          .dynamic_word_search_description :  AppLocalizations.of(context)!
+                                                          .dynamic_word_challenge_description
+                                                  ),
                                                 ]);
                                           }),
                                           if (!fixDynamo && widget.type == 'search') const SizedBox(height: 20),
@@ -426,7 +436,7 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                                 setState(() {
                                                   selectedLanguage = value!;
                                                 });
-                                              }, "Language/Idioma"),
+                                              }, AppLocalizations.of(context)!.game_lang),
                                         ]) ]))),
                       const SizedBox(height: 90),
                     ],
@@ -582,9 +592,9 @@ class _CreateWordPageState extends State<CreateWordPage> {
                 const SizedBox(height: 14),
                 CupertinoButton(
                   onPressed: () {
-                    print('lang here');
+                    print(_c2.text);
+                    print('langss here');
                     print(selectedLanguage);
-
                     for(var word in _list) {
 
                       if(word.word == _c2.text.toString().toUpperCase()) {
@@ -597,8 +607,10 @@ class _CreateWordPageState extends State<CreateWordPage> {
                         return;
                       }
                     }
-
-
+                    if(_c2.text.contains(new RegExp(r'[0-9]'))) {
+                      CustomDialog.showNumbersIncludedWarning(context: context);
+                      return;
+                    }
                     if(_c2.text.length>14) {
                       var snackBar = SnackBar(content: Text(
                           AppLocalizations.of(context)!.wordlimit_
@@ -833,8 +845,8 @@ class _CreateWordPageState extends State<CreateWordPage> {
                           Column(
                               children : [
                                 customSwitch([
-                                  AppLocalizations.of(context)!.public,
-                                  AppLocalizations.of(context)!.privet
+                                  widget.type == "search" ? AppLocalizations.of(context)!.public_search : AppLocalizations.of(context)!.public_challenge ,
+                                  widget.type == "search" ?  AppLocalizations.of(context)!.privet_search : AppLocalizations.of(context)!.privet_challenge
                                 ], value: public, onTap: () {
                                   final provider =
                                   Provider.of<ProfileProvider>(context, listen: false);
@@ -849,16 +861,18 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                   CustomDialog.showSuggestionDialog(
                                       context: context,
                                       suggestions: [
-                                        Suggestion(
-                                            AppLocalizations.of(context)!.publicprivate,
-                                            AppLocalizations.of(context)!
-                                                .publicprivatedesc),
+                                  Suggestion(
+                                  widget.type == "search" ?  AppLocalizations.of(context)!.publicprivate_search :
+                                  AppLocalizations.of(context)!.publicprivate_challenge,
+                                  widget.type == "search" ? AppLocalizations.of(context)!
+                                      .publicprivatedesc_search : AppLocalizations.of(context)!.publicprivatedesc_challenge
+                                  ),
                                       ]);
                                 }),
                                 gap(16),
                                 customSwitch([
-                                  AppLocalizations.of(context)!.fixed,
-                                  AppLocalizations.of(context)!.dynam
+                                  widget.type == "search" ? AppLocalizations.of(context)!.fixed_search : AppLocalizations.of(context)!.fixed_challenge ,
+                                  widget.type == "search" ?  AppLocalizations.of(context)!.dynam_search : AppLocalizations.of(context)!.dynam_challenge
                                 ], value: fixDynamo, onTap: () {
                                   final provider =
                                   Provider.of<ProfileProvider>(context, listen: false);
@@ -876,9 +890,12 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                       context: context,
                                       suggestions: [
                                         Suggestion(
+                                            widget.type == "search" ? AppLocalizations.of(context)!.dynamic_word_search :
                                             AppLocalizations.of(context)!.dynamic_word_challenge,
-                                            AppLocalizations.of(context)!
-                                                .dynamic_word_challenge_description),
+                                            widget.type == "search" ? AppLocalizations.of(context)!
+                                                .dynamic_word_search_description :  AppLocalizations.of(context)!
+                                                .dynamic_word_challenge_description
+                                        ),
                                       ]);
                                 }),
                                 if (!fixDynamo && widget.type == 'search') const SizedBox(height: 20),
@@ -891,8 +908,8 @@ class _CreateWordPageState extends State<CreateWordPage> {
                                     });
                                   }, AppLocalizations.of(context)!.wordcount),
                                 const SizedBox(height: 20),
-                                customDropdown(selectedLanguage != ''? selectedLanguage : AppLocalizations.of(context)!.select_language.toString().toUpperCase(), [
-                                  AppLocalizations.of(context)!.select_language.toString().toUpperCase(),'ENGLISH', 'ESPAÑOL'],
+                                customDropdown(selectedLanguage != ''? selectedLanguage : AppLocalizations.of(context)!.select_language_game.toString().toUpperCase(), [
+                                  AppLocalizations.of(context)!.select_language_game.toString().toUpperCase(),'ENGLISH', 'ESPAÑOL'],
                                         (value) {
                                       setState(() {
                                         selectedLanguage = value!;

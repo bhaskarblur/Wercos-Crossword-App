@@ -49,35 +49,41 @@ class _LevelCompletionPageState extends State<LevelCompletionPage> {
     final timerProvider = Provider.of<TimerProvider>(context, listen: false);
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
-
-    Prefs.getToken().then((token) {
-      Prefs.getPrefs('loginId').then((loginId) {
-        _apiServices.post(
-            context: context,
-            endpoint: 'addUserGameRecord',
-            body: {
-              "accessToken": token,
-              "userId": loginId,
-              "gameId": provider.gameData['gameDetails']['gameid'].toString(),
-              "timeScore": timerProvider.seconds.toString(),
-              "timeScoreText": formatTime(timerProvider.seconds),
-              "crosswordScore": provider.correctWords.length.toString(),
-              "playerName": profileProvider.profile['username'],
-            },
-            progressBar: false);
-      });
-
-      final provider_ = Provider.of<ProfileProvider>(context,
-          listen: false);
-      if (provider_.profile['subscriptionstatus'] ==
-          '1year' || provider_.profile['subscriptionstatus'] ==
-          '1month' ) {}
-      else {
-        playVideoAd();
-      }
-    });
-
     super.initState();
+
+    Future.delayed(const Duration(milliseconds: 200), () {
+      if(!provider.hasRated) {
+        Prefs.getToken().then((token) {
+          Prefs.getPrefs('loginId').then((loginId) {
+            _apiServices.post(
+                context: context,
+                endpoint: 'addUserGameRecord',
+                body: {
+                  "accessToken": token,
+                  "userId": loginId,
+                  "gameId": provider.gameData['gameDetails']['gameid'].toString(),
+                  "timeScore": timerProvider.seconds.toString(),
+                  "timeScoreText": formatTime(timerProvider.seconds),
+                  "crosswordScore": provider.correctWords.length.toString(),
+                  "playerName": profileProvider.profile['username'],
+                },
+                progressBar: false);
+          });
+
+          final provider_ = Provider.of<ProfileProvider>(context,
+              listen: false);
+          if (provider_.profile['subscriptionstatus'] ==
+              '1year' || provider_.profile['subscriptionstatus'] ==
+              '1month') {}
+          else {
+            playVideoAd();
+          }
+        });
+        provider.changeHasRated(true);
+      }
+
+      provider.changeHasGoBack(true);
+    });
   }
 
   @override

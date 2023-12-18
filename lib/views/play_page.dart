@@ -146,6 +146,8 @@ class _PlayPageState extends State<PlayPage> {
                                             .searchResult['gamesFound'][i]['sharecode'],
                                       }).then((value) {
                                     if (value['gameDetails'] != null) {
+                                      print(value['crossword_grid']);
+                                      print('gridsearch_');
                                       provider__.changeGameData(value);
                                       provider__.changeGameType('gamewithcode');
                                       provider__
@@ -339,6 +341,8 @@ class _PlayPageState extends State<PlayPage> {
             "sharecode": _playByCodeController.text,
           }).then((value) {
             if (value['gameDetails'] != null) {
+              print(value['crossword_grid']);
+              print('gridsearch_');
               provider.changeGameData(value);
               provider.changeGameType('gamewithcode');
               provider.addToCorrectWordsIncorrectWordsFromAPI();

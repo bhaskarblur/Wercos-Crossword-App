@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +18,12 @@ import 'package:werkos/widget/widgets.dart';
 import 'package:provider/provider.dart';
 import '../api_services.dart';
 import '../components/custom_dialogs.dart';
+import '../components/labels.dart';
 import '../components/suggestion/model/suggestion.dart';
 import '../crosswordfile.dart';
 import '../linedecoration.dart';
 import '../providers/timer_provider.dart';
+import '../utils/font_size.dart';
 import '../widget/sahared_prefs.dart';
 import 'level_completion_page.dart';
 
@@ -56,7 +59,11 @@ class _DrugPageState extends State<DrugPage> {
     Future.delayed(const Duration(milliseconds: 0), () async {
       var soundPref = await Prefs.getPrefs("sound");
       setState(() {
-      soundPref_ = soundPref!;
+        try {
+          soundPref_ = soundPref!;
+        } catch (e) {
+          print(e);
+        }
       });
     });
     super.initState();
@@ -70,10 +77,11 @@ class _DrugPageState extends State<DrugPage> {
   Widget build(BuildContext context) {
     Future<bool> showExitPopup() async {
       return await showDialog(
-            //show confirm dialogue
-            //the return value will be from "Yes" or "No" options
-            context: context,
-            builder: (context) => AlertDialog(
+        //show confirm dialogue
+        //the return value will be from "Yes" or "No" options
+        context: context,
+        builder: (context) =>
+            AlertDialog(
               title: Text('Exit App'),
               content: Text(AppLocalizations.of(context)!.exit_app),
               actions: [
@@ -89,7 +97,7 @@ class _DrugPageState extends State<DrugPage> {
                 ),
               ],
             ),
-          ) ??
+      ) ??
           false; //if showDialouge had returned null, then return false
     }
 
@@ -102,487 +110,578 @@ class _DrugPageState extends State<DrugPage> {
             return Padding(
               padding: const EdgeInsets.all(10),
               child: provider.gameData == null
-                  ? Column(children: [
+                  ?
+              Column(
+                  children: [
+                    statusBar(context),
+                    Text('00.00',
+                        style: GoogleFonts.inter(
+                            textStyle:
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .headlineLarge,
+                            fontSize: 23,
+                            color: const Color(0xFF221962),
+                            fontWeight: FontWeight.w700)),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            gradient: AllColors.bg,
+                            borderRadius: BorderRadius.circular(20)),
+                      ),
+                    ),
+                    gap(10),
+                    Expanded(
+                        flex: 3,
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white)))
+                  ])
+                  : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child:
+                    Column(
+                        children: [
                       statusBar(context),
-                      Text('00.00',
-                          style: GoogleFonts.inter(
-                              textStyle:
-                                  Theme.of(context).textTheme.headlineLarge,
-                              fontSize: 23,
-                              color: const Color(0xFF221962),
-                              fontWeight: FontWeight.w700)),
+                      gap(5),
                       Expanded(
-                        flex: 1,
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
                               gradient: AllColors.bg,
                               borderRadius: BorderRadius.circular(20)),
-                        ),
-                      ),
-                      gap(10),
-                      Expanded(
-                          flex: 3,
-                          child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white)))
-                    ])
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(children: [
-                            statusBar(context),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              gap(5),
                             Consumer<TimerProvider>(
                                 builder: (context, timer, _) {
-                              return Text(formatTime(timer.seconds),
-                                  style: GoogleFonts.inter(
-                                      textStyle: Theme.of(context)
-                                          .textTheme
-                                          .headlineLarge,
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700));
-                            }),
-                            gap(5),
-                            Expanded(
-                              child: Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                    gradient: AllColors.bg,
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    gap(5),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      //Center Row contents horizontally,
-
+                                  return Consumer<GameScreenProvider>(
+                                      builder: (context, gameProv, _) {
+                              return Row(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                mainAxisAlignment: gameProv.hasGoBack? MainAxisAlignment.end :
+                                MainAxisAlignment.center,
+                                //Center Row contents horizontally,
+                                children: [
+                                  Column(
                                       children: [
+                                        Text(formatTime(timer.seconds),
+                                            style: GoogleFonts.inter(textStyle: Theme
+                                                .of(context)
+                                                .textTheme
+                                                .bodyMedium,
+                                                fontSize: 18,
+                                                color: AllColors.white,
+                                                fontWeight: FontWeight.w700)),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                        children : [
                                         Text(
                                             provider.gameData['gameDetails']
-                                                ['gamename'],
+                                            ['gamename'],
                                             style: GoogleFonts.inter(
-                                                textStyle: Theme.of(context)
+                                                textStyle: Theme
+                                                    .of(context)
                                                     .textTheme
                                                     .headlineLarge,
                                                 fontSize: 18,
                                                 color: AllColors.liteGreen,
                                                 fontWeight: FontWeight.w800)),
-                                        if (provider.gameType == 'randomwordchallenge' ||
-                                            provider.gameType ==
-                                                'challengebycategory' ||
-                                            provider.gameType == 'challenge' ||
-                                            provider.gameData['gameDetails']
-                                                    ['searchtype'] ==
-                                                'challenge')
-                                          horGap(10),
-                                        if (provider.gameType == 'randomwordchallenge' ||
-                                            provider.gameType ==
-                                                'challengebycategory' ||
-                                            provider.gameType == 'challenge' ||
-                                            provider.gameData['gameDetails']
-                                                    ['searchtype'] ==
-                                                'challenge')
-                                          InkWell(
-                                              onTap: () {
-                                                CustomDialog
-                                                    .showSuggestionDialog(
-                                                        context: context,
-                                                        suggestions: [
-                                                      Suggestion(
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .what_is_challenge,
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .what_is_challenge_description),
-                                                    ]);
-                                              },
-                                              child: const Icon(
-                                                  Icons.info_outline,
-                                                  color: AllColors.white,
-                                                  size: 22)),
+                                          if (provider.gameType ==
+                                              'randomwordchallenge' ||
+                                              provider.gameType ==
+                                                  'challengebycategory' ||
+                                              provider.gameType == 'challenge' ||
+                                              provider.gameData['gameDetails']
+                                              ['searchtype'] ==
+                                                  'challenge')
+                                            horGap(10),
+                                          if (provider.gameType ==
+                                              'randomwordchallenge' ||
+                                              provider.gameType ==
+                                                  'challengebycategory' ||
+                                              provider.gameType == 'challenge' ||
+                                              provider.gameData['gameDetails']
+                                              ['searchtype'] ==
+                                                  'challenge')
+                                            InkWell(
+                                                onTap: () {
+                                                  CustomDialog
+                                                      .showSuggestionDialog(
+                                                      context: context,
+                                                      suggestions: [
+                                                        Suggestion(
+                                                            AppLocalizations.of(
+                                                                context)!
+                                                                .what_is_challenge,
+                                                            AppLocalizations.of(
+                                                                context)!
+                                                                .what_is_challenge_description),
+                                                      ]);
+                                                },
+                                                child: const Icon(
+                                                    Icons.info_outline,
+                                                    color: AllColors.white,
+                                                    size: 22)),
+                                        ]),
+                                      ]),
+                                  gameProv.hasGoBack && provider.gameData['gameDetails']
+                                  ['gamename'].toString().length > 15 ?
+                                  const SizedBox(width: 55) : gameProv.hasGoBack && provider.gameData['gameDetails']
+                                  ['gamename'].toString().length <= 15 ?
+                                  const SizedBox(width: 95) : const SizedBox(),
+                                  gameProv.hasGoBack ?
+                                  CupertinoButton(
+                                    onPressed: () {
+                                      navigate();
+                                    },
+                                    minSize: 0,
+                                    padding: EdgeInsets.zero,
+                                    child: Column(
+                                      children: [
+                                        const SizedBox(
+                                            height: 36,
+                                            child: Icon(
+                                                CupertinoIcons
+                                                    .arrowshape_turn_up_left_fill,
+                                                color: Colors.white,
+                                                size: 28)),
+                                        const SizedBox(height: 4),
+                                        Label(
+                                            text: AppLocalizations.of(
+                                                context)!.back,
+                                            fontSize: FontSize.p4,
+                                            color: AllColors.superLitePurple)
                                       ],
                                     ),
-                                    if (provider.gameData['gameDetails']
-                                            ['searchtype'] ==
-                                        'search')
-                                      Expanded(
-                                        child: RawScrollbar(
-                                            controller: _scrollController,
-                                            interactive: true,
-                                            thickness: 3,
-                                            scrollbarOrientation:
-                                                ScrollbarOrientation.right,
-                                            thumbVisibility: true,
-                                            trackVisibility: true,
-                                            thumbColor: AllColors.shineGreen,
-                                            radius: Radius.circular(10),
-                                            child: GridView.builder(
-                                              controller: _scrollController,
-                                              shrinkWrap: true,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 12,
-                                                      vertical: 12),
-                                              itemCount: provider
-                                                  .allWordsFromAPI.length,
-                                              gridDelegate:
-                                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                                      childAspectRatio: 5,
-                                                      crossAxisCount: 3),
-                                              itemBuilder: (context, index) {
-                                                return Container(
-                                                    child: Text(
-                                                        provider.allWordsFromAPI[index]
-                                                            .toUpperCase(),
-                                                        textAlign:
-                                                            (index + 1) % 3 == 0
-                                                                ? TextAlign.end
-                                                                : (index) % 3 ==
-                                                                        0
-                                                                    ? TextAlign
-                                                                        .start
-                                                                    : TextAlign
-                                                                        .center,
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            decoration: provider
-                                                                    .correctWords
-                                                                    .contains(
-                                                                        provider.allWordsFromAPI[index]
-                                                                            .toUpperCase())
-                                                                ? TextDecoration
-                                                                    .lineThrough
-                                                                : TextDecoration
-                                                                    .none,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: provider
-                                                                    .correctWords
-                                                                    .contains(provider.allWordsFromAPI[index].toUpperCase())
-                                                                ? Colors.green
-                                                                : Colors.white)));
-                                              },
-                                            )),
-                                      ),
-                                    if (provider.gameData['gameDetails']
-                                            ['searchtype'] ==
-                                        'challenge')
-                                      Expanded(
-                                        child: RawScrollbar(
-                                            controller: _scrollController,
-                                            interactive: true,
-                                            thickness: 6,
-                                            scrollbarOrientation:
-                                                ScrollbarOrientation.right,
-                                            thumbVisibility: true,
-                                            trackVisibility: true,
-                                            thumbColor: AllColors.shineGreen,
-                                            radius: Radius.circular(10),
-                                            child: GridView.builder(
-                                              controller: _scrollController,
-                                              shrinkWrap: true,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 12,
-                                                      vertical: 12),
-                                              itemCount: provider
-                                                  .allWordsFromAPI.length,
-                                              gridDelegate:
-                                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                                      childAspectRatio: 5,
-                                                      crossAxisCount: 3),
-                                              itemBuilder: (context, index) {
-                                                return Container(
-                                                    child: Text(
-                                                        provider.allWordsFromAPI[index]
-                                                            .toUpperCase(),
-                                                        textAlign: (index + 1) % 3 ==
-                                                                0
-                                                            ? TextAlign.end
-                                                            : (index) % 3 == 0
-                                                                ? TextAlign
-                                                                    .start
-                                                                : TextAlign
-                                                                    .center,
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            decoration: provider
-                                                                    .correctWords
-                                                                    .contains(provider.allWordsFromAPI[index]
-                                                                        .toUpperCase())
-                                                                ? TextDecoration
-                                                                    .lineThrough
-                                                                : provider.incorrectWords.contains(provider.allWordsFromAPI[index]
-                                                                        .toUpperCase())
-                                                                    ? TextDecoration
-                                                                        .lineThrough
-                                                                    : TextDecoration
-                                                                        .none,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: provider
-                                                                    .correctWords
-                                                                    .contains(provider.allWordsFromAPI[index].toUpperCase())
-                                                                ? Colors.green
-                                                                : provider.incorrectWords.contains(provider.allWordsFromAPI[index].toUpperCase())
-                                                                    ? Colors.red
-                                                                    : Colors.white)));
-                                              },
-                                            )),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            gap(10),
-                          ]),
-                        ),
-                        if (!provider.gameEnded || provider.allowMark)
-                          if (provider.grid_.isNotEmpty)
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white),
-                              child: Crossword(
-                                letters: provider.grid_,
-                                acceptReversedDirection: true,
-                                drawVerticalLine: true,
-                                drawHorizontalLine: true,
-                                spacing:
-                                    MediaQuery.of(context).size.width <= 376
-                                        ? const Offset(30, 33)
-                                        : const Offset(32, 33),
-                                drawCrossLine: true,
-                                onLineDrawn: (List<String> words) async {
-                                  var reverseWord = words.last
-                                      .toString()
-                                      .split('')
-                                      .reversed
-                                      .join('');
-                                  print(reverseWord);
-                                  var index = provider.filteredWordsFromAPI.
-                                  indexOf(words.last.toString());
-
-                                  if (index < 0) {
-                                    index = provider.filteredWordsFromAPI
-                                        .indexOf(reverseWord);
-                                  }
-                                  var word_ = provider.allWordsFromAPI[index];
-
-                                  if (provider.gameData['gameDetails']
-                                          ['searchtype'] ==
-                                      'search') {
-                                    if (provider.allWordsFromAPI
-                                        .contains(word_)) {
-                                      provider.addToCorrectWords(word_);
-                                      provider.addToFilteredCorrectWords(
-                                          words.last.toString());
-                                      if (soundPref_ == "on") {
-                                        await AudioPlayer()
-                                            .play(soundConstants.correctAnswer);
-                                      }
-                                      // print(player.playing);
-                                    }
-                                  }
-                                  else {
-                                    if (provider.correctWordsFromAPI
-                                        .contains(words.last.toString()) || provider.correctWordsFromAPI
-                                        .contains(reverseWord)) {
-                                      provider.addToCorrectWords(word_);
-                                      provider.addToMarkedWords(word_);
-                                      provider.addToFilteredCorrectWords(
-                                          words.last.toString());
-                                      if (soundPref_ == "on") {
-                                        await AudioPlayer()
-                                            .play(soundConstants.correctAnswer);
-                                      }
-                                    } else if (provider.incorrectWordsFromAPI
-                                        .contains(words.last.toString()) ||
-                                        provider.incorrectWordsFromAPI
-                                            .contains(reverseWord)) {
-                                      provider.addToInCorrectWords(word_);
-                                      print('__incorrect__');
-                                      provider.addToMarkedWords(word_);
-                                      provider.addToFilteredInCorrectWords(
-                                          words.last.toString());
-                                      if (soundPref_ == "on") {
-                                        await AudioPlayer()
-                                            .play(soundConstants.wrongAnswer);
-                                      }
-                                      // print(player.playing);
-                                    }
-                                  }
-
-                                  print(provider.allMarkedWords.length
-                                      .toString());
-                                  if (provider.gameData['gameDetails']
-                                          ['searchtype'] ==
-                                      'search') {
-                                    if (provider.allWordsFromAPI.length ==
-                                        provider.correctWords.length) {
-                                      navigate();
-                                    }
-                                  } else {
-                                    List<String> correctWordsMarked = [];
-                                    List<String> wordsToMark = [];
-
-                                    for (var word
-                                        in provider.correctWordsFromAPI) {
-                                      if (provider.allWordsFromAPI
-                                          .contains(word)) {
-                                        wordsToMark.add(word);
-                                      }
-                                      if (provider.allMarkedWords
-                                          .contains(word)) {
-                                        correctWordsMarked.add(word);
-                                      }
-                                    }
-
-                                    if (provider.correctWordsFromAPI.length ==
-                                        provider.correctWords.length) {
-                                      navigate();
-                                    } else if (provider
-                                            .allWordsFromAPI.length ==
-                                        provider.allMarkedWords.length) {
-                                      navigate();
-                                    } else {
-                                      if (provider.correctWords.length > 0) {
-                                        if (correctWordsMarked.length ==
-                                            wordsToMark.length) {
-                                          navigate();
-                                        }
-                                      }
-                                    }
-                                  }
-                                },
-                                textStyle: TextStyle(
-                                    fontSize: 23,
-                                    color: const Color(0xFF221962),
-                                    fontWeight: FontWeight.w900),
-                                lineDecoration: LineDecoration(
-                                    lineColors: lineColors,
-                                    incorrectColor: Colors.red,
-                                    strokeWidth: 28,
-                                    borderColor: Colors.red),
-                                allWords:
-                                    provider.filteredWordsFromAPI.isNotEmpty
-                                        ? provider.filteredWordsFromAPI
-                                        : [],
-                                correctWords: provider.gameData['gameDetails']
-                                            ['searchtype'] ==
-                                        'challenge'
-                                    ? provider.correctWordsFromAPI
-                                    : provider.allWordsFromAPI,
-                                incorrWords: provider.incorrectWordsFromAPI,
-                              ),
-                            ),
-                        if (provider.gameEnded && !provider.allowMark)
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Listener(
-                                  onPointerDown: null,
-                                  onPointerMove: null,
-                                  onPointerUp: _clearSelection,
-                                  child: GridView.builder(
-                                    key: key,
-                                    shrinkWrap: true,
-                                    padding: EdgeInsets.zero,
-                                    itemCount: provider.tiles.length,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    gridDelegate:
+                                  ): const SizedBox(),
+                                  gameProv.hasGoBack ?
+                                  const SizedBox(width: 20) : const SizedBox(),
+                                ],
+                              ); });
+                                }),
+                              if (provider.gameData['gameDetails']
+                              ['searchtype'] ==
+                                  'search')
+                                Expanded(
+                                  child: RawScrollbar(
+                                      controller: _scrollController,
+                                      interactive: true,
+                                      thickness: 3,
+                                      scrollbarOrientation:
+                                      ScrollbarOrientation.right,
+                                      thumbVisibility: true,
+                                      trackVisibility: true,
+                                      thumbColor: AllColors.shineGreen,
+                                      radius: Radius.circular(10),
+                                      child: GridView.builder(
+                                        controller: _scrollController,
+                                        shrinkWrap: true,
+                                        padding:
+                                        const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 14),
+                                        itemCount: provider
+                                            .allWordsFromAPI.length,
+                                        gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 11,
-                                            childAspectRatio: 1,
-                                            crossAxisSpacing: 3,
-                                            mainAxisSpacing: 3),
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: provider
-                                                    .tiles[index].borderColor!),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: provider
-                                                .tiles[index].backgroundColor),
-                                        child: Center(
-                                          child: Foo(
-                                            index: index,
-                                            child: Text(
-                                              provider.tiles[index].alphabet!,
-                                              style: GoogleFonts.inter(
-                                                  textStyle: Theme.of(context)
-                                                      .textTheme
-                                                      .headlineLarge,
-                                                  fontSize: 23,
-                                                  color:
-                                                      const Color(0xFF221962),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                            childAspectRatio: 5,
+                                            crossAxisCount: 3),
+                                        itemBuilder: (context, index) {
+                                          return Container(
+                                              child: Text(
+                                                  provider
+                                                      .allWordsFromAPI[index]
+                                                      .toUpperCase(),
+                                                  textAlign:
+                                                  (index + 1) % 3 == 0
+                                                      ? TextAlign.end
+                                                      : (index) % 3 ==
+                                                      0
+                                                      ? TextAlign
+                                                      .start
+                                                      : TextAlign
+                                                      .center,
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      decoration: provider
+                                                          .correctWords
+                                                          .contains(
+                                                          provider
+                                                              .allWordsFromAPI[index]
+                                                              .toUpperCase())
+                                                          ? TextDecoration
+                                                          .lineThrough
+                                                          : TextDecoration
+                                                          .none,
+                                                      fontWeight:
+                                                      FontWeight.w600,
+                                                      color: provider
+                                                          .correctWords
+                                                          .contains(provider
+                                                          .allWordsFromAPI[index]
+                                                          .toUpperCase())
+                                                          ? Colors.green
+                                                          : Colors.white)));
+                                        },
+                                      )),
                                 ),
-                              ),
+                              if (provider.gameData['gameDetails']
+                              ['searchtype'] ==
+                                  'challenge')
+                                Expanded(
+                                  child: RawScrollbar(
+                                      controller: _scrollController,
+                                      interactive: true,
+                                      thickness: 6,
+                                      scrollbarOrientation:
+                                      ScrollbarOrientation.right,
+                                      thumbVisibility: true,
+                                      trackVisibility: true,
+                                      thumbColor: AllColors.shineGreen,
+                                      radius: Radius.circular(10),
+                                      child: GridView.builder(
+                                        controller: _scrollController,
+                                        shrinkWrap: true,
+                                        padding:
+                                        const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 14),
+                                        itemCount: provider
+                                            .allWordsFromAPI.length,
+                                        gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                            childAspectRatio: 5,
+                                            crossAxisCount: 3),
+                                        itemBuilder: (context, index) {
+                                          return Container(
+                                              child: Text(
+                                                  provider
+                                                      .allWordsFromAPI[index]
+                                                      .toUpperCase(),
+                                                  textAlign: (index + 1) % 3 ==
+                                                      0
+                                                      ? TextAlign.end
+                                                      : (index) % 3 == 0
+                                                      ? TextAlign
+                                                      .start
+                                                      : TextAlign
+                                                      .center,
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      decoration: provider
+                                                          .correctWords
+                                                          .contains(provider
+                                                          .allWordsFromAPI[index]
+                                                          .toUpperCase())
+                                                          ? TextDecoration
+                                                          .lineThrough
+                                                          : provider
+                                                          .incorrectWords
+                                                          .contains(provider
+                                                          .allWordsFromAPI[index]
+                                                          .toUpperCase())
+                                                          ? TextDecoration
+                                                          .lineThrough
+                                                          : TextDecoration
+                                                          .none,
+                                                      fontWeight:
+                                                      FontWeight.w600,
+                                                      color: provider
+                                                          .correctWords
+                                                          .contains(provider
+                                                          .allWordsFromAPI[index]
+                                                          .toUpperCase())
+                                                          ? Colors.green
+                                                          : provider
+                                                          .incorrectWords
+                                                          .contains(provider
+                                                          .allWordsFromAPI[index]
+                                                          .toUpperCase())
+                                                          ? Colors.red
+                                                          : Colors.white)));
+                                        },
+                                      )),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      gap(10),
+                    ]),
+                  ),
+                  if (!provider.gameEnded || provider.allowMark)
+                    if (provider.grid_.isNotEmpty)
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white),
+                        child: Crossword(
+                          letters: provider.grid_,
+                          acceptReversedDirection: true,
+                          drawVerticalLine: true,
+                          drawHorizontalLine: true,
+                          spacing:
+                          MediaQuery
+                              .of(context)
+                              .size
+                              .width <= 376
+                              ? const Offset(30, 33)
+                              : const Offset(32, 33),
+                          drawCrossLine: true,
+                          onLineDrawn: (List<String> words) async {
+                            var reverseWord = words.last
+                                .toString()
+                                .split('')
+                                .reversed
+                                .join('');
+                            print(reverseWord);
+                            var index = provider.filteredWordsFromAPI.
+                            indexOf(words.last.toString());
+
+                            if (index < 0) {
+                              index = provider.filteredWordsFromAPI
+                                  .indexOf(reverseWord);
+                            }
+                            var word_ = provider.allWordsFromAPI[index];
+
+                            if (provider.gameData['gameDetails']
+                            ['searchtype'] ==
+                                'search') {
+                              if (provider.allWordsFromAPI
+                                  .contains(word_)) {
+                                provider.addToCorrectWords(word_);
+                                provider.addToFilteredCorrectWords(
+                                    words.last.toString());
+                                if (soundPref_ == "on") {
+                                  await AudioPlayer()
+                                      .play(soundConstants.correctAnswer);
+                                }
+                                // print(player.playing);
+                              }
+                            }
+                            else {
+                              if (provider.correctWordsFromAPI
+                                  .contains(words.last.toString()) ||
+                                  provider.correctWordsFromAPI
+                                      .contains(reverseWord)) {
+                                provider.addToCorrectWords(word_);
+                                provider.addToMarkedWords(word_);
+                                provider.addToFilteredCorrectWords(
+                                    words.last.toString());
+                                if (soundPref_ == "on") {
+                                  await AudioPlayer()
+                                      .play(soundConstants.correctAnswer);
+                                }
+                              } else if (provider.incorrectWordsFromAPI
+                                  .contains(words.last.toString()) ||
+                                  provider.incorrectWordsFromAPI
+                                      .contains(reverseWord)) {
+                                provider.addToInCorrectWords(word_);
+                                print('__incorrect__');
+                                provider.addToMarkedWords(word_);
+                                provider.addToFilteredInCorrectWords(
+                                    words.last.toString());
+                                if (soundPref_ == "on") {
+                                  await AudioPlayer()
+                                      .play(soundConstants.wrongAnswer);
+                                }
+                                // print(player.playing);
+                              }
+                            }
+
+                            print(provider.allMarkedWords.length
+                                .toString());
+                            if (provider.gameData['gameDetails']
+                            ['searchtype'] ==
+                                'search') {
+                              if (provider.allWordsFromAPI.length ==
+                                  provider.correctWords.length) {
+                                navigate();
+                              }
+                            } else {
+                              List<String> correctWordsMarked = [];
+                              List<String> wordsToMark = [];
+
+                              for (var word
+                              in provider.correctWordsFromAPI) {
+                                if (provider.allWordsFromAPI
+                                    .contains(word)) {
+                                  wordsToMark.add(word);
+                                }
+                                if (provider.allMarkedWords
+                                    .contains(word)) {
+                                  correctWordsMarked.add(word);
+                                }
+                              }
+
+                              if (provider.correctWordsFromAPI.length ==
+                                  provider.correctWords.length) {
+                                navigate();
+                              } else if (provider
+                                  .allWordsFromAPI.length ==
+                                  provider.allMarkedWords.length) {
+                                navigate();
+                              } else {
+                                if (provider.correctWords.length > 0) {
+                                  if (correctWordsMarked.length ==
+                                      wordsToMark.length) {
+                                    navigate();
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          textStyle: TextStyle(
+                              fontSize: 23,
+                              color: const Color(0xFF221962),
+                              fontWeight: FontWeight.w900),
+                          lineDecoration: LineDecoration(
+                              lineColors: lineColors,
+                              incorrectColor: Colors.red,
+                              strokeWidth: 28,
+                              borderColor: Colors.red),
+                          allWords:
+                          provider.filteredWordsFromAPI.isNotEmpty
+                              ? provider.filteredWordsFromAPI
+                              : [],
+                          correctWords: provider.gameData['gameDetails']
+                          ['searchtype'] ==
+                              'challenge'
+                              ? provider.correctWordsFromAPI
+                              : provider.allWordsFromAPI,
+                          incorrWords: provider.incorrectWordsFromAPI,
+                        ),
+                      ),
+                  if (provider.gameEnded && !provider.allowMark)
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Listener(
+                            onPointerDown: null,
+                            onPointerMove: null,
+                            onPointerUp: _clearSelection,
+                            child: GridView.builder(
+                              key: key,
+                              shrinkWrap: true,
+                              padding: EdgeInsets.zero,
+                              itemCount: provider.tiles.length,
+                              physics:
+                              const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 11,
+                                  childAspectRatio: 1,
+                                  crossAxisSpacing: 3,
+                                  mainAxisSpacing: 3),
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: provider
+                                              .tiles[index].borderColor!),
+                                      borderRadius:
+                                      BorderRadius.circular(10),
+                                      color: provider
+                                          .tiles[index].backgroundColor),
+                                  child: Center(
+                                    child: Foo(
+                                      index: index,
+                                      child: Text(
+                                        provider.tiles[index].alphabet!,
+                                        style: GoogleFonts.inter(
+                                            textStyle: Theme
+                                                .of(context)
+                                                .textTheme
+                                                .headlineLarge,
+                                            fontSize: 23,
+                                            color:
+                                            const Color(0xFF221962),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          )
-                      ],
-                    ),
+                          ),
+                        ),
+                      ),
+                    )
+                ],
+              ),
             );
           }),
           floatingActionButton:
-              Consumer<GameScreenProvider>(builder: (context, provider, _) {
+          Consumer<GameScreenProvider>(builder: (context, provider, _) {
             return provider.isMarkingCurrently
                 ? Container(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height < 900 &&
-                                MediaQuery.of(context).size.height > 650
-                            ? MediaQuery.of(context).size.height / 2 -
-                                MediaQuery.of(context).size.height / 4
-                            : MediaQuery.of(context).size.height / 2 -
-                                MediaQuery.of(context).size.height / 3.5),
-                    child: Container(
-                        decoration: BoxDecoration(
-                          color: AllColors.shineGreen,
-                          borderRadius: BorderRadius.circular(0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black38.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 6,
-                              offset:
-                                  Offset(1, 1), // changes position of shadow
-                            ),
-                          ],
+                padding: EdgeInsets.only(
+                    top: MediaQuery
+                        .of(context)
+                        .size
+                        .height < 900 &&
+                        MediaQuery
+                            .of(context)
+                            .size
+                            .height > 650
+                        ? MediaQuery
+                        .of(context)
+                        .size
+                        .height / 2 -
+                        MediaQuery
+                            .of(context)
+                            .size
+                            .height / 4
+                        : MediaQuery
+                        .of(context)
+                        .size
+                        .height / 2 -
+                        MediaQuery
+                            .of(context)
+                            .size
+                            .height / 3.5),
+                child: Container(
+                    decoration: BoxDecoration(
+                      color: AllColors.shineGreen,
+                      borderRadius: BorderRadius.circular(0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black38.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 6,
+                          offset:
+                          Offset(1, 1), // changes position of shadow
                         ),
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: 6, bottom: 6, left: 12, right: 12),
-                          child: Text(provider.currentMarkedWord.toString(),
-                              style: GoogleFonts.inter(
-                                  textStyle:
-                                      Theme.of(context).textTheme.headlineSmall,
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700)),
-                        )))
+                      ],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          top: 6, bottom: 6, left: 12, right: 12),
+                      child: Text(provider.currentMarkedWord.toString(),
+                          style: GoogleFonts.inter(
+                              textStyle:
+                              Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headlineSmall,
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700)),
+                    )))
                 : Container();
           }),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
@@ -640,7 +739,7 @@ class _DrugPageState extends State<DrugPage> {
 
   void startTimer() {
     final provider_game =
-        Provider.of<GameScreenProvider>(context, listen: false);
+    Provider.of<GameScreenProvider>(context, listen: false);
     final provider = Provider.of<TimerProvider>(context, listen: false);
     provider.resetSeconds();
     provider.setTicking(true);
@@ -821,7 +920,7 @@ class _DrugPageState extends State<DrugPage> {
                   Nav.pop(context);
 
                   final provider_ =
-                      Provider.of<HomeProvider>(context, listen: false);
+                  Provider.of<HomeProvider>(context, listen: false);
                   provider_.changeSelectedIndex(4);
                 }
                 startTimer();
@@ -842,7 +941,7 @@ class _DrugPageState extends State<DrugPage> {
   getCategorySearch() {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
     final categoryProvider =
-        Provider.of<CategoryProvider>(context, listen: false);
+    Provider.of<CategoryProvider>(context, listen: false);
     Prefs.getToken().then((token) {
       Prefs.getPrefs('loginId').then((loginId) {
         Prefs.getPrefs('gameLanguage').then((language) {
@@ -857,7 +956,7 @@ class _DrugPageState extends State<DrugPage> {
               "category": categoryProvider.selectedCategory['categoryname']
                   .toLowerCase(),
               "topic":
-                  categoryProvider.selectedCategory['topicsname'].toLowerCase(),
+              categoryProvider.selectedCategory['topicsname'].toLowerCase(),
             }).then((value) {
               if (value['gameDetails'] != null) {
                 provider.changeGameData(value);
@@ -898,7 +997,7 @@ class _DrugPageState extends State<DrugPage> {
     final provider = Provider.of<GameScreenProvider>(context, listen: false);
 
     final RenderBox box =
-        key.currentContext!.findAncestorRenderObjectOfType<RenderBox>()!;
+    key.currentContext!.findAncestorRenderObjectOfType<RenderBox>()!;
     final result = BoxHitTestResult();
     Offset local = box.globalToLocal(event.position);
     if (box.hitTest(result, position: local)) {
@@ -952,7 +1051,7 @@ class _DrugPageState extends State<DrugPage> {
 
   navigate() {
     final gameProvider =
-        Provider.of<GameScreenProvider>(context, listen: false);
+    Provider.of<GameScreenProvider>(context, listen: false);
     final p = Provider.of<TimerProvider>(context, listen: false);
 
     p.stopSeconds();
@@ -963,7 +1062,9 @@ class _DrugPageState extends State<DrugPage> {
     Future.delayed(const Duration(milliseconds: 500), () async {
       if (gameProvider.gameData['gameDetails']['searchtype'] == 'search') {
         if (soundPref_ == "on") {
-          await AudioPlayer().play(soundConstants.gameCompleted);
+          if(!gameProvider.hasGoBack) {
+            await AudioPlayer().play(soundConstants.gameCompleted);
+          }
         }
         Nav.push(
             context,
@@ -976,7 +1077,7 @@ class _DrugPageState extends State<DrugPage> {
             ));
       } else {
         final provider =
-            Provider.of<GameScreenProvider>(context, listen: false);
+        Provider.of<GameScreenProvider>(context, listen: false);
         // if (provider.allWordsFromAPI.length == provider.allMarkedWords.length) {
 
         // }
@@ -994,7 +1095,9 @@ class _DrugPageState extends State<DrugPage> {
         if (provider.correctWords.length > 0) {
           if (correctWordsMarked.length == wordsToMark.length) {
             if (soundPref_ == "on") {
-              await AudioPlayer().play(soundConstants.gameCompleted);
+              if(!provider.hasGoBack) {
+                await AudioPlayer().play(soundConstants.gameCompleted);
+              }
             }
 
             if (provider.incorrectWords.length > 0) {
@@ -1025,11 +1128,15 @@ class _DrugPageState extends State<DrugPage> {
               provider.allMarkedWords.length) {
             if (correctWordsMarked.length == wordsToMark.length) {
               if (soundPref_ == "on") {
-                await AudioPlayer().play(soundConstants.gameCompleted);
+                if(!provider.hasGoBack) {
+                  await AudioPlayer().play(soundConstants.gameCompleted);
+                }
               }
             } else {
               if (soundPref_ == "on") {
-                await AudioPlayer().play(soundConstants.gameEnded);
+                if(!provider.hasGoBack) {
+                  await AudioPlayer().play(soundConstants.gameEnded);
+                }
               }
             }
 

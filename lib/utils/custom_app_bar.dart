@@ -100,7 +100,8 @@ class CustomAppBar extends StatefulWidget {
                   Label(
                       text: AppLocalizations.of(context)!.game_lang,
                       fontSize: FontSize.p4,
-                      color: AllColors.superLitePurple)
+                      color: AllColors.superLitePurple),
+                  SizedBox(height: 5),
                 ],
               ),
             ),

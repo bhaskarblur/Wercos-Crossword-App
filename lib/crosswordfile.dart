@@ -79,7 +79,11 @@ class CrosswordState extends State<Crossword> {
 
     Future.delayed(const Duration(milliseconds: 0), () async {
       var soundPref = await Prefs.getPrefs("sound");
-      soundPref_ = soundPref!;
+      try {
+        soundPref_ = soundPref!;
+      } catch(e) {
+        print(e);
+      }
       setState(() {});
     });
 

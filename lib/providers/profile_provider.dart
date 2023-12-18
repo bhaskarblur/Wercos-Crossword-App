@@ -8,4 +8,5 @@ class ProfileProvider with ChangeNotifier {
     _profile = value;
     notifyListeners();
   }
+
 }

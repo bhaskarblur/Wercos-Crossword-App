@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:werkos/views/word_related_page.dart';
 import 'package:werkos/widget/navigator.dart';
 import 'package:provider/provider.dart';
 import 'package:werkos/api_services.dart';
@@ -217,7 +218,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
       child: Column(
         children: [
           Center(
-              child: new GestureDetector(
+              child: GestureDetector(
               onTap: () async {
                 await Clipboard.setData(ClipboardData(text: details['sharecode'].toString()));
                 var snackBar = SnackBar(content: Text(AppLocalizations.of(context)!.code_copied)
@@ -229,11 +230,12 @@ class _MyGamesPageState extends State<MyGamesPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children : [
         const SizedBox(width: 10),
+        Expanded(child:
         Label(text:'${AppLocalizations.of(context)!.code_to_share.toUpperCase()}: ${details['sharecode'].toString()}',
             fontSize: FontSize.p2,
             align: TextAlign.center,
             maxLine: 2,
-          ),
+          )),
         CupertinoButton(
             onPressed: () async {
               await Clipboard.setData(ClipboardData(text: details['sharecode'].toString()));
@@ -243,7 +245,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
             },
-            padding: EdgeInsets.zero,
+            padding: EdgeInsets.only(left: 8, top:4 , bottom: 4),
             minSize: 0,
             child: const Icon(Icons.copy, color: AllColors.white))
     ])
@@ -277,7 +279,48 @@ class _MyGamesPageState extends State<MyGamesPage> {
                   fontSize: FontSize.p2),
               Row(
                   children: [
-              CupertinoButton(
+                    CupertinoButton(
+                        onPressed: () {
+                          final provider = Provider.of<GameScreenProvider>(context, listen: false);
+                          provider.reset();
+                          Prefs.getToken().then((token) {
+                            Prefs.getPrefs('loginId').then((loginId) {
+                                _apiServices.post(context: context, endpoint: 'getGameByCode', body: {
+                                  "accessToken": token,
+                                  "userId": loginId,
+                                  "sharecode": details['sharecode'].toString(),
+                                }).then((value) {
+                                  if (value['gameDetails'] != null) {
+                                    provider.changeGameData(value);
+                                    provider.changeGameType('gamewithcode');
+                                    provider.addToCorrectWordsIncorrectWordsFromAPI();
+                                    if (value['gameDetails']['searchtype'] == 'search') {
+                                      final provider =
+                                      Provider.of<HomeProvider>(context, listen: false);
+                                      provider.changeSelectedIndex(4);
+                                    } else {
+                                      Nav.push(context, WordRelatedPage(data: value));
+                                    }
+                                  } else {
+                                    print(value['message'].toString().toLowerCase());
+                                    if (value['message'].toString().toLowerCase().contains('Cannot play')) {
+                                      CustomDialog.cannotPlayed6(
+                                          context: context);
+                                    }
+                                    else {
+                                      CustomDialog.wrongCode(
+                                          context: context);
+                                    }
+                                  }
+                                });
+                            });
+                          });
+                        },
+                        padding: EdgeInsets.zero,
+                        minSize: 0,
+                        child: Icon(Icons.play_arrow, color: Colors.white, size: 26,)),
+                    const SizedBox(width: 10),
+                    CupertinoButton(
                   onPressed: () {
                     CustomDialog.deleteGame(
                       onPressed: () {
@@ -341,7 +384,13 @@ class _MyGamesPageState extends State<MyGamesPage> {
                           '${details["totalplayed"]}/' '${provider.profile['subscriptionstatus'] ==
               'none'? '6' : '∞'}',
                   fontSize: FontSize.p2),
-              RatingBarIndicator(
+              Row(
+                  children: [
+                    Label(
+                        text:
+                        '${AppLocalizations.of(context)!.ratings}: ',
+                        fontSize: FontSize.p2),
+                    RatingBarIndicator(
                   rating: details["avgratings"] == null
                       ? 0
                       : double.parse(details["avgratings"]),
@@ -349,7 +398,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
                       const Icon(Icons.star, color: AllColors.superLightGreen),
                   itemCount: 5,
                   unratedColor: AllColors.grey,
-                  itemSize: 22),
+                  itemSize: 22)]),
             ],
           ),
           const SizedBox(height: 10),
