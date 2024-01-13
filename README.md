@@ -1,4 +1,4 @@
-# mobile_app_word_search
+# Werkos Crossword
 
 A new Flutter project.
 
